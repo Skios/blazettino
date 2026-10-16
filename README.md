@@ -8,8 +8,13 @@ Pagelle sarcastiche (e, in futuro, notiziario video) dei raid della gilda *Blaze
 python -m blazettino <codice_report_WCL>     # es. RaZCT7cxPbwQ4VNA
 ```
 
-Legge i boss uccisi del report (i parse esistono solo per le kill), calcola i voti, chiede i commenti all'LLM e salva `out/pagella_<data>.md` e `out/pagella_<data>.html`. L'HTML è un file unico e autonomo (responsive, filtri per ruolo, ordinamento, icone di spec incorporate): si può aprire, inviare o ospitare così com'è. Le icone vengono scaricate una volta dal CDN di WarcraftLogs e messe in cache; se mancano, la pagina esce senza. Le risposte WCL sono in cache in `cache/` (rilanciare non spende punti).
-Se l'LLM non risponde la pagella esce comunque, senza commenti.
+Per ogni boss usa il **miglior tentativo**: la kill se c'è, altrimenti il wipe che ha lasciato il boss più basso di vita. Calcola i voti per boss e per l'intera serata (media dei voti per boss), chiede i commenti all'LLM (una chiamata per boss più una per la serata, circa 5 minuti in tutto) e salva in `out/<data>/`:
+
+- `global.md`: podio, tabella dei voti per boss e commenti dell'intera serata
+- `<boss>_kill.md` / `<boss>_wipe.md`: una pagella per boss, marcata kill o wipe
+- `pagella.html`: file unico e autonomo che raccoglie tutto (schede Serata e una per boss, filtri per ruolo, ordinamento, icone di spec incorporate); si può aprire, inviare o ospitare così com'è
+
+Sui wipe WarcraftLogs non calcola i parse ("No kill no ranking!"): il voto usa la posizione del giocatore nel raid per ruolo, indicata come `pos.`. Le risposte WCL sono in cache in `cache/` (rilanciare non spende punti, ma i commenti vengono rigenerati). Le icone di spec vengono scaricate una volta dal CDN di WarcraftLogs e messe in cache; se mancano, la pagina esce senza. Se l'LLM non risponde, le pagelle escono comunque senza commenti.
 
 ## Setup
 

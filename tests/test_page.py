@@ -1,74 +1,121 @@
 import re
 import unittest
 
-from blazettino import kpi, page
+from blazettino import page, tips
 from blazettino.comment import Comment
-from tests.test_report import fight
+from tests.helpers import KILL_A, KILL_B, WIPE_C, build_night, players
+
+URI = "data:image/jpeg;base64,AAAA"
 
 
-def build(comments=None, max_missed=1, fights=None, bosses=("Ula'tek",), icons=None):
-    players = kpi.merge(fights or [fight("Ula'tek")])
-    if comments is None:
-        comments = {"Sleãze": Comment("CALAMITA", "Due morti evitabili.")}
-    return page.render_html(
-        "The Venomous Abyss", "2026-10-15", list(bosses), players, comments, max_missed, icons
-    )
+def build(night=None, icons=None):
+    return page.render_html(night or build_night(), icons)
 
 
-class PageTest(unittest.TestCase):
+def panels(html):
+    """Panel markup, in order: global first, then one per boss."""
+    return ['<div class="panel"' + part for part in html.split('<div class="panel"')[1:]]
+
+
+class StructureTest(unittest.TestCase):
     def test_is_a_responsive_html_document(self):
-        html = build()
-        self.assertTrue(html.lower().startswith("<!doctype html>"))
-        self.assertIn('name="viewport"', html)
+        h = build()
+        self.assertTrue(h.lower().startswith("<!doctype html>"))
+        self.assertIn('name="viewport"', h)
 
     def test_is_self_contained(self):
-        html = build()
-        self.assertNotRegex(html, r'(src|href)\s*=\s*"https?:')
-        self.assertNotIn("@import", html)
+        h = build()
+        self.assertNotRegex(h, r'(src|href)\s*=\s*"https?:')
+        self.assertNotIn("@import", h)
 
     def test_llm_text_is_escaped(self):
-        html = build({"Sleãze": Comment("<b>X</b>", "<script>alert(1)</script>")})
-        self.assertNotIn("<script>alert(1)</script>", html)
-        self.assertIn("&lt;script&gt;alert(1)&lt;/script&gt;", html)
+        def evil(players, cfg, context=""):
+            return {p.name: Comment("<b>X</b>", "<script>alert(1)</script>") for p in players}
 
-    def test_one_card_per_player_with_role_and_grade_for_filtering(self):
-        cards = re.findall(
-            r'<article class="card"[^>]*data-role="(\w+)"[^>]*data-grade="([\d.]+)"', build()
-        )
-        self.assertEqual(len(cards), 20)
+        h = build(build_night(comments_fn=evil))
+        self.assertNotIn("<script>alert(1)</script>", h)
+        self.assertIn("&lt;script&gt;alert(1)&lt;/script&gt;", h)
+
+    def test_one_tab_and_one_panel_for_the_night_and_each_boss(self):
+        h = build()
+        self.assertEqual(h.count('class="tab"'), 4)
+        ps = panels(h)
+        self.assertEqual(len(ps), 4)
+        self.assertIn('id="global"', ps[0])
+        self.assertIn("boss-uno", ps[1])
+        self.assertIn("boss-tre", ps[3])
+
+    def test_only_the_first_panel_is_visible_at_load(self):
+        ps = panels(build())
+        self.assertNotIn("hidden", ps[0].split(">")[0])
+        self.assertTrue(all("hidden" in p.split(">")[0] for p in ps[1:]))
+
+
+class PanelContentTest(unittest.TestCase):
+    def setUp(self):
+        self.ps = panels(build())
+
+    def test_every_panel_has_twenty_cards_filters_and_sort(self):
+        for p in self.ps:
+            self.assertEqual(p.count('<article class="card"'), 20)
+            for role in ("all", "tank", "healer", "dps"):
+                self.assertIn(f'data-filter="{role}"', p)
+            self.assertIn('class="sort"', p)
+
+    def test_cards_carry_role_and_grade_for_filtering(self):
+        cards = re.findall(r'<article class="card"[^>]*data-role="(\w+)"[^>]*data-grade="([\d.]+)"', self.ps[0])
         self.assertEqual({r for r, _ in cards}, {"tank", "healer", "dps"})
 
-    def test_filter_and_sort_controls_present(self):
-        html = build()
-        for role in ("all", "tank", "healer", "dps"):
-            self.assertIn(f'data-filter="{role}"', html)
-        self.assertIn('id="sort"', html)
+    def test_every_panel_has_a_podium_with_mvp_and_lvp(self):
+        for p in self.ps:
+            podium = re.search(r'<section class="podium">(.*?)</section>', p, re.S).group(1)
+            self.assertIn("MVP", podium)
+            self.assertIn("LVP", podium)
 
-    def test_podium_shows_mvp_and_lvp(self):
-        html = build()
-        self.assertRegex(html, r"MVP[\s\S]*Karabosca")
-        self.assertRegex(html, r"LVP[\s\S]*Sleãze")
+    def test_podium_comments_start_open_and_the_rest_closed(self):
+        for p in self.ps:
+            self.assertEqual(p.count('<details class="say" open'), 4)
+            self.assertEqual(p.count('<details class="say"'), 20)
 
-    def test_comment_and_deaths_are_in_the_card(self):
-        html = build()
-        self.assertIn("CALAMITA", html)
-        self.assertIn("Caustic Waves", html)
+    def test_global_panel_has_the_grade_table_with_wipe_marked(self):
+        self.assertIn('class="heat"', self.ps[0])
+        self.assertIn("Boss Tre", self.ps[0])
+        self.assertIn("WIPE", self.ps[0])
 
-    def test_benched_player_is_marked_and_off_podium(self):
-        short = [p for p in fight("C") if p.name != "Sleãze"]
-        html = build(fights=[fight("A"), fight("B"), short], max_missed=0, bosses=("A", "B", "C"))
-        self.assertIn("poche presenze", html)
-        podium = html.split('id="grid"')[0]
+    def test_kill_panels_show_parses_and_no_wipe_banner(self):
+        for p in self.ps[1:3]:
+            self.assertNotIn(tips.NO_KILL, p)
+            self.assertIn("parse", p)
+
+    def test_wipe_panel_says_no_kill_no_ranking_with_tip_and_no_parse(self):
+        p = self.ps[3]
+        self.assertIn(tips.NO_KILL, p)
+        self.assertTrue(any(t in p for t in tips.TIPS))
+        self.assertIn("16.54%", p)
+        self.assertNotIn("parse", p.split('<section class="podium">')[0] + p.split('class="grid"')[1])
+        self.assertIn("pos.", p)
+
+
+class AttendanceTest(unittest.TestCase):
+    def test_benched_player_is_marked_and_off_the_global_podium(self):
+        tries = [(KILL_A, players(21)), (KILL_B, players(21)), (WIPE_C, [p for p in players(20) if p.name != "Sleãze"])]
+        h = build(build_night({"max_missed_fights": 0}, tries))
+        g = panels(h)[0]
+        self.assertIn("poche presenze", g)
+        podium = re.search(r'<section class="podium">(.*?)</section>', g, re.S).group(1)
         self.assertNotIn("Sleãze", podium)
 
-    def test_spec_icon_is_inlined_on_matching_cards_only(self):
-        uri = "data:image/jpeg;base64,AAAA"
-        html = build(icons={"Priest-Holy": uri})
-        self.assertEqual(html.count(f'<img class="spec" src="{uri}"'), 1)  # Karabosca, the only Holy Priest
-        self.assertIn('alt="Holy Priest"', html)
 
-    def test_no_icons_means_no_img_tags(self):
-        self.assertNotIn("<img", build())
+class IconsTest(unittest.TestCase):
+    def test_icon_data_is_inlined_once_and_reused_by_class(self):
+        h = build(icons={"Priest-Holy": URI})
+        self.assertEqual(h.count(URI), 1)
+        self.assertIn(".i-Priest-Holy{background-image:url(" + URI + ")}", h)
+        for p in panels(h):
+            self.assertEqual(p.count('class="spec i-Priest-Holy"'), 1)  # Karabosca, the only Holy Priest
+
+    def test_no_icons_means_no_icon_elements(self):
+        self.assertNotIn('class="spec', build())
 
 
 if __name__ == "__main__":
