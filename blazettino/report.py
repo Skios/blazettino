@@ -6,13 +6,13 @@ SECTIONS = (("tank", "Tank"), ("healer", "Healer"), ("dps", "DPS"))
 MEDALS = ("🥇", "🥈", "🥉")
 
 
-def _death(d: kpi.Death) -> str:
+def death_text(d: kpi.Death) -> str:
     where = f"{d.boss} " if d.boss else ""
     return f"{where}{kpi.mmss(d.time_s)} {d.ability}" + (" (strage)" if d.mass else "")
 
 
 def _numbers(p: kpi.Player) -> str:
-    deaths = "; ".join(_death(d) for d in p.deaths) or "nessuna"
+    deaths = "; ".join(death_text(d) for d in p.deaths) or "nessuna"
     return (
         f"{p.damage / 1e6:.2f}M danni ({p.dps / 1e3:.1f}k DPS, parse {p.dps_parse}) · "
         f"{p.healing / 1e6:.2f}M cure ({p.hps / 1e3:.1f}k HPS, parse {p.hps_parse}) · "
@@ -29,6 +29,16 @@ def _entry(p: kpi.Player, c: Comment | None, benched: bool) -> str:
     return f"{head}\n_{_numbers(p)}_"
 
 
+def standings(
+    players: list[kpi.Player], n_bosses: int, max_missed: int
+) -> tuple[list[kpi.Player], list[kpi.Player], list[kpi.Player]]:
+    """(everyone ranked, podium-eligible pool, pool ranked). Podium counts only raiders who missed
+    at most max_missed of the night's boss fights; if nobody qualifies everyone does."""
+    ranked = kpi.ranking(players)
+    pool = kpi.eligible(ranked, n_bosses, max_missed) or ranked
+    return ranked, pool, kpi.ranking(pool)
+
+
 def render(
     title: str,
     date: str,
@@ -37,10 +47,7 @@ def render(
     comments: dict[str, Comment],
     max_missed: int = 1,
 ) -> str:
-    """Podium only counts raiders who missed at most max_missed of the night's boss fights."""
-    ranked = kpi.ranking(players)
-    pool = kpi.eligible(ranked, len(bosses), max_missed) or ranked
-    top = kpi.ranking(pool)
+    ranked, pool, top = standings(players, len(bosses), max_missed)
     podium = [f"{MEDALS[0]} MVP — {top[0].name} ({kpi.grade(top[0]):g})"]
     podium += [f"{m} {p.name} ({kpi.grade(p):g})" for m, p in zip(MEDALS[1:], top[1:3])]
     podium.append(f"💀 LVP — {top[-1].name} ({kpi.grade(top[-1]):g})")

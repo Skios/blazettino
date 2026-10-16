@@ -4,7 +4,7 @@ import logging
 import sys
 from datetime import datetime
 
-from blazettino import comment, kpi, report, wcl
+from blazettino import comment, icons, kpi, page, report, wcl
 from blazettino.config import ROOT, load_config
 
 
@@ -30,16 +30,19 @@ def main(argv: list[str]) -> None:
     fights = [_tag_boss(kpi.load_fight(*wcl.fight_tables(code, f["id"])), f["name"]) for f in kills]
     players = [p for p in kpi.merge(fights) if p.name not in exclude]
     date = datetime.fromtimestamp(info["startTime"] / 1000).strftime("%Y-%m-%d")
-    text = report.render(
-        info["title"], date, [f["name"] for f in kills], players, comment.comments(players, cfg),
-        cfg.get("max_missed_fights", 1),
+    names = [f["name"] for f in kills]
+    notes, max_missed = comment.comments(players, cfg), cfg.get("max_missed_fights", 1)
+    text = report.render(info["title"], date, names, players, notes, max_missed)
+    html = page.render_html(
+        info["title"], date, names, players, notes, max_missed, icons.fetch(sorted({p.icon for p in players}))
     )
 
-    path = ROOT / "out" / f"pagella_{date}.md"
-    path.parent.mkdir(exist_ok=True)
-    path.write_text(text)
+    out = ROOT / "out"
+    out.mkdir(exist_ok=True)
+    (out / f"pagella_{date}.md").write_text(text)
+    (out / f"pagella_{date}.html").write_text(html)
     sys.stdout.write(text)
-    logging.getLogger(__name__).warning("salvata in %s", path)
+    logging.getLogger(__name__).warning("salvate in %s (.md e .html)", out / f"pagella_{date}")
 
 
 if __name__ == "__main__":

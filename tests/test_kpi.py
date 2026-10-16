@@ -28,6 +28,10 @@ class KpiTest(unittest.TestCase):
         )
         cls.by_name = {p.name: p for p in cls.players}
 
+    def test_icon_id_matches_warcraftlogs_naming(self):
+        self.assertEqual(self.by_name["Karabosca"].icon, "Priest-Holy")
+        self.assertEqual(self.by_name["Feroce"].icon, "Hunter-BeastMastery")
+
     def test_returns_all_twenty_raiders(self):
         self.assertEqual(len(self.players), 20)
 

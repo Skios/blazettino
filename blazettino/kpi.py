@@ -46,6 +46,11 @@ class Player:
     fights: int = 1  # boss fights this raider took part in
 
     @property
+    def icon(self) -> str:
+        """WarcraftLogs icon id, e.g. Priest-Holy."""
+        return f"{self.cls}-{self.spec}"
+
+    @property
     def role_parse(self) -> int:
         return self.hps_parse if self.role == "healer" else self.dps_parse
 
