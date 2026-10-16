@@ -1,7 +1,8 @@
 import json
 import unittest
+from pathlib import Path
 
-from blazettino import comment, kpi
+from blazettino import attempts, comment, kpi
 from tests.test_kpi import load
 
 
@@ -84,6 +85,48 @@ class HighlightsTest(unittest.TestCase):
 
     def test_prompt_includes_highlights(self):
         self.assertIn("soli 3", comment.build_prompt(self.players))
+
+
+KILL = attempts.Attempt(21, "Ula'tek", True, 0.0, 602)
+WIPE = attempts.Attempt(19, "Ula'tek", False, 16.54, 553)
+
+
+class ContextTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        def w(name):
+            return json.loads((Path(__file__).parent / "fixtures" / f"{name}_20.json").read_text())
+
+        cls.wipe = kpi.load_fight(w("summary"), w("taken"), w("rank_dps"), w("rank_hps"))
+        cls.kill = kpi.load_fight(load("summary"), load("taken"), load("rank_dps"), load("rank_hps"))
+
+    def test_kill_context_is_in_the_prompt(self):
+        prompt = comment.build_prompt(self.kill, context=comment.attempt_context(KILL))
+        self.assertIn("KILL", prompt)
+        self.assertIn("10:02", prompt)
+
+    def test_wipe_context_mentions_boss_health_and_no_ranking(self):
+        text = comment.attempt_context(WIPE)
+        self.assertIn("WIPE", text)
+        self.assertIn("16.54%", text)
+        self.assertIn("ranking", text)
+
+    def test_unranked_facts_do_not_claim_a_parse(self):
+        facts = comment.facts(self.wipe[0], self.wipe)
+        self.assertNotIn("parse", facts)
+        self.assertIn("posizione", facts)
+
+    def test_ranked_facts_keep_the_parse(self):
+        self.assertIn("parse", comment.facts(self.kill[0], self.kill))
+
+    def test_no_cross_role_callout_without_real_parses(self):
+        for p in self.wipe:
+            self.assertFalse(any("non e' il suo ruolo" in h for h in comment.highlights(p, self.wipe)))
+
+    def test_comments_forwards_context_to_the_prompt(self):
+        seen = []
+        comment.comments(self.kill, {}, generate=lambda prompt, cfg: seen.append(prompt) or "{}", context="CTX-XYZ")
+        self.assertIn("CTX-XYZ", seen[0])
 
 
 if __name__ == "__main__":

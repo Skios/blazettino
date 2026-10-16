@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Callable, Iterable
 
 from blazettino import kpi
+from blazettino.attempts import Attempt
 from blazettino.config import env
 
 log = logging.getLogger(__name__)
@@ -73,6 +74,31 @@ def highlights(p: kpi.Player, players: list[kpi.Player]) -> list[str]:
     return out
 
 
+def _rank(p: kpi.Player, value: int, what: str) -> str:
+    """'parse 56' when WarcraftLogs ranks the fight, else the inside-raid position (wipes have no ranking)."""
+    return f"{what} {value}" if p.ranked else f"posizione {value}/100 nel ruolo"
+
+
+def attempt_context(a: Attempt) -> str:
+    if a.kill:
+        return f"Boss: {a.name} - KILL in {kpi.mmss(a.seconds)}."
+    return (
+        f"Boss: {a.name} - WIPE (miglior tentativo: boss a {a.pct:g}% di vita dopo {kpi.mmss(a.seconds)}). "
+        "Nessuna kill: niente ranking WarcraftLogs, le posizioni sono interne al raid. "
+        "Su un wipe non c'e' vittoria: tono da 'quasi ce l'avevamo' o 'tanto rumore per nulla', sempre con affetto."
+    )
+
+
+def night_context(attempts: list[Attempt]) -> str:
+    bosses = "; ".join(
+        f"{a.name} ({'KILL' if a.kill else f'WIPE a {a.pct:g}%'})" for a in attempts
+    )
+    return (
+        f"Serata completa: {bosses}. I dati sono aggregati sui boss (somme e medie) e il voto e' la media dei voti per boss: "
+        "commenta l'andamento dell'intera serata, non un singolo boss."
+    )
+
+
 def facts(p: kpi.Player, players: list[kpi.Player]) -> str:
     deaths = "nessuna" if not p.deaths else "; ".join(
         f"{d.boss + ' ' if d.boss else ''}{kpi.mmss(d.time_s)} {d.ability} ({'strage generale' if d.mass else 'evitabile'})" for d in p.deaths
@@ -80,18 +106,19 @@ def facts(p: kpi.Player, players: list[kpi.Player]) -> str:
     hints = highlights(p, players)
     return (
         f"{p.name} ({p.spec} {p.cls}, ruolo {p.role}, iLvl {p.ilvl}) - Voto {kpi.grade(p)}. "
-        f"Danni {p.damage / 1e6:.2f}M ({p.dps / 1e3:.1f}k DPS, parse {p.dps_parse}), "
-        f"cure {p.healing / 1e6:.2f}M ({p.hps / 1e3:.1f}k HPS, parse cure {p.hps_parse}), "
+        f"Danni {p.damage / 1e6:.2f}M ({p.dps / 1e3:.1f}k DPS, {_rank(p, p.dps_parse, 'parse')}), "
+        f"cure {p.healing / 1e6:.2f}M ({p.hps / 1e3:.1f}k HPS, {_rank(p, p.hps_parse, 'parse cure')}), "
         f"danni subiti {p.taken / 1e6:.2f}M. Morti: {deaths}."
         + (f" Spunti: {'; '.join(hints)}." if hints else "")
     )
 
 
-def build_prompt(players: list[kpi.Player], exclude: Iterable[str] = ()) -> str:
+def build_prompt(players: list[kpi.Player], exclude: Iterable[str] = (), context: str = "") -> str:
     skip = set(exclude)
     lines = [facts(p, players) for p in players if p.name not in skip]
     style = [e for e in STYLE_ENTRIES if e.split(" ", 1)[0] not in skip]  # opt-out also covers the examples
-    return "\n\n".join([SYSTEM, STYLE_HEADER, *style, "Dati:\n" + "\n".join(lines), FORMAT])
+    parts = [SYSTEM, STYLE_HEADER, *style, *([context] if context else []), "Dati:\n" + "\n".join(lines), FORMAT]
+    return "\n\n".join(parts)
 
 
 def _post(url: str, body: dict, headers: dict) -> dict:
@@ -116,13 +143,16 @@ def call_backend(prompt: str, cfg: dict) -> str:
 
 
 def comments(
-    players: list[kpi.Player], cfg: dict, generate: Callable[[str, dict], str] = call_backend
+    players: list[kpi.Player],
+    cfg: dict,
+    generate: Callable[[str, dict], str] = call_backend,
+    context: str = "",
 ) -> dict[str, Comment]:
     """Name -> Comment for every non-excluded player the model answered for; {} if the backend fails."""
     cfg = {**DEFAULTS, **cfg}
     targets = [p.name for p in players if p.name not in set(cfg.get("exclude", ()))]
     try:
-        data = json.loads(generate(build_prompt(players, cfg.get("exclude", ())), cfg))
+        data = json.loads(generate(build_prompt(players, cfg.get("exclude", ()), context), cfg))
         if not isinstance(data, dict):
             raise ValueError("risposta JSON non è un oggetto")
     except (OSError, ValueError, KeyError, RuntimeError) as e:
