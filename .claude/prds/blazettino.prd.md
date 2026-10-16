@@ -25,7 +25,7 @@ We'll know we're right when **dopo alcuni giorni di prova, il sondaggio "continu
 | Costo per pagella | 0 € | Stack locale/gratuito |
 
 ## Scope
-**MVP** — Dato il report WCL di una serata: pagella testuale con podio (MVP e "LVP"), voto per player calcolato da formula su KPI (parse, DPS/HPS, morti con abilità/minuto, danno subìto, mitigazione, parse incrociati tra ruoli) e un commento sarcastico per ognuno. Esclusioni per nome via config. Generazione semi-automatica con modello locale (costo 0, anche se lento). Output testo; embed HTML interattivo accettabile come evoluzione, non requisito.
+**MVP** — Dato il report WCL di una serata: pagella testuale con podio (MVP e "LVP"), voto per player calcolato da formula su KPI (parse, DPS/HPS, morti con abilità/minuto, danno subìto, mitigazione, parse incrociati tra ruoli) e un commento sarcastico per ognuno. Esclusioni per nome via config. Generazione semi-automatica dei commenti con LLM a costo 0: Ollama locale e/o Gemini free tier (AI Studio), backend scelto da config. Output testo; embed HTML interattivo accettabile come evoluzione, non requisito.
 
 **Out of scope**
 - Video, avatar, voce (clonata o TTS) — milestone successiva.
@@ -47,6 +47,7 @@ We'll know we're right when **dopo alcuni giorni di prova, il sondaggio "continu
 ## Open Questions
 - [ ] Hardware noto: RTX 4060 Ti 16GB, 32GB RAM. Modello locale (classe 12–14B) da scegliere con test di qualità dell'umorismo in italiano.
 - [x] Credenziali API WarcraftLogs v2: ottenute (720 punti/ora; un report di serata costa ~8 punti/fight, verificato).
+- [ ] Storico dati (SQLite vs Postgres+pgvector) e RAG vettoriale: rimandati, vedi `docs/backlog.md`.
 - [ ] Canale di pubblicazione (Discord/Telegram) e formato (testo, immagine, embed).
 - [ ] Quali KPI "pesanti" valgono lo sforzo dopo l'MVP?
 - [ ] Milestone video: modelli 3D da armory/estrattori (licenza/ToS di Blizzard, sforzo) e tool di rendering ("getartcraft" non verificato) — TBD, da validare.
