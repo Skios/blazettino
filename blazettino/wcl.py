@@ -48,3 +48,10 @@ def gql(query: str) -> dict:
 def report(code: str, body: str) -> dict:
     """Query inside reportData.report(code) and return that sub-object."""
     return gql('{reportData{report(code:"%s"){%s}}}' % (code, body))["data"]["reportData"]["report"]
+
+
+def fight_tables(code: str, fight_id: int) -> tuple[dict, dict, dict, dict]:
+    """(Summary, DamageTaken, Rankings by dps, Rankings by hps) for one fight, shaped like tests/fixtures."""
+    table = lambda kind: report(code, f"table(dataType:{kind},fightIDs:[{fight_id}])")["table"]
+    ranks = lambda metric: report(code, f"rankings(fightIDs:[{fight_id}],playerMetric:{metric})")["rankings"]
+    return table("Summary"), table("DamageTaken"), ranks("dps"), ranks("hps")

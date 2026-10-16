@@ -45,13 +45,9 @@ class Comment:
     text: str
 
 
-def _mmss(s: int) -> str:
-    return f"{s // 60}:{s % 60:02d}"
-
-
 def facts(p: kpi.Player) -> str:
     deaths = "nessuna" if not p.deaths else "; ".join(
-        f"{_mmss(d.time_s)} {d.ability} ({'strage generale' if d.mass else 'evitabile'})" for d in p.deaths
+        f"{d.boss + ' ' if d.boss else ''}{kpi.mmss(d.time_s)} {d.ability} ({'strage generale' if d.mass else 'evitabile'})" for d in p.deaths
     )
     return (
         f"{p.name} ({p.spec} {p.cls}, ruolo {p.role}, iLvl {p.ilvl}) - Voto {kpi.grade(p)}. "

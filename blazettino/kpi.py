@@ -1,5 +1,6 @@
 """Pure functions: WarcraftLogs tables for one fight -> per-player KPIs -> 0-10 grade -> podium."""
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
+from itertools import chain
 
 ROLE_KEYS = {"tanks": "tank", "healers": "healer", "dps": "dps"}
 
@@ -22,6 +23,7 @@ class Death:
     time_s: int
     ability: str
     mass: bool
+    boss: str = ""
 
 
 @dataclass(frozen=True)
@@ -40,6 +42,7 @@ class Player:
     dps_parse: int
     hps_parse: int
     deaths: tuple[Death, ...]
+    score: float | None = None  # night grade set by merge(); None = compute from the fight
 
     @property
     def role_parse(self) -> int:
@@ -89,6 +92,8 @@ def load_fight(summary: dict, taken: dict, rank_dps: dict, rank_hps: dict) -> li
 
 
 def grade(p: Player) -> float:
+    if p.score is not None:
+        return p.score
     avoidable = sum(not d.mass for d in p.deaths)
     g = BASE + PARSE_WEIGHT * p.role_parse / 100 - DEATH_PENALTY * avoidable
     g += SURVIVOR_BONUS * (not p.deaths)
@@ -96,7 +101,45 @@ def grade(p: Player) -> float:
     return min(MAX_GRADE, max(MIN_GRADE, round(g * 2) / 2))
 
 
+def ranking(players: list[Player]) -> list[Player]:
+    """Best first; ties broken by role parse."""
+    return sorted(players, key=lambda p: (grade(p), p.role_parse), reverse=True)
+
+
 def podium(players: list[Player]) -> tuple[Player, Player]:
-    """(MVP, LVP): best and worst grade; ties broken by role parse."""
-    ranked = sorted(players, key=lambda p: (grade(p), p.role_parse))
-    return ranked[-1], ranked[0]
+    """(MVP, LVP)."""
+    ranked = ranking(players)
+    return ranked[0], ranked[-1]
+
+
+def mmss(seconds: int) -> str:
+    return f"{seconds // 60}:{seconds % 60:02d}"
+
+
+def merge(fights: list[list[Player]]) -> list[Player]:
+    """Collapse the same raider across fights: sum totals, average rates/parses, keep all deaths,
+    night grade = mean of the per-fight grades (so more pulls do not multiply death penalties)."""
+    by_name: dict[str, list[Player]] = {}
+    for f in fights:
+        for p in f:
+            by_name.setdefault(p.name, []).append(p)
+
+    def one(ps: list[Player]) -> Player:
+        n = len(ps)
+        mean = lambda xs: sum(xs) / n
+        return replace(
+            ps[-1],
+            ilvl=max(p.ilvl for p in ps),
+            damage=sum(p.damage for p in ps),
+            healing=sum(p.healing for p in ps),
+            taken=sum(p.taken for p in ps),
+            dps=mean([p.dps for p in ps]),
+            hps=mean([p.hps for p in ps]),
+            mitigation=mean([p.mitigation for p in ps]),
+            dps_parse=round(mean([p.dps_parse for p in ps])),
+            hps_parse=round(mean([p.hps_parse for p in ps])),
+            deaths=tuple(chain.from_iterable(p.deaths for p in ps)),
+            score=round(mean([grade(p) for p in ps]) * 2) / 2,
+        )
+
+    return [one(ps) for ps in by_name.values()]
