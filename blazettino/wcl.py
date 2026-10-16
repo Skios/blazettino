@@ -2,24 +2,12 @@
 import base64
 import hashlib
 import json
-import re
 import urllib.request
-from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
+from blazettino.config import ROOT, env
+
 CACHE = ROOT / "cache"
 API = "https://www.warcraftlogs.com"
-
-
-def _creds() -> dict[str, str]:
-    env = {}
-    for line in (ROOT / ".env").read_text().splitlines():
-        m = re.match(r"\s*(clientId|secret)\s*[:=\s]\s*(\S+)", line)
-        if m:
-            env[m[1]] = m[2].strip("\"'")
-    if len(env) != 2:
-        raise SystemExit(".env: mancano clientId/secret WarcraftLogs v2")
-    return env
 
 
 _token = None
@@ -28,7 +16,7 @@ _token = None
 def _auth() -> str:
     global _token
     if _token is None:
-        c = _creds()
+        c = env("clientId", "secret")
         basic = base64.b64encode(f"{c['clientId']}:{c['secret']}".encode()).decode()
         req = urllib.request.Request(
             f"{API}/oauth/token",
