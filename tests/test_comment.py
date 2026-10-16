@@ -58,5 +58,33 @@ class CommentTest(unittest.TestCase):
         self.assertEqual(comment.comments(self.players, {}, generate=lambda p, c: reply), {})
 
 
+class HighlightsTest(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.players = kpi.load_fight(
+            load("summary"), load("taken"), load("rank_dps"), load("rank_hps")
+        )
+        cls.by = {p.name: p for p in cls.players}
+
+    def hints(self, name):
+        return comment.highlights(self.by[name], self.players)
+
+    def test_few_survivors_are_called_out(self):
+        self.assertTrue(any("soli 3" in h for h in self.hints("Feroce")))
+
+    def test_cross_role_parse_is_called_out(self):
+        self.assertTrue(any("93" in h and "danni" in h for h in self.hints("Fardina")))
+
+    def test_most_hit_of_role_is_called_out(self):
+        self.assertTrue(any("piu' colpito" in h and "healer" in h for h in self.hints("Madreh")))
+
+    def test_top_and_bottom_of_role(self):
+        self.assertTrue(any("primo" in h for h in self.hints("Karabosca")))
+        self.assertTrue(any("ultimo" in h for h in self.hints("Sleãze")))
+
+    def test_prompt_includes_highlights(self):
+        self.assertIn("soli 3", comment.build_prompt(self.players))
+
+
 if __name__ == "__main__":
     unittest.main()

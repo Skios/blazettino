@@ -31,7 +31,8 @@ def main(argv: list[str]) -> None:
     players = [p for p in kpi.merge(fights) if p.name not in exclude]
     date = datetime.fromtimestamp(info["startTime"] / 1000).strftime("%Y-%m-%d")
     text = report.render(
-        info["title"], date, [f["name"] for f in kills], players, comment.comments(players, cfg)
+        info["title"], date, [f["name"] for f in kills], players, comment.comments(players, cfg),
+        cfg.get("max_missed_fights", 1),
     )
 
     path = ROOT / "out" / f"pagella_{date}.md"

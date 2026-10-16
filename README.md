@@ -26,10 +26,11 @@ geminiKey: <Google AI Studio API key>
 `config.json` (opzionale, non versionato):
 
 ```json
-{"backend": "gemini", "model": "gemini-3.8-flash", "exclude": ["NomePG"]}
+{"backend": "gemini", "model": "gemini-3.8-flash", "exclude": ["NomePG"], "max_missed_fights": 1}
 ```
 
-- `exclude`: PG che non compaiono in pagella, podio e commenti.
+- `exclude`: PG che non compaiono in pagella, podio e commenti (nemmeno negli esempi di stile).
+- `max_missed_fights` (default 1): chi salta più boss della serata resta in pagella ma non entra nel podio.
 - `backend`: `gemini` (default) oppure `ollama` (locale, qualità inferiore: vedi `docs/backlog.md`).
 
 ## Test
@@ -41,4 +42,5 @@ python -m unittest
 ## Documenti
 
 - Requisiti: [`.claude/prds/blazettino.prd.md`](.claude/prds/blazettino.prd.md)
+- Esempi di stile (la pagella scritta a mano): [`blazettino/style_examples.txt`](blazettino/style_examples.txt)
 - Idee non ancora in scope: [`docs/backlog.md`](docs/backlog.md)

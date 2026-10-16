@@ -20,23 +20,33 @@ def _numbers(p: kpi.Player) -> str:
     )
 
 
-def _entry(p: kpi.Player, c: Comment | None) -> str:
+def _entry(p: kpi.Player, c: Comment | None, benched: bool) -> str:
     head = f"**{p.name}** ({p.spec} {p.cls}, iLvl {p.ilvl}) — Voto {kpi.grade(p):g}"
+    if benched:
+        head += " (poche presenze: fuori dal podio)"
     if c:
         return f"{head} — *{c.title}*\n{c.text}\n_{_numbers(p)}_"
     return f"{head}\n_{_numbers(p)}_"
 
 
 def render(
-    title: str, date: str, bosses: list[str], players: list[kpi.Player], comments: dict[str, Comment]
+    title: str,
+    date: str,
+    bosses: list[str],
+    players: list[kpi.Player],
+    comments: dict[str, Comment],
+    max_missed: int = 1,
 ) -> str:
+    """Podium only counts raiders who missed at most max_missed of the night's boss fights."""
     ranked = kpi.ranking(players)
-    podium = [f"{MEDALS[0]} MVP — {ranked[0].name} ({kpi.grade(ranked[0]):g})"]
-    podium += [f"{m} {p.name} ({kpi.grade(p):g})" for m, p in zip(MEDALS[1:], ranked[1:3])]
-    podium.append(f"💀 LVP — {ranked[-1].name} ({kpi.grade(ranked[-1]):g})")
+    pool = kpi.eligible(ranked, len(bosses), max_missed) or ranked
+    top = kpi.ranking(pool)
+    podium = [f"{MEDALS[0]} MVP — {top[0].name} ({kpi.grade(top[0]):g})"]
+    podium += [f"{m} {p.name} ({kpi.grade(p):g})" for m, p in zip(MEDALS[1:], top[1:3])]
+    podium.append(f"💀 LVP — {top[-1].name} ({kpi.grade(top[-1]):g})")
     out = [f"# Pagella — {title} ({date})", f"Boss: {', '.join(bosses)}", "## Podio", "\n".join(podium)]
     for role, label in SECTIONS:
         group = [p for p in ranked if p.role == role]
         if group:
-            out += [f"## {label}", "\n\n".join(_entry(p, comments.get(p.name)) for p in group)]
+            out += [f"## {label}", "\n\n".join(_entry(p, comments.get(p.name), p not in pool) for p in group)]
     return "\n\n".join(out) + "\n"

@@ -65,5 +65,26 @@ class RenderTest(unittest.TestCase):
             self.assertIn(h, self.text)
 
 
+class AttendanceTest(unittest.TestCase):
+    def setUp(self):
+        missing = [p for p in fight("C") if p.name != "Sleãze"]
+        self.players = kpi.merge([fight("A"), fight("B"), missing])  # Sleãze present in 2 of 3
+
+    def render(self, max_missed):
+        return report.render("T", "d", ["A", "B", "C"], self.players, {}, max_missed=max_missed)
+
+    def test_fights_attended_are_counted(self):
+        by = {p.name: p for p in self.players}
+        self.assertEqual((by["Sleãze"].fights, by["Ghàdyus"].fights), (2, 3))
+
+    def test_missing_more_than_allowed_blocks_podium_but_keeps_listing(self):
+        text = self.render(max_missed=0)
+        self.assertNotRegex(text, r"LVP.*Sleãze")
+        self.assertIn("**Sleãze**", text)
+
+    def test_missing_within_allowance_can_still_be_lvp(self):
+        self.assertRegex(self.render(max_missed=1), r"LVP.*Sleãze")
+
+
 if __name__ == "__main__":
     unittest.main()

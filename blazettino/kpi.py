@@ -43,6 +43,7 @@ class Player:
     hps_parse: int
     deaths: tuple[Death, ...]
     score: float | None = None  # night grade set by merge(); None = compute from the fight
+    fights: int = 1  # boss fights this raider took part in
 
     @property
     def role_parse(self) -> int:
@@ -106,6 +107,11 @@ def ranking(players: list[Player]) -> list[Player]:
     return sorted(players, key=lambda p: (grade(p), p.role_parse), reverse=True)
 
 
+def eligible(players: list[Player], total_fights: int, max_missed: int) -> list[Player]:
+    """Raiders who missed at most max_missed of the night's boss fights (podium candidates)."""
+    return [p for p in players if p.fights >= total_fights - max_missed]
+
+
 def podium(players: list[Player]) -> tuple[Player, Player]:
     """(MVP, LVP)."""
     ranked = ranking(players)
@@ -140,6 +146,7 @@ def merge(fights: list[list[Player]]) -> list[Player]:
             hps_parse=round(mean([p.hps_parse for p in ps])),
             deaths=tuple(chain.from_iterable(p.deaths for p in ps)),
             score=round(mean([grade(p) for p in ps]) * 2) / 2,
+            fights=n,
         )
 
     return [one(ps) for ps in by_name.values()]
