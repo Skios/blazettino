@@ -56,7 +56,7 @@ def highlights(p: kpi.Player, players: list[kpi.Player]) -> list[str]:
     alive = [q for q in players if not q.deaths]
     if not p.deaths and len(alive) <= max(3, int(len(players) * FEW_SURVIVORS_SHARE)):
         out.append(f"uno dei soli {len(alive)} giocatori a non morire mai")
-    if p.other_parse >= kpi.CROSS_ROLE_THRESHOLD:
+    if p.ranked and p.other_parse >= kpi.CROSS_ROLE_THRESHOLD:
         side = "danni" if p.role == "healer" else "cure"
         out.append(f"parse {p.other_parse} nei {side} pur essendo {label} (non e' il suo ruolo)" if side == "danni"
                    else f"parse {p.other_parse} nelle {side} pur essendo {label} (non e' il suo ruolo)")

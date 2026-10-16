@@ -44,6 +44,7 @@ class Player:
     deaths: tuple[Death, ...]
     score: float | None = None  # night grade set by merge(); None = compute from the fight
     fights: int = 1  # boss fights this raider took part in
+    ranked: bool = True  # False: parses are inside-raid percentiles (no WarcraftLogs ranking on wipes)
 
     @property
     def icon(self) -> str:
@@ -74,26 +75,42 @@ def _deaths(events: list[dict]) -> dict[str, tuple[Death, ...]]:
     return {n: tuple(d) for n, d in out.items()}
 
 
+def _percentiles(values: dict[str, tuple[str, float]]) -> dict[str, int]:
+    """name -> 0..100 rank percentile among the raiders of the same role (best = 100)."""
+    out = {}
+    for role in {role for role, _ in values.values()}:
+        group = sorted((v, n) for n, (r, v) in values.items() if r == role)
+        for i, (_, name) in enumerate(group):
+            out[name] = round(100 * i / (len(group) - 1)) if len(group) > 1 else 50
+    return out
+
+
 def load_fight(summary: dict, taken: dict, rank_dps: dict, rank_hps: dict) -> list[Player]:
-    """Build one Player per raider from the Summary, DamageTaken and the two Rankings (dps/hps metric) tables."""
+    """Build one Player per raider from the Summary, DamageTaken and the two Rankings (dps/hps metric) tables.
+    Wipes have empty rankings: parses then become percentiles inside the raid, per role, and ranked=False."""
     s = summary["data"]
     secs = s["totalTime"] / 1000
     damage = {e["name"]: e["total"] for e in s["damageDone"]}
     healing = {e["name"]: e["total"] for e in s["healingDone"]}
     tk = {e["name"]: e for e in taken["data"]["entries"]}
-    dps_p, hps_p = _parses(rank_dps), _parses(rank_hps)
+    roster = [(role, d) for key, role in ROLE_KEYS.items() for d in s["playerDetails"][key]]
+    ranked = bool(rank_dps["data"]) and bool(rank_hps["data"])
+    if ranked:
+        dps_p, hps_p = _parses(rank_dps), _parses(rank_hps)
+    else:
+        dps_p = _percentiles({d["name"]: (role, damage[d["name"]]) for role, d in roster})
+        hps_p = _percentiles({d["name"]: (role, healing[d["name"]]) for role, d in roster})
     deaths = _deaths(s["deathEvents"])
     players = []
-    for key, role in ROLE_KEYS.items():
-        for d in s["playerDetails"][key]:
-            n = d["name"]
-            t = tk[n]
-            players.append(Player(
-                name=n, spec=d["specs"][0], cls=d["type"], role=role, ilvl=d["maxItemLevel"],
-                damage=damage[n], healing=healing[n], dps=damage[n] / secs, hps=healing[n] / secs,
-                taken=t["total"], mitigation=1 - t["totalReduced"] / t["total"],
-                dps_parse=dps_p[n], hps_parse=hps_p[n], deaths=deaths.get(n, ()),
-            ))
+    for role, d in roster:
+        n = d["name"]
+        t = tk[n]
+        players.append(Player(
+            name=n, spec=d["specs"][0], cls=d["type"], role=role, ilvl=d["maxItemLevel"],
+            damage=damage[n], healing=healing[n], dps=damage[n] / secs, hps=healing[n] / secs,
+            taken=t["total"], mitigation=1 - t["totalReduced"] / t["total"],
+            dps_parse=dps_p[n], hps_parse=hps_p[n], deaths=deaths.get(n, ()), ranked=ranked,
+        ))
     return players
 
 
@@ -103,7 +120,7 @@ def grade(p: Player) -> float:
     avoidable = sum(not d.mass for d in p.deaths)
     g = BASE + PARSE_WEIGHT * p.role_parse / 100 - DEATH_PENALTY * avoidable
     g += SURVIVOR_BONUS * (not p.deaths)
-    g += CROSS_ROLE_BONUS * (p.other_parse >= CROSS_ROLE_THRESHOLD)
+    g += CROSS_ROLE_BONUS * (p.ranked and p.other_parse >= CROSS_ROLE_THRESHOLD)
     return min(MAX_GRADE, max(MIN_GRADE, round(g * 2) / 2))
 
 
@@ -152,6 +169,7 @@ def merge(fights: list[list[Player]]) -> list[Player]:
             deaths=tuple(chain.from_iterable(p.deaths for p in ps)),
             score=round(mean([grade(p) for p in ps]) * 2) / 2,
             fights=n,
+            ranked=all(p.ranked for p in ps),
         )
 
     return [one(ps) for ps in by_name.values()]

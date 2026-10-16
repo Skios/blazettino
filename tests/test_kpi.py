@@ -76,5 +76,45 @@ class KpiTest(unittest.TestCase):
         self.assertLessEqual(sum(errs) / len(errs), MAX_MEAN_ABS_ERROR)
 
 
+class WipeTest(unittest.TestCase):
+    """A wipe has no WarcraftLogs rankings: parses become percentiles inside the raid, per role."""
+
+    @classmethod
+    def setUpClass(cls):
+        def w(name):
+            return json.loads((FIX / f"{name}_20.json").read_text())
+
+        cls.players = kpi.load_fight(w("summary"), w("taken"), w("rank_dps"), w("rank_hps"))
+        cls.by_name = {p.name: p for p in cls.players}
+
+    def test_wipe_players_are_loaded_and_flagged_unranked(self):
+        self.assertEqual(len(self.players), 20)
+        self.assertFalse(any(p.ranked for p in self.players))
+
+    def test_kill_players_are_flagged_ranked(self):
+        kill = kpi.load_fight(load("summary"), load("taken"), load("rank_dps"), load("rank_hps"))
+        self.assertTrue(all(p.ranked for p in kill))
+
+    def test_percentiles_span_zero_to_hundred_within_each_role(self):
+        for role in ("tank", "healer", "dps"):
+            parses = sorted(p.dps_parse for p in self.players if p.role == role)
+            self.assertEqual((parses[0], parses[-1]), (0, 100))
+
+    def test_top_dps_of_role_gets_100_and_bottom_gets_0(self):
+        dps = [p for p in self.players if p.role == "dps"]
+        self.assertEqual(max(dps, key=lambda p: p.damage).dps_parse, 100)
+        self.assertEqual(min(dps, key=lambda p: p.damage).dps_parse, 0)
+
+    def test_cross_role_bonus_never_applies_without_real_parses(self):
+        for p in self.players:
+            with_bonus = kpi.grade(p)
+            ranked_twin = kpi.grade(__import__("dataclasses").replace(p, ranked=True))
+            self.assertLessEqual(with_bonus, ranked_twin)
+
+    def test_grades_are_in_range(self):
+        for p in self.players:
+            self.assertTrue(1 <= kpi.grade(p) <= 10)
+
+
 if __name__ == "__main__":
     unittest.main()
