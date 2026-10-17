@@ -1,4 +1,5 @@
 """python -m blazettino <report_code> [--publish]
+python -m blazettino --remove <YYYY-MM-DD>     take a published night off the site
 
 Writes out/<date>/{global.md, <boss>_kill|wipe.md, pagella.html, messaggio.txt}. With --publish the page is also
 copied to the Pages repo (config: site_dir, site_url), committed and pushed, so the message link works.
@@ -12,10 +13,21 @@ from blazettino import attempts, icons, kpi, message, night, page, publish, repo
 from blazettino.config import ROOT, load_config
 
 FIGHTS = "fights{id name encounterID kill fightPercentage startTime endTime}"
-USAGE = "uso: python -m blazettino <codice_report> [--publish]"
+USAGE = "uso: python -m blazettino <codice_report> [--publish] | --remove <YYYY-MM-DD>"
+
+
+def _remove(date: str, cfg: dict) -> None:
+    if not cfg.get("site_dir"):
+        raise SystemExit("--remove richiede site_dir in config.json (vedi README)")
+    publish.remove(date, Path(cfg["site_dir"]).expanduser())
+    sys.stdout.write(f"rimossa la pagella {date} dal sito\n")
 
 
 def main(argv: list[str]) -> None:
+    if argv[1:2] == ["--remove"]:
+        if len(argv) != 3:
+            raise SystemExit(USAGE)
+        return _remove(argv[2], load_config())
     args = [a for a in argv[1:] if a != "--publish"]
     do_publish = "--publish" in argv[1:]
     if len(args) != 1:

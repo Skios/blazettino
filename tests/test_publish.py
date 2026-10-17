@@ -72,5 +72,42 @@ class PublishTest(unittest.TestCase):
             self.run_publish()
 
 
+class RemoveTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.site = Path(self.tmp.name)
+        for d in ("2026-10-01", "2026-10-15"):
+            (self.site / d).mkdir()
+            (self.site / d / "index.html").write_text(d)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_removes_the_night_and_unlists_it(self):
+        git = FakeGit()
+        publish.remove("2026-10-15", self.site, git)
+        self.assertFalse((self.site / "2026-10-15").exists())
+        self.assertTrue((self.site / "2026-10-01").exists())
+        index = (self.site / "index.html").read_text()
+        self.assertNotIn("2026-10-15", index)
+        self.assertIn("2026-10-01", index)
+
+    def test_commits_and_pushes_the_removal(self):
+        git = FakeGit()
+        publish.remove("2026-10-15", self.site, git)
+        self.assertEqual([c[:2] for c in git.calls], [["git", "add"], ["git", "status"], ["git", "commit"], ["git", "push"]])
+        self.assertIn("2026-10-15", " ".join(git.calls[2]))
+
+    def test_only_dated_folders_can_be_removed(self):
+        for bad in ("../x", "..", "index.html", "2026-10-1", ""):
+            with self.assertRaises(ValueError):
+                publish.remove(bad, self.site, FakeGit())
+        self.assertTrue((self.site / "2026-10-15").exists())
+
+    def test_unknown_night_fails_clearly(self):
+        with self.assertRaises(FileNotFoundError):
+            publish.remove("2026-12-31", self.site, FakeGit())
+
+
 if __name__ == "__main__":
     unittest.main()

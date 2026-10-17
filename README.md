@@ -19,19 +19,26 @@ Sui wipe WarcraftLogs non calcola i parse ("No kill no ranking!"): il voto usa l
 
 ## Pubblicare (link cliccabile con anteprima)
 
-La pagina si apre direttamente nel browser da un link, ospitata su GitHub Pages (gratis, link non listato: `noindex` + `robots.txt`, nessuna indicizzazione). Su Discord e Telegram il link mostra un'anteprima con titolo, MVP e LVP.
+La pagina si apre direttamente nel browser da un link, ospitata su GitHub Pages (gratis). Il link è non listato (`noindex` + `robots.txt`). Su Discord e Telegram mostra un'anteprima con titolo, MVP e LVP.
+
+Si usa lo **stesso repo** del progetto: il codice sta su `master`, le pagine in un branch separato `gh-pages` (senza cronologia in comune) che tieni in una cartella a parte. Attenzione: Pages gratis richiede un repo **pubblico**, quindi diventa pubblico anche il codice (nessun segreto: `.env` e `config.json` sono ignorati da git).
 
 Setup, una volta sola:
 
-1. Crea un repo **pubblico** vuoto, es. `blazettino-site`, solo per le pagine generate (nessun segreto vi finisce: la pagina contiene nomi dei PG e statistiche).
-2. Su GitHub: Settings → Pages → Deploy from a branch → `main` / `(root)`.
-3. Clonalo in locale e aggiungi in `config.json` (vedi sotto) `site_dir` (percorso del clone) e `site_url` (es. `https://<utente>.github.io/blazettino-site`).
-
 ```
-python -m blazettino <codice_report> --publish
+git remote add origin https://github.com/<utente>/blazettino.git && git push -u origin master
+git worktree add --orphan -b gh-pages ../blazettino-site
+cd ../blazettino-site && git commit --allow-empty -m "pagine" && git push -u origin gh-pages
 ```
 
-Genera tutto, copia la pagina in `<site_dir>/<data>/index.html`, aggiorna l'indice delle serate, fa commit e push. Dopo circa un minuto il link in `messaggio.txt` è attivo. Senza `--publish` non viene toccato nessun repo e non parte nessun push.
+Poi su GitHub: Settings → Pages → Deploy from a branch → `gh-pages` / root, e in `config.json` (vedi sotto) `site_dir` = percorso assoluto di `../blazettino-site` e `site_url` = `https://<utente>.github.io/blazettino`.
+
+```
+python -m blazettino <codice_report> --publish    # genera, copia in site_dir/<data>/, commit e push
+python -m blazettino --remove <YYYY-MM-DD>         # toglie una serata dal sito
+```
+
+Dopo circa un minuto il link in `messaggio.txt` è attivo. Senza `--publish` non viene toccato nessun repo e non parte nessun push. `--remove` fa smettere di funzionare il link, ma la pagina resta nella cronologia del branch `gh-pages` (che è pubblica): per cancellarla davvero serve riscrivere la cronologia con un force-push.
 
 ## Setup
 
@@ -49,11 +56,11 @@ geminiKey: <Google AI Studio API key>
 
 ```json
 {"backend": "gemini", "model": "gemini-3.8-flash", "exclude": ["NomePG"], "max_missed_fights": 1,
- "site_dir": "~/blazettino-site", "site_url": "https://<utente>.github.io/blazettino-site"}
+ "site_dir": "/mnt/c/projects/blazettino-site", "site_url": "https://<utente>.github.io/blazettino"}
 ```
 
 - `exclude`: PG che non compaiono in pagella, podio e commenti (nemmeno negli esempi di stile).
-- `site_dir`, `site_url`: repo GitHub Pages locale e suo indirizzo pubblico (servono solo per `--publish` e per il link nel messaggio).
+- `site_dir`, `site_url`: cartella locale del branch `gh-pages` e suo indirizzo pubblico (servono solo per `--publish` e per il link nel messaggio).
 - `max_missed_fights` (default 1): chi salta più boss della serata resta in pagella ma non entra nel podio.
 - `backend`: `gemini` (default) oppure `ollama` (locale, qualità inferiore: vedi `docs/backlog.md`).
 
