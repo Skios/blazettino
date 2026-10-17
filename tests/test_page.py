@@ -132,6 +132,10 @@ class SharingTest(unittest.TestCase):
     def test_no_og_url_when_the_page_is_not_hosted_yet(self):
         self.assertNotIn("og:url", build())
 
+    def test_hosted_page_links_to_the_archive_and_local_one_does_not(self):
+        self.assertIn('href="../archivio/"', page.render_html(build_night(), None, self.URL))
+        self.assertNotIn("archivio", build())
+
     def test_page_is_unlisted(self):
         self.assertIn('name="robots" content="noindex"', build())
 

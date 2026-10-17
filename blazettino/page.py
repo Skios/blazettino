@@ -212,6 +212,7 @@ def render_html(night: Night, icons: dict[str, str] | None = None, url: str | No
             f'<button class="tab" data-tab="{pid}" aria-pressed="false">{escape(b.attempt.name)} '
             f'<span class="tag {kind}">{kind.upper()}</span></button>'
         )
+    archive_link = '<br><a href="../archivio/">Tutte le serate</a>' if url else ""  # only meaningful when hosted
     return (
         '<!doctype html><html lang="it"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
@@ -220,6 +221,6 @@ def render_html(night: Night, icons: dict[str, str] | None = None, url: str | No
         f"<style>{CSS}{_icon_css(icons)}</style></head><body><main>"
         f"<h1>📰 Il Blazettino</h1><p class='sub'>Pagella — {escape(night.title)} · {escape(night.date)}</p>"
         f'<nav class="tabs">{"".join(tabs)}</nav>{"".join(panels)}'
-        "<footer>Voti calcolati dai dati di WarcraftLogs, battute dell'IA. Si fa per ridere.</footer>"
+        f"<footer>Voti calcolati dai dati di WarcraftLogs, battute dell'IA. Si fa per ridere.{archive_link}</footer>"
         f"</main><script>{JS}</script></body></html>"
     )

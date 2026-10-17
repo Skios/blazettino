@@ -36,7 +36,10 @@ Poi su GitHub: Settings → Pages → Deploy from a branch → `gh-pages` / root
 ```
 python -m blazettino <codice_report> --publish    # genera, copia in site_dir/<data>/, commit e push
 python -m blazettino --remove <YYYY-MM-DD>         # toglie una serata dal sito
+python -m blazettino --refresh-site                # riscrive radice e archivio dalle serate già pubblicate (senza rigenerare nulla)
 ```
+
+La radice del sito (`<site_url>/`) apre direttamente l'ultima serata; `<site_url>/archivio/` elenca tutte le serate (data, titolo, MVP/LVP, tag "Ultima"). Ogni pagella pubblicata ha in fondo il link "Tutte le serate".
 
 Dopo circa un minuto il link in `messaggio.txt` è attivo. Senza `--publish` non viene toccato nessun repo e non parte nessun push. `--remove` fa smettere di funzionare il link, ma la pagina resta nella cronologia del branch `gh-pages` (che è pubblica): per cancellarla davvero serve riscrivere la cronologia con un force-push.
 
