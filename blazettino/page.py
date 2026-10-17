@@ -176,7 +176,27 @@ def _icon_css(icons: dict[str, str]) -> str:
     return "".join(f".i-{name}{{background-image:url({uri})}}" for name, uri in icons.items())
 
 
-def render_html(night: Night, icons: dict[str, str] | None = None) -> str:
+def _share_head(night: Night, top: list[kpi.Player], url: str | None) -> str:
+    """Unlisted page + Open Graph tags, so Discord/Telegram unfurl the link as a card."""
+    mvp, lvp = top[0], top[-1]
+    kills = sum(b.attempt.kill for b in night.bosses)
+    desc = (
+        f"MVP {mvp.name} ({kpi.grade(mvp):g}) · LVP {lvp.name} ({kpi.grade(lvp):g}) · "
+        f"{len(night.bosses)} boss, {kills} kill"
+    )
+    tags = [
+        '<meta name="robots" content="noindex">',
+        '<meta property="og:type" content="website">',
+        f'<meta property="og:title" content="Il Blazettino · {escape(night.title)} {escape(night.date)}">',
+        f'<meta property="og:description" content="{escape(desc)}">',
+        '<meta name="twitter:card" content="summary">',
+    ]
+    if url:
+        tags.append(f'<meta property="og:url" content="{escape(url)}">')
+    return "".join(tags)
+
+
+def render_html(night: Night, icons: dict[str, str] | None = None, url: str | None = None) -> str:
     icons = icons or {}
     ranked, pool, top = report.standings(night.players, len(night.bosses), night.max_missed)
     chips = "".join(f'<span class="chip">{escape(b.attempt.name)}</span>' for b in night.bosses)
@@ -195,6 +215,7 @@ def render_html(night: Night, icons: dict[str, str] | None = None) -> str:
     return (
         '<!doctype html><html lang="it"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
+        f"{_share_head(night, top, url)}"
         f"<title>Il Blazettino · {escape(night.title)} {escape(night.date)}</title>"
         f"<style>{CSS}{_icon_css(icons)}</style></head><body><main>"
         f"<h1>📰 Il Blazettino</h1><p class='sub'>Pagella — {escape(night.title)} · {escape(night.date)}</p>"

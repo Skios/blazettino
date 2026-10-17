@@ -118,5 +118,23 @@ class IconsTest(unittest.TestCase):
         self.assertNotIn('class="spec', build())
 
 
+class SharingTest(unittest.TestCase):
+    URL = "https://example.github.io/blazettino-site/2026-10-15/"
+
+    def test_link_preview_tags_describe_the_night(self):
+        h = page.render_html(build_night(), None, self.URL)
+        self.assertIn('property="og:title" content="Il Blazettino · The Venomous Abyss', h)
+        desc = re.search(r'property="og:description" content="([^"]*)"', h).group(1)
+        self.assertIn("MVP", desc)
+        self.assertIn("LVP", desc)
+        self.assertIn(f'property="og:url" content="{self.URL}"', h)
+
+    def test_no_og_url_when_the_page_is_not_hosted_yet(self):
+        self.assertNotIn("og:url", build())
+
+    def test_page_is_unlisted(self):
+        self.assertIn('name="robots" content="noindex"', build())
+
+
 if __name__ == "__main__":
     unittest.main()
