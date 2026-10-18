@@ -14,7 +14,7 @@ from typing import Callable, Iterable
 
 from blazettino import kpi
 from blazettino.attempts import Attempt
-from blazettino.config import env
+from blazettino.config import env_prefix
 
 log = logging.getLogger(__name__)
 
@@ -143,12 +143,16 @@ def _post(url: str, body: dict, headers: dict) -> dict:
 
 def call_backend(prompt: str, cfg: dict) -> str:
     if cfg["backend"] == "gemini":
-        out = _post(
-            GEMINI_URL.format(model=cfg["model"]),
-            {"contents": [{"parts": [{"text": prompt}]}], "generationConfig": {"responseMimeType": "application/json"}},
-            {"x-goog-api-key": env("geminiKey")["geminiKey"]},
-        )
-        return out["candidates"][0]["content"]["parts"][-1]["text"]
+        body = {"contents": [{"parts": [{"text": prompt}]}], "generationConfig": {"responseMimeType": "application/json"}}
+        keys = env_prefix("geminiKey")
+        for i, key in enumerate(keys):
+            try:
+                out = _post(GEMINI_URL.format(model=cfg["model"]), body, {"x-goog-api-key": key})
+                return out["candidates"][0]["content"]["parts"][-1]["text"]
+            except urllib.error.HTTPError as e:
+                if e.code != 429 or i == len(keys) - 1:  # only an exhausted quota moves on to the next key
+                    raise
+                log.warning("chiave Gemini %d esaurita (429): passo alla successiva", i + 1)
     if cfg["backend"] == "ollama":
         out = _post(OLLAMA_URL, {"model": cfg["model"], "prompt": prompt, "stream": False, "think": False, "format": "json"}, {})
         return out["response"]

@@ -83,6 +83,47 @@ class CommentTest(unittest.TestCase):
         self.assertEqual(comment.comments(self.players, {}, generate=lambda p, c: reply), {})
 
 
+class GeminiKeysTest(unittest.TestCase):
+    CFG = {"backend": "gemini", "model": "m"}
+    REPLY = {"candidates": [{"content": {"parts": [{"text": "{}"}]}}]}
+
+    def run_with(self, post):
+        keys = {"geminiKey": "A", "geminiKey2": "B", "geminiKey3": "C"}
+        with mock.patch.object(comment, "env_prefix", lambda p: [keys[k] for k in sorted(keys)]), \
+                mock.patch.object(comment, "_post", post):
+            return comment.call_backend("p", self.CFG)
+
+    def test_next_key_is_used_when_one_is_out_of_quota(self):
+        used = []
+
+        def post(url, body, headers):
+            used.append(headers["x-goog-api-key"])
+            if headers["x-goog-api-key"] != "C":
+                raise urllib.error.HTTPError(url, 429, "Too Many Requests", {}, None)
+            return self.REPLY
+
+        self.assertEqual(self.run_with(post), "{}")
+        self.assertEqual(used, ["A", "B", "C"])
+
+    def test_error_surfaces_when_every_key_is_exhausted(self):
+        def post(url, body, headers):
+            raise urllib.error.HTTPError(url, 429, "Too Many Requests", {}, None)
+
+        with self.assertRaises(urllib.error.HTTPError):
+            self.run_with(post)
+
+    def test_other_errors_do_not_burn_the_remaining_keys(self):
+        used = []
+
+        def post(url, body, headers):
+            used.append(1)
+            raise urllib.error.HTTPError(url, 400, "Bad Request", {}, None)
+
+        with self.assertRaises(urllib.error.HTTPError):
+            self.run_with(post)
+        self.assertEqual(len(used), 1)
+
+
 class HighlightsTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

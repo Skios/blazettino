@@ -57,7 +57,10 @@ Solo libreria standard di Python 3.11+ (testato su 3.14), nessuna dipendenza.
 clientId: <WarcraftLogs v2 client id>
 secret: <WarcraftLogs v2 client secret>
 geminiKey: <Google AI Studio API key>
+geminiKey2: <altra chiave, facoltativa>
 ```
+
+Le chiavi `geminiKey2`, `geminiKey3`... sono di riserva: si passa alla successiva solo quando la corrente risponde 429 (quota esaurita). Attenzione: usare più account per aggirare i limiti può violare i termini di Google.
 
 `config.json` (opzionale, non versionato):
 
