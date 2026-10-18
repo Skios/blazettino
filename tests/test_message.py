@@ -1,7 +1,7 @@
 import unittest
 
-from blazettino import message, report
-from tests.helpers import build_night
+from blazettino import message, night, report
+from tests.helpers import build_night, fake_comments
 
 URL = "https://example.github.io/blazettino-site/2026-10-15/"
 
@@ -35,6 +35,12 @@ class MessageTest(unittest.TestCase):
 
     def test_date_is_day_slash_month(self):
         self.assertIn("(15/10)", message.render(self.night, URL))
+
+    def test_week_message_has_the_range_and_no_single_day(self):
+        week = night.assemble_week([build_night(date="2026-10-07"), build_night(date="2026-10-08")], {}, fake_comments)
+        text = message.render(week, URL)
+        self.assertIn("Settimana 07/10–08/10", text)
+        self.assertNotIn("(07/10)\n", text)  # no single-day suffix after the title
 
 
 if __name__ == "__main__":

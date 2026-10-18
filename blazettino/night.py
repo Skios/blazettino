@@ -26,6 +26,7 @@ class Night:
     players: list[kpi.Player]  # merged across bosses
     comments: dict[str, Comment]  # night-wide, from the aggregated data
     max_missed: int
+    kind: str = "Serata"  # "Settimana" for the weekly aggregate
 
 
 def _tag_boss(players: list[kpi.Player], boss: str) -> list[kpi.Player]:
@@ -52,3 +53,21 @@ def assemble(
         notes = list(pool.map(lambda job: comments_fn(job[0], cfg, context=job[1]), jobs))
     bosses = [BossReport(a, ps, n) for (a, ps), n in zip(per_boss, notes)]
     return Night(title, date, bosses, merged, notes[-1], cfg.get("max_missed_fights", 1))
+
+
+def _day(date: str) -> str:
+    return f"{date[8:]}/{date[5:7]}"
+
+
+def assemble_week(nights: list[Night], cfg: dict, comments_fn: Callable[..., dict[str, Comment]] = comment.comments) -> Night:
+    """The week as one big night: every boss try of every night (named with its day), merged grades,
+    one extra LLM call. Boss comments are reused from the nights, not regenerated."""
+    nights = sorted(nights, key=lambda n: n.date)
+    bosses = [
+        dataclasses.replace(b, attempt=dataclasses.replace(b.attempt, name=f"{b.attempt.name} ({_day(n.date)})"))
+        for n in nights for b in n.bosses
+    ]
+    merged = kpi.merge([_tag_boss(b.players, b.attempt.name) for b in bosses])
+    notes = comments_fn(merged, cfg, context=comment.week_context([b.attempt for b in bosses], len(nights)))
+    title = f"Settimana {_day(nights[0].date)}–{_day(nights[-1].date)} · {nights[0].title}"
+    return Night(title, nights[0].date, bosses, merged, notes, cfg.get("max_missed_fights", 1) * len(nights), "Settimana")

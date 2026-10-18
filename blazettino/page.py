@@ -159,7 +159,7 @@ def _heat(night: Night, ranked: list[kpi.Player]) -> str:
         + f'<td class="g" style="--g:{kpi.grade(p):g}"><b>{kpi.grade(p):g}</b></td></tr>'
         for p in ranked
     )
-    return f'<div class="heatwrap"><table class="heat"><thead><tr><th>Giocatore</th>{heads}<th>Serata</th></tr></thead><tbody>{rows}</tbody></table></div>'
+    return f'<div class="heatwrap"><table class="heat"><thead><tr><th>Giocatore</th>{heads}<th>{night.kind}</th></tr></thead><tbody>{rows}</tbody></table></div>'
 
 
 def _banner(night: Night, boss: BossReport) -> str:
@@ -202,7 +202,7 @@ def render_html(night: Night, icons: dict[str, str] | None = None, url: str | No
     chips = "".join(f'<span class="chip">{escape(b.attempt.name)}</span>' for b in night.bosses)
     panels = [_panel("global", False, f'<div class="chips">{chips}</div>{_heat(night, ranked)}',
                      ranked, top, pool, night.comments, icons, True)]
-    tabs = ['<button class="tab" data-tab="global" aria-pressed="true">Serata</button>']
+    tabs = [f'<button class="tab" data-tab="global" aria-pressed="true">{night.kind}</button>']
     for i, b in enumerate(night.bosses, 1):
         pid = f"b{i}-{b.attempt.slug}"
         ranked_b = kpi.ranking(b.players)
@@ -212,7 +212,8 @@ def render_html(night: Night, icons: dict[str, str] | None = None, url: str | No
             f'<button class="tab" data-tab="{pid}" aria-pressed="false">{escape(b.attempt.name)} '
             f'<span class="tag {kind}">{kind.upper()}</span></button>'
         )
-    archive_link = '<br><a href="../archivio/">Tutte le serate</a>' if url else ""  # only meaningful when hosted
+    home = "../../" if night.kind == "Settimana" else "../"
+    archive_link = f'<br><a href="{home}">Home</a>' if url else ""  # only meaningful when hosted
     return (
         '<!doctype html><html lang="it"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'

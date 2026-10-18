@@ -1,5 +1,7 @@
 import json
 import unittest
+import urllib.error
+from unittest import mock
 from pathlib import Path
 
 from blazettino import attempts, comment, kpi
@@ -49,6 +51,28 @@ class CommentTest(unittest.TestCase):
 
         with self.assertLogs("blazettino.comment", level="WARNING"):
             self.assertEqual(comment.comments(self.players, {}, generate=boom), {})
+
+    def test_overloaded_backend_is_retried_then_succeeds(self):
+        names = [p.name for p in self.players]
+        calls = []
+
+        def flaky(prompt, cfg):
+            calls.append(1)
+            if len(calls) < 3:
+                raise urllib.error.HTTPError("u", 503, "Service Unavailable", {}, None)
+            return fake_reply(names)
+
+        with mock.patch.object(comment, "RETRY_WAIT_S", (0, 0, 0)):
+            out = comment.comments(self.players, {}, generate=flaky)
+        self.assertEqual(len(calls), 3)
+        self.assertEqual(len(out), 20)
+
+    def test_overloaded_backend_gives_up_after_the_retries(self):
+        def down(prompt, cfg):
+            raise urllib.error.HTTPError("u", 429, "Too Many Requests", {}, None)
+
+        with mock.patch.object(comment, "RETRY_WAIT_S", (0, 0)), self.assertLogs("blazettino.comment", level="WARNING"):
+            self.assertEqual(comment.comments(self.players, {}, generate=down), {})
 
     def test_invalid_json_returns_empty(self):
         with self.assertLogs("blazettino.comment", level="WARNING"):

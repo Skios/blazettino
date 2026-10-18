@@ -47,57 +47,68 @@ class PublishTest(unittest.TestCase):
         self.assertIn("Disallow: /", (self.site / "robots.txt").read_text())
         self.assertTrue((self.site / ".nojekyll").exists())
 
-    def test_archive_lists_every_night_newest_first_unlisted_and_styled(self):
+    def home(self):
+        return (self.site / "index.html").read_text()
+
+    def test_home_lists_every_night_newest_first_unlisted_and_styled(self):
         old = self.site / "2026-10-01"
         old.mkdir()
         (old / "index.html").write_text("old")
         self.run_publish()
-        archive = (self.site / "archivio" / "index.html").read_text()
-        self.assertLess(archive.index("2026-10-15/"), archive.index("2026-10-01/"))
-        self.assertIn('href="../2026-10-15/"', archive)
-        self.assertIn("noindex", archive)
-        self.assertIn("<style>", archive)
-        self.assertIn('name="viewport"', archive)
+        home = self.home()
+        self.assertLess(home.index('href="2026-10-15/"'), home.index('href="2026-10-01/"'))
+        self.assertIn("noindex", home)
+        self.assertIn("<style>", home)
+        self.assertIn('name="viewport"', home)
 
-    def test_archive_shows_readable_date_title_summary_and_marks_the_latest(self):
+    def test_home_does_not_redirect_and_offers_the_latest_night_first(self):
+        self.run_publish()
+        home = self.home()
+        self.assertNotIn("refresh", home)
+        self.assertNotIn("location.replace", home)
+        self.assertIn('class="btn" href="2026-10-15/"', home)
+
+    def test_home_shows_readable_date_title_summary_and_marks_the_latest(self):
         (self.folder / "pagella.html").write_text(
             '<html><head><title>Il Blazettino · The Venomous Abyss 2026-10-15</title>'
             '<meta property="og:description" content="MVP Karabosca (9.5) · LVP Madreh (4.5)"></head></html>'
         )
         self.run_publish()
-        archive = (self.site / "archivio" / "index.html").read_text()
-        self.assertIn("15 ottobre 2026", archive)
-        self.assertIn("The Venomous Abyss", archive)
-        self.assertIn("MVP Karabosca (9.5)", archive)
-        self.assertEqual(archive.count("Ultima"), 1)
+        home = self.home()
+        self.assertIn("15 ottobre 2026", home)
+        self.assertIn("The Venomous Abyss", home)
+        self.assertIn("MVP Karabosca (9.5)", home)
+        self.assertEqual(home.count("Ultima</span>"), 1)
 
-    def test_archive_text_from_pages_is_escaped(self):
+    def test_home_text_from_pages_is_escaped(self):
         (self.folder / "pagella.html").write_text(
             '<title>Il Blazettino · &lt;script&gt;x&lt;/script&gt; 2026-10-15</title>'
         )
         self.run_publish()
-        self.assertNotIn("<script>x", (self.site / "archivio" / "index.html").read_text())
+        self.assertNotIn("<script>x", self.home())
 
-    def test_root_opens_straight_on_the_latest_night(self):
-        old = self.site / "2026-10-01"
-        old.mkdir()
-        (old / "index.html").write_text("old")
+    def test_old_archive_link_goes_to_the_home(self):
         self.run_publish()
-        root = (self.site / "index.html").read_text()
-        self.assertIn('http-equiv="refresh" content="0; url=2026-10-15/"', root)
-        self.assertIn("location.replace(\"2026-10-15/\")", root)
-        self.assertIn('href="2026-10-15/"', root)  # visible fallback link
-        self.assertIn('href="archivio/"', root)
-        self.assertIn("noindex", root)
+        self.assertIn('url=../"', (self.site / "archivio" / "index.html").read_text())
 
-    def test_root_without_nights_does_not_redirect(self):
+    def test_home_without_nights_says_so(self):
         (self.folder / "pagella.html").write_text("x")
         self.run_publish()
         publish.remove("2026-10-15", self.site, FakeGit())
-        root = (self.site / "index.html").read_text()
-        self.assertNotIn("refresh", root)
-        self.assertNotIn("location.replace", root)
-        self.assertIn("Nessuna pagella", root)
+        self.assertIn("Nessuna pagella", self.home())
+
+    def test_week_is_published_under_settimana_and_listed_apart_from_the_nights(self):
+        (self.folder / "pagella.html").write_text(
+            '<title>Il Blazettino · Settimana 07/10–12/10 · The Venomous Abyss 2026-10-07</title>'
+        )
+        url = publish.publish(self.folder, "2026-10-07", self.site, SITE_URL, FakeGit(), "settimana")
+        self.assertEqual(url, "https://example.github.io/blazettino-site/settimana/2026-10-07/")
+        self.assertTrue((self.site / "settimana" / "2026-10-07" / "index.html").exists())
+        home = self.home()
+        self.assertIn('href="settimana/2026-10-07/"', home)
+        self.assertIn("Settimana 07/10–12/10 · The Venomous Abyss", home)
+        self.assertNotIn('href="2026-10-07/"', home)  # not mistaken for a night
+        self.assertNotIn('class="btn"', home)  # no night yet, so no "latest night" button
 
     def test_commits_and_pushes_when_something_changed(self):
         _, git = self.run_publish()
@@ -130,10 +141,9 @@ class RemoveTest(unittest.TestCase):
         publish.remove("2026-10-15", self.site, git)
         self.assertFalse((self.site / "2026-10-15").exists())
         self.assertTrue((self.site / "2026-10-01").exists())
-        archive = (self.site / "archivio" / "index.html").read_text()
-        self.assertNotIn("2026-10-15", archive)
-        self.assertIn("2026-10-01", archive)
-        self.assertIn("url=2026-10-01/", (self.site / "index.html").read_text())  # root falls back to the previous night
+        home = (self.site / "index.html").read_text()
+        self.assertNotIn("2026-10-15", home)
+        self.assertIn('class="btn" href="2026-10-01/"', home)  # latest falls back to the previous night
 
     def test_commits_and_pushes_the_removal(self):
         git = FakeGit()
@@ -141,8 +151,16 @@ class RemoveTest(unittest.TestCase):
         self.assertEqual([c[:2] for c in git.calls], [["git", "add"], ["git", "status"], ["git", "commit"], ["git", "push"]])
         self.assertIn("2026-10-15", " ".join(git.calls[2]))
 
+    def test_a_week_can_be_removed_with_its_section(self):
+        week = self.site / "settimana" / "2026-10-07"
+        week.mkdir(parents=True)
+        (week / "index.html").write_text("w")
+        publish.remove("settimana/2026-10-07", self.site, FakeGit())
+        self.assertFalse(week.exists())
+        self.assertTrue((self.site / "2026-10-15").exists())
+
     def test_only_dated_folders_can_be_removed(self):
-        for bad in ("../x", "..", "index.html", "2026-10-1", ""):
+        for bad in ("../x", "..", "index.html", "2026-10-1", "", "settimana/..", "altro/2026-10-15"):
             with self.assertRaises(ValueError):
                 publish.remove(bad, self.site, FakeGit())
         self.assertTrue((self.site / "2026-10-15").exists())
@@ -167,8 +185,9 @@ class RefreshTest(unittest.TestCase):
     def test_rewrites_root_and_archive_from_the_published_nights_and_pushes(self):
         git = FakeGit()
         publish.refresh(self.site, git)
-        self.assertIn("url=2026-10-15/", (self.site / "index.html").read_text())
-        self.assertIn("2026-10-01/", (self.site / "archivio" / "index.html").read_text())
+        home = (self.site / "index.html").read_text()
+        self.assertIn('class="btn" href="2026-10-15/"', home)
+        self.assertIn('href="2026-10-01/"', home)
         self.assertEqual([c[:2] for c in git.calls], [["git", "add"], ["git", "status"], ["git", "commit"], ["git", "push"]])
 
     def test_does_not_touch_the_night_pages(self):

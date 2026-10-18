@@ -5,6 +5,8 @@ Any backend failure degrades to "no comments" instead of crashing the report.
 """
 import json
 import logging
+import time
+import urllib.error
 import urllib.request
 from dataclasses import dataclass
 from pathlib import Path
@@ -18,6 +20,8 @@ log = logging.getLogger(__name__)
 
 DEFAULTS = {"backend": "gemini", "model": "gemini-3.8-flash"}
 TIMEOUT_S = 300
+RETRY_WAIT_S = (10, 30, 60)  # free tiers answer 429/503 when busy: wait and retry before giving up
+TRANSIENT = (429, 503)
 OLLAMA_URL = "http://localhost:11434/api/generate"
 GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
 
@@ -99,6 +103,15 @@ def night_context(attempts: list[Attempt]) -> str:
     )
 
 
+def week_context(attempts: list[Attempt], nights: int) -> str:
+    kills = sum(a.kill for a in attempts)
+    return (
+        f"Settimana di raid: {nights} serate, {len(attempts)} boss affrontati ({kills} kill, {len(attempts) - kills} wipe). "
+        "I dati sono aggregati su tutta la settimana (somme e medie) e il voto e' la media dei voti per boss: "
+        "commenta l'andamento della settimana intera, non una singola serata."
+    )
+
+
 def facts(p: kpi.Player, players: list[kpi.Player]) -> str:
     deaths = "nessuna" if not p.deaths else "; ".join(
         f"{d.boss + ' ' if d.boss else ''}{kpi.mmss(d.time_s)} {d.ability} ({'strage generale' if d.mass else 'evitabile'})" for d in p.deaths
@@ -142,6 +155,18 @@ def call_backend(prompt: str, cfg: dict) -> str:
     raise RuntimeError(f"backend sconosciuto: {cfg['backend']}")
 
 
+def _generate_with_retry(generate: Callable[[str, dict], str], prompt: str, cfg: dict) -> str:
+    for wait in RETRY_WAIT_S:
+        try:
+            return generate(prompt, cfg)
+        except urllib.error.HTTPError as e:
+            if e.code not in TRANSIENT:
+                raise
+            log.warning("backend occupato (HTTP %s): riprovo tra %ss", e.code, wait)
+            time.sleep(wait)
+    return generate(prompt, cfg)
+
+
 def comments(
     players: list[kpi.Player],
     cfg: dict,
@@ -151,8 +176,9 @@ def comments(
     """Name -> Comment for every non-excluded player the model answered for; {} if the backend fails."""
     cfg = {**DEFAULTS, **cfg}
     targets = [p.name for p in players if p.name not in set(cfg.get("exclude", ()))]
+    prompt = build_prompt(players, cfg.get("exclude", ()), context)
     try:
-        data = json.loads(generate(build_prompt(players, cfg.get("exclude", ()), context), cfg))
+        data = json.loads(_generate_with_retry(generate, prompt, cfg))
         if not isinstance(data, dict):
             raise ValueError("risposta JSON non è un oggetto")
     except (OSError, ValueError, KeyError, RuntimeError) as e:

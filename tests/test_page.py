@@ -1,9 +1,9 @@
 import re
 import unittest
 
-from blazettino import page, tips
+from blazettino import night, page, tips
 from blazettino.comment import Comment
-from tests.helpers import KILL_A, KILL_B, WIPE_C, build_night, players
+from tests.helpers import KILL_A, KILL_B, WIPE_C, build_night, fake_comments, players
 
 URI = "data:image/jpeg;base64,AAAA"
 
@@ -132,9 +132,16 @@ class SharingTest(unittest.TestCase):
     def test_no_og_url_when_the_page_is_not_hosted_yet(self):
         self.assertNotIn("og:url", build())
 
-    def test_hosted_page_links_to_the_archive_and_local_one_does_not(self):
-        self.assertIn('href="../archivio/"', page.render_html(build_night(), None, self.URL))
-        self.assertNotIn("archivio", build())
+    def test_hosted_page_links_to_the_home_and_local_one_does_not(self):
+        self.assertIn('href="../">Home', page.render_html(build_night(), None, self.URL))
+        self.assertNotIn("Home", build())
+
+    def test_week_page_is_labelled_as_such_and_links_two_levels_up(self):
+        week = night.assemble_week([build_night(date="2026-10-07"), build_night(date="2026-10-08")], {}, fake_comments)
+        h = page.render_html(week, None, self.URL)
+        self.assertIn('data-tab="global" aria-pressed="true">Settimana<', h)
+        self.assertIn("<th>Settimana</th>", h)
+        self.assertIn('href="../../">Home', h)
 
     def test_page_is_unlisted(self):
         self.assertIn('name="robots" content="noindex"', build())

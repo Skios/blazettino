@@ -27,6 +27,6 @@ def fake_comments(players, cfg, context=""):
     return {p.name: Comment(f"TITOLO {p.name.upper()}", f"Commento per {p.name}.") for p in players if p.name not in skip}
 
 
-def build_night(cfg=None, tries=None, comments_fn=fake_comments) -> night.Night:
+def build_night(cfg=None, tries=None, comments_fn=fake_comments, date="2026-10-15") -> night.Night:
     tries = tries or [(KILL_A, players(21)), (KILL_B, players(21)), (WIPE_C, players(20))]
-    return night.assemble("The Venomous Abyss", "2026-10-15", tries, cfg or {}, comments_fn)
+    return night.assemble("The Venomous Abyss", date, tries, cfg or {}, comments_fn)

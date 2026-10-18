@@ -1,6 +1,6 @@
 import unittest
 
-from blazettino import kpi
+from blazettino import kpi, night
 from tests.helpers import KILL_A, KILL_B, WIPE_C, build_night, fake_comments, players
 
 
@@ -57,6 +57,49 @@ class AssembleTest(unittest.TestCase):
         short = [p for p in players(21) if p.name != "Madreh"]
         n = build_night(tries=[(KILL_A, players(21)), (KILL_B, short)])
         self.assertEqual(next(p for p in n.players if p.name == "Madreh").fights, 1)
+
+
+class WeekTest(unittest.TestCase):
+    def setUp(self):
+        self.seen = []
+
+        def spy(players, cfg, context=""):
+            self.seen.append(context)
+            return fake_comments(players, cfg, context)
+
+        nights = [build_night(date="2026-10-07"), build_night(date="2026-10-08")]
+        self.week = night.assemble_week(nights, {}, spy)
+
+    def test_week_is_a_night_starting_on_the_first_date_with_every_boss_of_every_night(self):
+        self.assertEqual(self.week.kind, "Settimana")
+        self.assertEqual(self.week.date, "2026-10-07")
+        self.assertEqual(len(self.week.bosses), 6)
+        self.assertIn("07/10", self.week.title)
+        self.assertIn("08/10", self.week.title)
+
+    def test_boss_tabs_carry_the_day_so_repeated_bosses_stay_distinct(self):
+        names = [b.attempt.name for b in self.week.bosses]
+        self.assertEqual(len(set(names)), 6)
+        self.assertIn("Boss Uno (07/10)", names)
+        self.assertIn("Boss Uno (08/10)", names)
+
+    def test_week_grade_is_the_mean_over_all_boss_grades_and_fights_add_up(self):
+        p = next(p for p in self.week.players if p.name == "Karabosca")
+        grades = [kpi.grade(next(q for q in b.players if q.name == "Karabosca")) for b in self.week.bosses]
+        self.assertEqual(p.fights, 6)
+        self.assertEqual(kpi.grade(p), round(sum(grades) / 6 * 2) / 2)
+
+    def test_death_tags_name_the_boss_and_the_day(self):
+        p = next(p for p in self.week.players if p.name == "Nzotten")
+        self.assertIn("Boss Uno (07/10)", {d.boss for d in p.deaths})
+
+    def test_one_extra_llm_call_for_the_whole_week(self):
+        self.assertEqual(len(self.seen), 1)
+        self.assertIn("Settimana", self.seen[0])
+        self.assertEqual(len(self.week.comments), 20)
+
+    def test_allowed_absences_scale_with_the_number_of_nights(self):
+        self.assertEqual(self.week.max_missed, 2)
 
 
 if __name__ == "__main__":

@@ -1,4 +1,5 @@
 """Pure functions: WarcraftLogs tables for one fight -> per-player KPIs -> 0-10 grade -> podium."""
+from collections import defaultdict
 from dataclasses import dataclass, replace
 from itertools import chain
 
@@ -12,6 +13,8 @@ SURVIVOR_BONUS = 1.0  # zero deaths
 CROSS_ROLE_BONUS = 1.0  # parse in the "other" role at or above the threshold
 CROSS_ROLE_THRESHOLD = 90
 MIN_GRADE, MAX_GRADE = 1.0, 10.0
+
+UNKNOWN_ABILITY = "causa sconosciuta"  # WarcraftLogs gives no killing blow for some deaths
 
 # A death is "mass" (not penalised) when this many raiders die within the window.
 MASS_DEATHS = 5
@@ -70,7 +73,7 @@ def _deaths(events: list[dict]) -> dict[str, tuple[Death, ...]]:
     out: dict[str, list[Death]] = {}
     for e in sorted(events, key=lambda e: e["deathTime"]):
         near = sum(abs(t - e["deathTime"]) <= MASS_WINDOW_S * 1000 for t in times)
-        d = Death(e["deathTime"] // 1000, e["ability"]["name"], near >= MASS_DEATHS)
+        d = Death(e["deathTime"] // 1000, e.get("ability", {}).get("name", UNKNOWN_ABILITY), near >= MASS_DEATHS)
         out.setdefault(e["name"], []).append(d)
     return {n: tuple(d) for n, d in out.items()}
 
@@ -90,8 +93,8 @@ def load_fight(summary: dict, taken: dict, rank_dps: dict, rank_hps: dict) -> li
     Wipes have empty rankings: parses then become percentiles inside the raid, per role, and ranked=False."""
     s = summary["data"]
     secs = s["totalTime"] / 1000
-    damage = {e["name"]: e["total"] for e in s["damageDone"]}
-    healing = {e["name"]: e["total"] for e in s["healingDone"]}
+    damage = defaultdict(int, {e["name"]: e["total"] for e in s["damageDone"]})  # absent = did nothing
+    healing = defaultdict(int, {e["name"]: e["total"] for e in s["healingDone"]})
     tk = {e["name"]: e for e in taken["data"]["entries"]}
     roster = [(role, d) for key, role in ROLE_KEYS.items() for d in s["playerDetails"][key]]
     ranked = bool(rank_dps["data"]) and bool(rank_hps["data"])
@@ -108,7 +111,7 @@ def load_fight(summary: dict, taken: dict, rank_dps: dict, rank_hps: dict) -> li
         players.append(Player(
             name=n, spec=d["specs"][0], cls=d["type"], role=role, ilvl=d["maxItemLevel"],
             damage=damage[n], healing=healing[n], dps=damage[n] / secs, hps=healing[n] / secs,
-            taken=t["total"], mitigation=1 - t["totalReduced"] / t["total"],
+            taken=t["total"], mitigation=1 - t.get("totalReduced", t["total"]) / t["total"] if t["total"] else 0.0,
             dps_parse=dps_p[n], hps_parse=hps_p[n], deaths=deaths.get(n, ()), ranked=ranked,
         ))
     return players

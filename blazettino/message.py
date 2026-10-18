@@ -11,9 +11,9 @@ def _boss(b) -> str:
 def render(night: Night, url: str | None = None) -> str:
     _, _, top = report.standings(night.players, len(night.bosses), night.max_missed)
     mvp, lvp = top[0], top[-1]
-    day = f"{night.date[8:]}/{night.date[5:7]}"
+    day = f" ({night.date[8:]}/{night.date[5:7]})" if night.kind == "Serata" else ""
     lines = [
-        f"📰 Il Blazettino — {night.title} ({day})",
+        f"📰 Il Blazettino — {night.title}{day}",
         f"🥇 {mvp.name} ({kpi.grade(mvp):g}) · 🥈 {top[1].name} · 🥉 {top[2].name} · 💀 LVP {lvp.name} ({kpi.grade(lvp):g})",
         "Boss: " + " · ".join(_boss(b) for b in night.bosses),
     ]

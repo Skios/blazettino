@@ -14,6 +14,11 @@ Idee emerse durante il PRD. Non sono requisiti: si promuovono nel PRD solo quand
 - KPI "pesanti" da valutare dopo l'MVP: taunt swap timing, uptime mitigazione attiva, interrupt (count/target), dispel timing, danno evitabile subìto, padding su add, uso dei raid cooldown.
 - Premi speciali: MVP, LVP, "Premio Yordata" (morte sciocca: salto dalla piattaforma, teletrasporto nel frontale del boss, ecc.). Il meme nasce da Yorda, che lo gioca per primo.
 
+- **Nuovi KPI, in ordine di costo/beneficio** (da calibrare sulle serate reali): interrupt mancati/riusciti, dispel, danno evitabile subito (per abilità), uptime sulla mitigazione attiva dei tank, uso dei cooldown di raid, tempo di presenza in combattimento (afk/late).
+- **Premi di serata/settimana oltre MVP/LVP**: "Premio Yordata", più costante, più migliorato (voto vs settimana scorsa), "muro" (meno danno subito).
+- **Pagelle migliori**: trend per giocatore (richiede lo storico), callback ai gag ricorrenti, confronto con la settimana precedente, voti per ruolo meglio calibrati (soglie ancora da validare), tono per boss/wipe, sezione "momento clou" (strage più grossa).
+- **Qualità dei voti**: tarare i pesi sulla formula dopo il primo sondaggio; considerare ilvl e difficoltà del boss; gestire casi limite (player senza dati su un boss, cambio spec a metà serata).
+
 ## LLM
 - Backend per i commenti: Ollama locale (costo 0, offline) e/o Gemini via Google AI Studio (free tier, qualità migliore in italiano). Controllare limiti e policy sui dati sulla documentazione ufficiale prima di dipendere dal free tier.
 - Modelli locali candidati (4060 Ti 16GB): gemma3:12b, qwen3:14b.

@@ -38,10 +38,11 @@ We'll know we're right when **dopo alcuni giorni di prova, il sondaggio "continu
 | # | Milestone | Outcome | Status | Plan |
 |---|---|---|---|---|
 | 1 | Pagella di serata | Report WCL → pagella testuale con podio, voti da KPI, commenti sarcastici, esclusioni per nome | pending | — |
-| 2 | Prova gilda | Qualche giorno di uso reale + sondaggio continuare/cambiare/smettere | pending | — |
-| 3 | Pagella settimanale (martedì) | Aggregato delle 2–3 serate della settimana | pending | — |
-| 4 | Pagina HTML interattiva | Embed esplorabile della pagella | pending | — |
+| 2 | Prova gilda | Qualche giorno di uso reale + sondaggio continuare/cambiare/smettere | in progress | — |
+| 3 | Pagella settimanale (martedì) | Aggregato delle 2–3 serate della settimana | done (da validare su dati reali) | — |
+| 4 | Pagina HTML interattiva | Embed esplorabile della pagella, home con scelta serata/settimana | done | — |
 | 5 | Notiziario video | TG settimanale letto da un personaggio (voce + avatar) | pending | — |
+| 7 | KPI e pagelle migliori | Nuovi KPI (interrupt, dispel, danno evitabile, premi speciali) e pagelle più ricche (trend, callback, confronto con la settimana prima) | pending | — |
 | 6 | Format extra | Il Pentito, regia caustica, personaggi (se il sondaggio lo giustifica) | pending | — |
 
 ## Open Questions

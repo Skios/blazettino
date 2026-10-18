@@ -5,8 +5,11 @@ Pagelle sarcastiche (e, in futuro, notiziario video) dei raid della gilda *Blaze
 ## Uso
 
 ```
-python -m blazettino <codice_report_WCL>     # es. RaZCT7cxPbwQ4VNA
+python -m blazettino <codice_report_WCL>     # es. RaZCT7cxPbwQ4VNA: la pagella di una serata
+python -m blazettino --week <codice>...       # più serate della stessa settimana: una pagella ciascuna + la settimanale
 ```
+
+Il codice è la parte finale dell'indirizzo del report (`warcraftlogs.com/reports/<codice>`); non c'è autodiscover.
 
 Per ogni boss usa il **miglior tentativo**: la kill se c'è, altrimenti il wipe che ha lasciato il boss più basso di vita. Calcola i voti per boss e per l'intera serata (media dei voti per boss), chiede i commenti all'LLM (una chiamata per boss più una per la serata, circa 5 minuti in tutto) e salva in `out/<data>/`:
 
@@ -35,11 +38,12 @@ Poi su GitHub: Settings → Pages → Deploy from a branch → `gh-pages` / root
 
 ```
 python -m blazettino <codice_report> --publish    # genera, copia in site_dir/<data>/, commit e push
-python -m blazettino --remove <YYYY-MM-DD>         # toglie una serata dal sito
+python -m blazettino --week <codice>... --publish  # una pagella per ogni report + la settimanale (site_dir/settimana/<prima data>/)
+python -m blazettino --remove <YYYY-MM-DD>         # toglie una serata dal sito (o settimana/<YYYY-MM-DD> per una settimanale)
 python -m blazettino --refresh-site                # riscrive radice e archivio dalle serate già pubblicate (senza rigenerare nulla)
 ```
 
-La radice del sito (`<site_url>/`) apre direttamente l'ultima serata; `<site_url>/archivio/` elenca tutte le serate (data, titolo, MVP/LVP, tag "Ultima"). Ogni pagella pubblicata ha in fondo il link "Tutte le serate".
+La radice del sito (`<site_url>/`) è la home: pulsante per l'ultima serata, poi l'elenco delle settimanali e delle serate (data, titolo, MVP/LVP, tag "Ultima"). Ogni pagella pubblicata ha in fondo il link "Home". La settimanale è una pagella con tutti i boss della settimana (un tab per tentativo, col giorno), voto = media dei voti per boss, un solo commento in più per giocatore; `--week` con le pagelle delle serate (rigenerate: non usarlo su una serata modificata a mano) le pubblica tutte insieme.
 
 Dopo circa un minuto il link in `messaggio.txt` è attivo. Senza `--publish` non viene toccato nessun repo e non parte nessun push. `--remove` fa smettere di funzionare il link, ma la pagina resta nella cronologia del branch `gh-pages` (che è pubblica): per cancellarla davvero serve riscrivere la cronologia con un force-push.
 
@@ -72,6 +76,17 @@ geminiKey: <Google AI Studio API key>
 ```
 python -m unittest
 ```
+
+## Come contribuire
+
+Il codice è Python con sola libreria standard: niente da installare, serve solo `.env` per provare con dati veri (vedi Setup).
+
+- **Prima i test.** Scrivi un test che fallisce (`tests/test_*.py`, `unittest`), poi il codice minimo che lo fa passare. Si parte da `python -m unittest` verde e si finisce verde. I dati reali di prova stanno in `tests/fixtures/`; `tests/helpers.py` costruisce una serata di esempio.
+- **Dove mettere le cose.** `kpi.py` (dati WarcraftLogs → voti), `comment.py` (prompt e LLM), `night.py` (serata e settimana), `page.py`/`report.py`/`message.py` (output), `publish.py` (sito). I commenti vengono solo da fatti già calcolati: l'LLM non inventa numeri né decide i voti.
+- **Voti e KPI.** La formula è in cima a `kpi.py` (costanti con nome). Un nuovo KPI parte da `docs/backlog.md`: va calcolato in `kpi.py`, coperto da un test sulla fixture e, se serve ai commenti, aggiunto agli "spunti" di `comment.py`.
+- **Tono.** Sarcasmo affettuoso, scopo coesione di gruppo; chi non vuole comparire va in `exclude`. Lingua italiana, genere neutro nei commenti.
+- **Commit** piccoli, formato `tipo: descrizione` (`feat`, `fix`, `docs`, `test`, `refactor`). Niente segreti: `.env`, `config.json`, `cache/` e `out/` sono ignorati; il repo è pubblico.
+- **Dati incompleti.** Se WarcraftLogs omette un pezzo (danni, abilità della morte...), si gestisce in `kpi.py` con un test che riproduce il caso, come già fatto per giocatori senza danni o morti senza colpo letale.
 
 ## Documenti
 

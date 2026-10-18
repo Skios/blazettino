@@ -76,6 +76,34 @@ class KpiTest(unittest.TestCase):
         self.assertLessEqual(sum(errs) / len(errs), MAX_MEAN_ABS_ERROR)
 
 
+class MissingEntriesTest(unittest.TestCase):
+    def test_raider_absent_from_the_damage_table_is_loaded_with_zero_damage(self):
+        summary = load("summary")
+        summary["data"]["damageDone"] = [e for e in summary["data"]["damageDone"] if e["name"] != "Stormrager"]
+        players = kpi.load_fight(summary, load("taken"), load("rank_dps"), load("rank_hps"))
+        p = next(p for p in players if p.name == "Stormrager")
+        self.assertEqual((p.damage, p.dps), (0, 0))
+        self.assertEqual(len(players), 20)
+
+    def test_damage_taken_entry_without_reduction_means_no_mitigation(self):
+        taken = load("taken")
+        for e in taken["data"]["entries"]:
+            if e["name"] == "Stormrager":
+                del e["totalReduced"]
+        players = kpi.load_fight(load("summary"), taken, load("rank_dps"), load("rank_hps"))
+        self.assertEqual(next(p for p in players if p.name == "Stormrager").mitigation, 0)
+
+
+class UnknownKillerTest(unittest.TestCase):
+    def test_death_without_killing_blow_is_kept_with_a_placeholder_ability(self):
+        summary = load("summary")
+        event = summary["data"]["deathEvents"][0]
+        del event["ability"]
+        players = kpi.load_fight(summary, load("taken"), load("rank_dps"), load("rank_hps"))
+        deaths = next(p for p in players if p.name == event["name"]).deaths
+        self.assertIn(kpi.UNKNOWN_ABILITY, {d.ability for d in deaths})
+
+
 class WipeTest(unittest.TestCase):
     """A wipe has no WarcraftLogs rankings: parses become percentiles inside the raid, per role."""
 
