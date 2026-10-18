@@ -51,7 +51,7 @@ Dopo circa un minuto il link in `messaggio.txt` è attivo. Senza `--publish` non
 
 Solo libreria standard di Python 3.11+ (testato su 3.14), nessuna dipendenza.
 
-`.env` (non versionato), una riga per chiave:
+`.env` (non versionato; il modello è in `.env.example`), una riga per chiave:
 
 ```
 clientId: <WarcraftLogs v2 client id>
