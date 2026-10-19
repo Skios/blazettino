@@ -18,18 +18,26 @@ class Attempt:
         return re.sub(r"[^a-z0-9]+", "-", self.name.lower().replace("'", "")).strip("-")
 
 
+DIFFICULTIES = {1: "LFR", 3: "Normal", 4: "HC", 5: "Mythic"}
+
+
 def best_tries(fights: list[dict]) -> list[Attempt]:
-    """Boss attempts from a WCL `fights` list (encounterID 0 = trash, ignored), in order of first pull."""
-    by_boss: dict[str, list[dict]] = {}
+    """Boss attempts from a WCL `fights` list (encounterID 0 = trash, ignored), in order of first pull.
+    One attempt per boss and difficulty; the difficulty goes in the name only when a boss was done on several."""
+    by_boss: dict[tuple[str, int | None], list[dict]] = {}
     for f in fights:
         if f["encounterID"]:
-            by_boss.setdefault(f["name"], []).append(f)
+            by_boss.setdefault((f["name"], f.get("difficulty")), []).append(f)
+    levels: dict[str, int] = {}
+    for name, _ in by_boss:
+        levels[name] = levels.get(name, 0) + 1
     out = []
-    for name, tries in by_boss.items():
+    for (name, diff), tries in by_boss.items():
         kills = [f for f in tries if f["kill"]]
         best = kills[0] if kills else min(tries, key=lambda f: f["fightPercentage"] or WORST_PCT)
+        label = f"{name} ({DIFFICULTIES.get(diff, diff)})" if levels[name] > 1 else name
         out.append(Attempt(
-            id=best["id"], name=name, kill=bool(best["kill"]),
+            id=best["id"], name=label, kill=bool(best["kill"]),
             pct=0.0 if best["kill"] else float(best["fightPercentage"] or WORST_PCT),
             seconds=(best["endTime"] - best["startTime"]) // 1000,
         ))

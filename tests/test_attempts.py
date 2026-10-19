@@ -11,6 +11,26 @@ def only_wipes(names):
     return [f for f in FIGHTS if not (f["name"] in names and f["kill"])]
 
 
+def fight(id, diff, kill, pct=0.0, name="Kith'ix"):
+    return {"id": id, "name": name, "encounterID": 9, "difficulty": diff, "kill": kill,
+            "fightPercentage": pct, "startTime": id * 1000, "endTime": id * 1000 + 200_000}
+
+
+class DifficultyTest(unittest.TestCase):
+    def test_same_boss_on_two_difficulties_gives_two_attempts_labelled(self):
+        got = attempts.best_tries([fight(1, 3, True), fight(5, 4, False, 91.0), fight(19, 4, True)])
+        self.assertEqual([(a.name, a.id, a.kill) for a in got], [("Kith'ix (Normal)", 1, True), ("Kith'ix (HC)", 19, True)])
+        self.assertEqual([a.slug for a in got], ["kithix-normal", "kithix-hc"])
+
+    def test_a_single_difficulty_keeps_the_plain_boss_name(self):
+        got = attempts.best_tries([fight(5, 4, False, 91.0), fight(19, 4, True)])
+        self.assertEqual([a.name for a in got], ["Kith'ix"])
+
+    def test_each_difficulty_picks_its_own_best_try(self):
+        got = attempts.best_tries([fight(1, 3, False, 50.0), fight(2, 3, False, 20.0), fight(3, 4, False, 70.0)])
+        self.assertEqual([(a.id, a.pct) for a in got], [(2, 20.0), (3, 70.0)])
+
+
 class BestTriesTest(unittest.TestCase):
     def test_kill_is_chosen_when_present_in_order_of_first_attempt(self):
         got = attempts.best_tries(FIGHTS)

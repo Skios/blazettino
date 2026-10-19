@@ -14,7 +14,7 @@ from pathlib import Path
 from blazettino import attempts, icons, kpi, message, night, page, publish, report, wcl
 from blazettino.config import ROOT, load_config
 
-FIGHTS = "fights{id name encounterID kill fightPercentage startTime endTime}"
+FIGHTS = "fights{id name encounterID difficulty kill fightPercentage startTime endTime}"
 USAGE = "uso: python -m blazettino <codice_report> [--publish] | --week <codice>... [--publish] | --remove <YYYY-MM-DD|settimana/YYYY-MM-DD> | --refresh-site"
 
 
