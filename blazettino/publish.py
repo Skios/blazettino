@@ -9,7 +9,7 @@ from typing import Callable
 Runner = Callable[[list[str], Path], str]
 DATED = re.compile(r"\d{4}-\d{2}-\d{2}")
 SECTION = "settimana"
-REMOVABLE = re.compile(rf"({SECTION}/)?\d{{4}}-\d{{2}}-\d{{2}}")
+REMOVABLE = re.compile(rf"({SECTION}/)?\d{{4}}-\d{{2}}-\d{{2}}(/[a-z0-9-]+)?")
 
 
 def _git(cmd: list[str], cwd: Path) -> str:
@@ -75,6 +75,12 @@ def _weeks(site_dir: Path) -> list[str]:
     return sorted((d.name for d in base.iterdir() if DATED.fullmatch(d.name)), reverse=True) if base.is_dir() else []
 
 
+def _bosses(site_dir: Path) -> list[str]:
+    """Single-boss pages (<date>/<boss>/), newest first."""
+    found = [f"{n}/{d.name}" for n in _nights(site_dir) for d in (site_dir / n).iterdir() if (d / "index.html").exists()]
+    return sorted(found, reverse=True)
+
+
 def _item(site_dir: Path, folder: str, head: str | None, latest: bool) -> str:
     """One card of the home: `head` is the line above the title (None: the page title is the head)."""
     title, desc = _summary(site_dir / folder)
@@ -90,9 +96,9 @@ def _item(site_dir: Path, folder: str, head: str | None, latest: bool) -> str:
 
 def _home(site_dir: Path) -> str:
     """The site root: a page to pick the night or the week (the latest night is one tap away)."""
-    nights, weeks = _nights(site_dir), _weeks(site_dir)
+    nights, weeks, bosses = _nights(site_dir), _weeks(site_dir), _bosses(site_dir)
     body = "<h1>📰 Il Blazettino</h1><p class='sub'>Le pagelle della Blaze of Glory</p>"
-    if not nights and not weeks:
+    if not (nights or weeks):
         return _head("Il Blazettino") + f"<body><main>{body}<p>Nessuna pagella pubblicata, per ora.</p></main></body></html>"
     if nights:
         body += f'<p><a class="btn" href="{nights[0]}/">Apri l\'ultima serata ({_human(nights[0])})</a></p>'
@@ -102,6 +108,9 @@ def _home(site_dir: Path) -> str:
     if nights:
         items = "".join(_item(site_dir, n, _human(n), i == 0) for i, n in enumerate(nights))
         body += f"<h2>Serate</h2><ul>{items}</ul>"
+    if bosses:
+        items = "".join(_item(site_dir, b, None, False) for b in bosses)
+        body += f"<h2>Boss singoli</h2><ul>{items}</ul>"
     return _head("Il Blazettino") + f"<body><main>{body}</main></body></html>"
 
 

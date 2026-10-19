@@ -3,7 +3,7 @@ import unittest
 
 from blazettino import night, page, tips
 from blazettino.comment import Comment
-from tests.helpers import KILL_A, KILL_B, WIPE_C, build_night, fake_comments, players
+from tests.helpers import KILL_A, KILL_B, WIPE_C, build_boss, build_night, fake_comments, players
 
 URI = "data:image/jpeg;base64,AAAA"
 
@@ -116,6 +116,24 @@ class IconsTest(unittest.TestCase):
 
     def test_no_icons_means_no_icon_elements(self):
         self.assertNotIn('class="spec', build())
+
+
+class BossPageTest(unittest.TestCase):
+    def test_boss_page_has_no_tabs_and_a_single_panel_with_the_banner(self):
+        h = page.render_html(build_boss(WIPE_C))
+        self.assertEqual(len(panels(h)), 1)
+        self.assertNotIn('class="tab"', h)
+        self.assertIn(tips.NO_KILL, h)
+        self.assertEqual(h.count('class="card"'), 20)
+
+    def test_kill_banner_and_podium(self):
+        h = page.render_html(build_boss(KILL_A))
+        self.assertIn("KILL</strong> in", h)
+        self.assertIn("LVP", h)
+
+    def test_hosted_boss_page_links_to_the_home_two_levels_up(self):
+        h = page.render_html(build_boss(KILL_A), None, "https://x.github.io/b/2026-10-15/boss-uno/")
+        self.assertIn('href="../../">Home', h)
 
 
 class SharingTest(unittest.TestCase):

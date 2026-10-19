@@ -110,6 +110,25 @@ class PublishTest(unittest.TestCase):
         self.assertNotIn('href="2026-10-07/"', home)  # not mistaken for a night
         self.assertNotIn('class="btn"', home)  # no night yet, so no "latest night" button
 
+    def test_single_boss_goes_under_its_night_and_is_listed_in_its_own_section(self):
+        (self.folder / "pagella.html").write_text(
+            "<title>Il Blazettino · Ula'tek (14/10) · The Venomous Abyss 2026-10-14</title>"
+        )
+        night_dir = self.site / "2026-10-14"
+        night_dir.mkdir()
+        (night_dir / "index.html").write_text("hand edited night")
+        url = publish.publish(self.folder, "ulatek", self.site, SITE_URL, FakeGit(), "2026-10-14")
+        self.assertEqual(url, "https://example.github.io/blazettino-site/2026-10-14/ulatek/")
+        self.assertEqual((night_dir / "index.html").read_text(), "hand edited night")
+        home = self.home()
+        self.assertIn("Boss singoli", home)
+        self.assertIn('href="2026-10-14/ulatek/"', home)
+        self.assertIn("Ula&#x27;tek (14/10)", home)
+
+    def test_home_has_no_boss_section_without_boss_pages(self):
+        self.run_publish()
+        self.assertNotIn("Boss singoli", self.home())
+
     def test_commits_and_pushes_when_something_changed(self):
         _, git = self.run_publish()
         self.assertEqual([c[:2] for c in git.calls], [["git", "add"], ["git", "status"], ["git", "commit"], ["git", "push"]])
@@ -158,6 +177,14 @@ class RemoveTest(unittest.TestCase):
         publish.remove("settimana/2026-10-07", self.site, FakeGit())
         self.assertFalse(week.exists())
         self.assertTrue((self.site / "2026-10-15").exists())
+
+    def test_a_single_boss_page_can_be_removed_without_the_night(self):
+        boss = self.site / "2026-10-15" / "ulatek"
+        boss.mkdir()
+        (boss / "index.html").write_text("b")
+        publish.remove("2026-10-15/ulatek", self.site, FakeGit())
+        self.assertFalse(boss.exists())
+        self.assertTrue((self.site / "2026-10-15" / "index.html").exists())
 
     def test_only_dated_folders_can_be_removed(self):
         for bad in ("../x", "..", "index.html", "2026-10-1", "", "settimana/..", "altro/2026-10-15"):

@@ -109,7 +109,7 @@ def render_global(night: Night) -> str:
 
 def files(night: Night) -> dict[str, str]:
     """filename -> markdown: global.md plus <boss>_kill.md / <boss>_wipe.md for every boss."""
-    out = {"global.md": render_global(night)}
+    out = {} if night.kind == "Boss" else {"global.md": render_global(night)}
     for b in night.bosses:
         out[f"{b.attempt.slug}_{'kill' if b.attempt.kill else 'wipe'}.md"] = render_boss(night, b)
     return out

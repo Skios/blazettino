@@ -30,3 +30,7 @@ def fake_comments(players, cfg, context=""):
 def build_night(cfg=None, tries=None, comments_fn=fake_comments, date="2026-10-15") -> night.Night:
     tries = tries or [(KILL_A, players(21)), (KILL_B, players(21)), (WIPE_C, players(20))]
     return night.assemble("The Venomous Abyss", date, tries, cfg or {}, comments_fn)
+
+
+def build_boss(attempt=KILL_A, comments_fn=fake_comments, date="2026-10-15") -> night.Night:
+    return night.assemble_boss("The Venomous Abyss", date, attempt, players(20 if not attempt.kill else 21), {}, comments_fn)

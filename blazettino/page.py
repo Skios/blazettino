@@ -200,10 +200,13 @@ def render_html(night: Night, icons: dict[str, str] | None = None, url: str | No
     icons = icons or {}
     ranked, pool, top = report.standings(night.players, len(night.bosses), night.max_missed)
     chips = "".join(f'<span class="chip">{escape(b.attempt.name)}</span>' for b in night.bosses)
-    panels = [_panel("global", False, f'<div class="chips">{chips}</div>{_heat(night, ranked)}',
-                     ranked, top, pool, night.comments, icons, True)]
-    tabs = [f'<button class="tab" data-tab="global" aria-pressed="true">{night.kind}</button>']
-    for i, b in enumerate(night.bosses, 1):
+    if night.kind == "Boss":  # one boss: a single panel, no tabs
+        head, show_fights, boss_tabs = _banner(night, night.bosses[0]), False, []
+    else:
+        head, show_fights, boss_tabs = f'<div class="chips">{chips}</div>{_heat(night, ranked)}', True, night.bosses
+    panels = [_panel("global", False, head, ranked, top, pool, night.comments, icons, show_fights)]
+    tabs = [] if night.kind == "Boss" else [f'<button class="tab" data-tab="global" aria-pressed="true">{night.kind}</button>']
+    for i, b in enumerate(boss_tabs, 1):
         pid = f"b{i}-{b.attempt.slug}"
         ranked_b = kpi.ranking(b.players)
         panels.append(_panel(pid, True, _banner(night, b), ranked_b, ranked_b, ranked_b, b.comments, icons, False))
@@ -212,7 +215,8 @@ def render_html(night: Night, icons: dict[str, str] | None = None, url: str | No
             f'<button class="tab" data-tab="{pid}" aria-pressed="false">{escape(b.attempt.name)} '
             f'<span class="tag {kind}">{kind.upper()}</span></button>'
         )
-    home = "../../" if night.kind == "Settimana" else "../"
+    nav = f'<nav class="tabs">{"".join(tabs)}</nav>' if tabs else ""
+    home = "../../" if night.kind in ("Settimana", "Boss") else "../"
     archive_link = f'<br><a href="{home}">Home</a>' if url else ""  # only meaningful when hosted
     return (
         '<!doctype html><html lang="it"><head><meta charset="utf-8">'
@@ -221,7 +225,7 @@ def render_html(night: Night, icons: dict[str, str] | None = None, url: str | No
         f"<title>Il Blazettino · {escape(night.title)} {escape(night.date)}</title>"
         f"<style>{CSS}{_icon_css(icons)}</style></head><body><main>"
         f"<h1>📰 Il Blazettino</h1><p class='sub'>Pagella — {escape(night.title)} · {escape(night.date)}</p>"
-        f'<nav class="tabs">{"".join(tabs)}</nav>{"".join(panels)}'
+        f"{nav}{''.join(panels)}"
         f"<footer>Voti calcolati dai dati di WarcraftLogs, battute dell'IA. Si fa per ridere.{archive_link}</footer>"
         f"</main><script>{JS}</script></body></html>"
     )

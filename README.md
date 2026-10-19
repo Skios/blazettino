@@ -38,12 +38,15 @@ Poi su GitHub: Settings → Pages → Deploy from a branch → `gh-pages` / root
 
 ```
 python -m blazettino <codice_report> --publish    # genera, copia in site_dir/<data>/, commit e push
+python -m blazettino <codice> --boss <slug> --publish  # pagina del solo boss (es. ulatek, kithix-hc), separata: site_dir/<data>/<slug>/
 python -m blazettino --week <codice>... --publish  # una pagella per ogni report + la settimanale (site_dir/settimana/<prima data>/)
-python -m blazettino --remove <YYYY-MM-DD>         # toglie una serata dal sito (o settimana/<YYYY-MM-DD> per una settimanale)
+python -m blazettino --remove <YYYY-MM-DD>         # toglie una serata dal sito (o settimana/<YYYY-MM-DD>, o <YYYY-MM-DD>/<slug> per un boss singolo)
 python -m blazettino --refresh-site                # riscrive radice e archivio dalle serate già pubblicate (senza rigenerare nulla)
 ```
 
 La radice del sito (`<site_url>/`) è la home: pulsante per l'ultima serata, poi l'elenco delle settimanali e delle serate (data, titolo, MVP/LVP, tag "Ultima"). Ogni pagella pubblicata ha in fondo il link "Home". La settimanale è una pagella con tutti i boss della settimana (un tab per tentativo, col giorno), voto = media dei voti per boss, un solo commento in più per giocatore; `--week` con le pagelle delle serate (rigenerate: non usarlo su una serata modificata a mano) le pubblica tutte insieme.
+
+La pagina di un boss singolo (`--boss`) ha un solo pannello con banner kill/wipe, podio e schede, costa una sola chiamata all'LLM e non tocca la pagina della serata; compare nella home sotto "Boss singoli". Lo slug è il nome del boss minuscolo senza apostrofi e spazi (`ulatek`, `the-coiled-altar`; con più difficoltà `kithix-normal`, `kithix-hc`); se sbagli, il comando elenca quelli disponibili.
 
 Dopo circa un minuto il link in `messaggio.txt` è attivo. Senza `--publish` non viene toccato nessun repo e non parte nessun push. `--remove` fa smettere di funzionare il link, ma la pagina resta nella cronologia del branch `gh-pages` (che è pubblica): per cancellarla davvero serve riscrivere la cronologia con un force-push.
 

@@ -2,7 +2,7 @@ import re
 import unittest
 
 from blazettino import report, tips
-from tests.helpers import KILL_A, KILL_B, WIPE_C, build_night, players
+from tests.helpers import KILL_A, KILL_B, WIPE_C, build_boss, build_night, players
 
 
 class GlobalTest(unittest.TestCase):
@@ -83,6 +83,11 @@ class AttendanceTest(unittest.TestCase):
 
     def test_missing_within_allowance_can_still_be_lvp(self):
         self.assertRegex(report.render_global(self.night(1)), r"LVP — Sleãze")
+
+
+class BossFilesTest(unittest.TestCase):
+    def test_single_boss_writes_only_its_own_file(self):
+        self.assertEqual(set(report.files(build_boss(WIPE_C))), {"boss-tre_wipe.md"})
 
 
 if __name__ == "__main__":

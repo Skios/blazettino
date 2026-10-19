@@ -78,3 +78,17 @@ def assemble_week(nights: list[Night], cfg: dict, comments_fn: Callable[..., dic
     notes = comments_fn(merged, cfg, context=comment.week_context([b.attempt for b in bosses], len(nights)))
     title = f"Settimana {_day(nights[0].date)}–{_day(nights[-1].date)} · {nights[0].title}"
     return Night(title, nights[0].date, bosses, merged, notes, cfg.get("max_missed_fights", 1) * len(nights), "Settimana")
+
+
+def assemble_boss(
+    title: str, date: str, attempt: Attempt, players: list[kpi.Player], cfg: dict,
+    comments_fn: Callable[..., dict[str, Comment]] = comment.comments,
+) -> Night:
+    """A page for one boss of a night: one LLM call, its comments are the page comments."""
+    exclude = set(cfg.get("exclude", ()))
+    ps = [p for p in players if p.name not in exclude]
+    notes = comments_fn(ps, cfg, context=comment.attempt_context(attempt))
+    return Night(
+        f"{attempt.name} ({_day(date)}) · {clean_title(title)}", date, [BossReport(attempt, ps, notes)], ps, notes,
+        cfg.get("max_missed_fights", 1), "Boss",
+    )

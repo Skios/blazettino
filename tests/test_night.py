@@ -1,7 +1,7 @@
 import unittest
 
 from blazettino import kpi, night
-from tests.helpers import KILL_A, KILL_B, WIPE_C, build_night, fake_comments, players
+from tests.helpers import KILL_A, KILL_B, WIPE_C, build_boss, build_night, fake_comments, players
 
 
 class AssembleTest(unittest.TestCase):
@@ -66,6 +66,32 @@ class CleanTitleTest(unittest.TestCase):
     def test_plain_titles_are_untouched(self):
         self.assertEqual(night.clean_title("The Venomous Abyss"), "The Venomous Abyss")
         self.assertEqual(night.clean_title("2026-10-19 raid"), "2026-10-19 raid")  # nothing before the date: keep it
+
+
+class BossTest(unittest.TestCase):
+    def test_single_boss_is_a_night_of_one_boss_with_its_own_title(self):
+        b = build_boss(WIPE_C)
+        self.assertEqual(b.kind, "Boss")
+        self.assertEqual([x.attempt for x in b.bosses], [WIPE_C])
+        self.assertIn("Boss Tre", b.title)
+        self.assertIn("15/10", b.title)
+        self.assertEqual(len(b.players), 20)
+
+    def test_one_llm_call_and_the_boss_comments_are_the_page_comments(self):
+        seen = []
+
+        def spy(players, cfg, context=""):
+            seen.append(context)
+            return fake_comments(players, cfg, context)
+
+        b = build_boss(KILL_A, spy)
+        self.assertEqual(len(seen), 1)
+        self.assertIn("KILL in", seen[0])
+        self.assertEqual(b.comments, b.bosses[0].comments)
+
+    def test_excluded_players_vanish(self):
+        b = night.assemble_boss("T", "2026-10-15", KILL_A, players(21), {"exclude": ["Sleãze"]}, fake_comments)
+        self.assertFalse(any(p.name == "Sleãze" for p in b.players))
 
 
 class WeekTest(unittest.TestCase):

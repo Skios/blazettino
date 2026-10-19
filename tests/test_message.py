@@ -1,7 +1,7 @@
 import unittest
 
 from blazettino import message, night, report
-from tests.helpers import build_night, fake_comments
+from tests.helpers import build_boss, build_night, fake_comments
 
 URL = "https://example.github.io/blazettino-site/2026-10-15/"
 
@@ -41,6 +41,11 @@ class MessageTest(unittest.TestCase):
         text = message.render(week, URL)
         self.assertIn("Settimana 07/10–08/10", text)
         self.assertNotIn("(07/10)\n", text)  # no single-day suffix after the title
+
+    def test_boss_message_keeps_the_day_and_names_the_boss(self):
+        text = message.render(build_boss(), URL)
+        self.assertIn("Boss Uno", text.splitlines()[0])
+        self.assertEqual(text.splitlines()[0].count("15/10"), 1)  # the day is in the title already
 
 
 if __name__ == "__main__":
