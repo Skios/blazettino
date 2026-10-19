@@ -19,6 +19,12 @@ Idee emerse durante il PRD. Non sono requisiti: si promuovono nel PRD solo quand
 - **Pagelle migliori**: trend per giocatore (richiede lo storico), callback ai gag ricorrenti, confronto con la settimana precedente, voti per ruolo meglio calibrati (soglie ancora da validare), tono per boss/wipe, sezione "momento clou" (strage più grossa).
 - **Qualità dei voti**: tarare i pesi sulla formula dopo il primo sondaggio; considerare ilvl e difficoltà del boss; gestire casi limite (player senza dati su un boss, cambio spec a metà serata).
 
+## Premi e rubriche (le minchiate)
+- **Premio YORDATA**: la morte più sciocca della serata (salto dalla piattaforma, teletrasporto nel frontale, soak mancato). Serve distinguere morte evitabile da inevitabile: aiutano le note sui boss (Mythic Trap) e l'abilità killer di WarcraftLogs. Una categoria fissa nella pagina, con vincitore e commento.
+- **Altri premi di serata**: "Il Muro" (meno danno subito), "Il Fantasma" (più morto), "Il Cecchino" (più interrupt), "Il Pompiere" (più cure di emergenza), "Il Turista" (arrivato tardi o uscito presto), "Sempre in piedi" (zero morti più a lungo), "Il Redento" (più migliorato rispetto alla serata scorsa).
+- **Rubriche**: "Frase della serata" dalla chat vocale/testuale (solo con consenso), "Il più sfortunato" (parse alto ma morto per colpa altrui), classifica stagionale dei premi.
+- Ogni premio nasce da un KPI della lista sopra; si aggiungono una alla volta, con test sulla fixture, e solo se fanno ridere davvero il gruppo (verificare nel sondaggio).
+
 ## LLM
 - Backend per i commenti: Ollama locale (costo 0, offline) e/o Gemini via Google AI Studio (free tier, qualità migliore in italiano). Controllare limiti e policy sui dati sulla documentazione ufficiale prima di dipendere dal free tier.
 - Modelli locali candidati (4060 Ti 16GB): gemma3:12b, qwen3:14b.
