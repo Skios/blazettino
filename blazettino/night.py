@@ -1,5 +1,6 @@
 """The night as the reports see it: one BossReport per boss (best try) plus the merged night."""
 import dataclasses
+import re
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from typing import Callable
@@ -29,6 +30,12 @@ class Night:
     kind: str = "Serata"  # "Settimana" for the weekly aggregate
 
 
+def clean_title(title: str) -> str:
+    """WarcraftLogs titles sometimes arrive with date and boss glued on ('Raid2026-10-1926Boss'): keep what precedes the date."""
+    head = re.split(r"\d{4}-\d{2}-\d{2}", title, maxsplit=1)[0].strip()
+    return head or title
+
+
 def _tag_boss(players: list[kpi.Player], boss: str) -> list[kpi.Player]:
     return [
         dataclasses.replace(p, deaths=tuple(dataclasses.replace(d, boss=boss) for d in p.deaths))
@@ -52,7 +59,7 @@ def assemble(
     with ThreadPoolExecutor(max_workers=LLM_WORKERS) as pool:
         notes = list(pool.map(lambda job: comments_fn(job[0], cfg, context=job[1]), jobs))
     bosses = [BossReport(a, ps, n) for (a, ps), n in zip(per_boss, notes)]
-    return Night(title, date, bosses, merged, notes[-1], cfg.get("max_missed_fights", 1))
+    return Night(clean_title(title), date, bosses, merged, notes[-1], cfg.get("max_missed_fights", 1))
 
 
 def _day(date: str) -> str:

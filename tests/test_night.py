@@ -59,6 +59,15 @@ class AssembleTest(unittest.TestCase):
         self.assertEqual(next(p for p in n.players if p.name == "Madreh").fights, 1)
 
 
+class CleanTitleTest(unittest.TestCase):
+    def test_keeps_only_the_raid_name_before_a_glued_date(self):
+        self.assertEqual(night.clean_title("The Venomous Abyss2026-10-1926Kith'ix (Kill, 12 Pulls)"), "The Venomous Abyss")
+
+    def test_plain_titles_are_untouched(self):
+        self.assertEqual(night.clean_title("The Venomous Abyss"), "The Venomous Abyss")
+        self.assertEqual(night.clean_title("2026-10-19 raid"), "2026-10-19 raid")  # nothing before the date: keep it
+
+
 class WeekTest(unittest.TestCase):
     def setUp(self):
         self.seen = []
