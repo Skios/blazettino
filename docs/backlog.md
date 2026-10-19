@@ -38,4 +38,5 @@ Idee emerse durante il PRD. Non sono requisiti: si promuovono nel PRD solo quand
 - Il Pentito (intervista/scena in cui il player giustifica il disastro), regia caustica, personaggi ricorrenti.
 
 ## Etica
+- **Smorzare i commenti troppo cattivelli** (segnalato dopo le prime serate vere): alcune battute passano da sarcasmo a presa in giro pesante. Da fare: rivedere `SYSTEM` in `comment.py` (più affetto, nessun attacco alla persona, solo al gesto), un tetto di caustica anche sui voti più bassi, esempi di stile con battute "da amico", e un controllo a campione sui commenti dei voti bassi prima di pubblicare (o un'opzione per tenerli in bozza). Valutare dopo il sondaggio con la gilda.
 - Tutti dentro di default; chi vuole esce per nome da config. Tono: sarcasmo affettuoso, scopo coesione.
