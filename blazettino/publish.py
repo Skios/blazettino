@@ -6,6 +6,10 @@ from html import escape, unescape
 from pathlib import Path
 from typing import Callable
 
+from blazettino import nav
+from blazettino.config import ROOT
+
+LOGO = ROOT / "assets" / "logo.png"
 Runner = Callable[[list[str], Path], str]
 DATED = re.compile(r"\d{4}-\d{2}-\d{2}")
 SECTION = "settimana"
@@ -20,9 +24,9 @@ MONTHS = ("gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno",
           "luglio", "agosto", "settembre", "ottobre", "novembre", "dicembre")
 
 SITE_CSS = """
-:root{color-scheme:dark light;--bg:#14161c;--card:#1d2029;--fg:#e8e9ee;--muted:#9aa0b0;--line:#2c3040;--accent:#f0b429}
-@media (prefers-color-scheme:light){:root{--bg:#f4f5f8;--card:#fff;--fg:#1c1f27;--muted:#5d6475;--line:#dfe2ea;--accent:#b7791f}}
+:root{color-scheme:dark;--bg:#14161c;--card:#1d2029;--fg:#e8e9ee;--muted:#9aa0b0;--line:#2c3040;--accent:#f0b429}
 *{box-sizing:border-box}
+.logo{display:block;margin:0 auto;height:110px;width:auto}
 body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
 main{max-width:640px;margin:0 auto;padding:24px 16px}
 h1{margin:.2em 0 0;font:700 clamp(2rem,8vw,3.2rem)/1.1 Georgia,'Times New Roman',serif;text-align:center}
@@ -100,7 +104,7 @@ def _item(site_dir: Path, folder: str, head: str | None, latest: bool) -> str:
 def _home(site_dir: Path) -> str:
     """The site root: a page to pick the night or the week (the latest night is one tap away)."""
     nights, weeks, bosses = _nights(site_dir), _weeks(site_dir), _bosses(site_dir)
-    body = "<h1>📰 Il Blazettino</h1><p class='sub'>Le pagelle della Blaze of Glory</p>"
+    body = '<img class="logo" src="logo.png" alt=""><h1>Il Blazettino</h1><p class=\'sub\'>Le pagelle della Blaze of Glory</p>'
     if not (nights or weeks):
         return _head("Il Blazettino") + f"<body><main>{body}<p>Nessuna pagella pubblicata, per ora.</p></main></body></html>"
     if nights:
@@ -117,7 +121,18 @@ def _home(site_dir: Path) -> str:
     return _head("Il Blazettino") + f"<body><main>{body}</main></body></html>"
 
 
+def _dress_pages(site_dir: Path) -> None:
+    """Top bar, dark theme and picker on every published page (nav.enhance is idempotent)."""
+    for page in site_dir.rglob("index.html"):
+        rel = page.parent.relative_to(site_dir).as_posix()
+        if REMOVABLE.fullmatch(rel):
+            page.write_text(nav.enhance(page.read_text(), rel))
+
+
 def _write_site_pages(site_dir: Path) -> None:
+    if LOGO.exists():
+        shutil.copy(LOGO, site_dir / "logo.png")
+    _dress_pages(site_dir)
     (site_dir / "index.html").write_text(_home(site_dir))
     (site_dir / "archivio").mkdir(exist_ok=True)  # the old archive address keeps working
     (site_dir / "archivio" / "index.html").write_text(_head("Il Blazettino", '<meta http-equiv="refresh" content="0; url=../">') + '<body><a href="../">Home</a></body></html>')

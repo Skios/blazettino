@@ -131,23 +131,6 @@ class BossPageTest(unittest.TestCase):
         self.assertIn("KILL</strong> in", h)
         self.assertIn("LVP", h)
 
-    def test_hosted_boss_page_links_to_the_home_two_levels_up(self):
-        h = page.render_html(build_boss(KILL_A), None, "https://x.github.io/b/2026-10-15/boss-uno/")
-        self.assertIn('href="../../">Home', h)
-
-    def test_hosted_boss_page_has_a_top_bar_back_to_its_night(self):
-        h = page.render_html(build_boss(KILL_A), None, "https://x.github.io/b/2026-10-15/boss-uno/")
-        bar = re.search(r'<nav class="bar">(.*?)</nav>', h, re.S).group(1)
-        self.assertIn('href="../../">Home', bar)
-        self.assertIn('href="../">← Serata', bar)
-
-    def test_top_bar_of_a_night_has_only_the_home_and_local_pages_have_none(self):
-        h = page.render_html(build_night(), None, "https://x.github.io/b/2026-10-15/")
-        bar = re.search(r'<nav class="bar">(.*?)</nav>', h, re.S).group(1)
-        self.assertIn('href="../">Home', bar)
-        self.assertNotIn("Serata<", bar)
-        self.assertNotIn('class="bar"', build())
-
 
 class SharingTest(unittest.TestCase):
     URL = "https://example.github.io/blazettino-site/2026-10-15/"
@@ -163,17 +146,16 @@ class SharingTest(unittest.TestCase):
     def test_no_og_url_when_the_page_is_not_hosted_yet(self):
         self.assertNotIn("og:url", build())
 
-    def test_hosted_page_links_to_the_home_and_local_one_does_not(self):
-        self.assertIn('href="../">Home', page.render_html(build_night(), None, self.URL))
-        self.assertNotIn("Home", build())
+    def test_page_is_dark_only_and_has_no_link_at_the_bottom(self):
+        h = page.render_html(build_night(), None, self.URL)
+        self.assertNotIn("prefers-color-scheme:light", h)
+        self.assertNotIn("Home", h)
 
     def test_week_page_is_labelled_as_such_and_links_two_levels_up(self):
         week = night.assemble_week([build_night(date="2026-10-07"), build_night(date="2026-10-08")], {}, fake_comments)
         h = page.render_html(week, None, self.URL)
         self.assertIn('data-tab="global" aria-pressed="true">Settimana<', h)
         self.assertIn("<th>Settimana</th>", h)
-        self.assertIn('href="../../">Home', h)
-        self.assertNotIn("Serata<", re.search(r'<nav class="bar">(.*?)</nav>', h, re.S).group(1))
 
     def test_page_is_unlisted(self):
         self.assertIn('name="robots" content="noindex"', build())

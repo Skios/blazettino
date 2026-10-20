@@ -17,14 +17,10 @@ FALLBACK_COLOR = "#888888"
 FILTERS = (("all", "Tutti"), ("tank", "Tank"), ("healer", "Healer"), ("dps", "DPS"))
 
 CSS = """
-:root{color-scheme:dark light;--bg:#14161c;--card:#1d2029;--fg:#e8e9ee;--muted:#9aa0b0;--line:#2c3040;--accent:#f0b429;--ok:#3fb950;--bad:#e5534b}
-@media (prefers-color-scheme:light){:root{--bg:#f4f5f8;--card:#fff;--fg:#1c1f27;--muted:#5d6475;--line:#dfe2ea;--accent:#b7791f}}
+:root{color-scheme:dark;--bg:#14161c;--card:#1d2029;--fg:#e8e9ee;--muted:#9aa0b0;--line:#2c3040;--accent:#f0b429;--ok:#3fb950;--bad:#e5534b}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-main{max-width:1100px;margin:0 auto;padding:16px}
-.bar{position:sticky;top:0;z-index:5;display:flex;gap:16px;padding:10px 16px;background:var(--card);border-bottom:1px solid var(--line)}
-.bar a{color:var(--accent);text-decoration:none;font-weight:700}
-h1{margin:.2em 0 0;font-size:clamp(1.4rem,4vw,2rem)}
+main{max-width:1100px;margin:0 auto;padding:16px}h1{margin:.2em 0 0;font-size:clamp(1.4rem,4vw,2rem)}
 .sub{color:var(--muted);margin:.2em 0 1em}
 .tabs{display:flex;gap:6px;overflow-x:auto;margin:0 0 1em;padding-bottom:4px}
 .tab,.controls button,.controls select{background:var(--card);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:6px 12px;font:inherit;cursor:pointer;white-space:nowrap}
@@ -218,15 +214,12 @@ def render_html(night: Night, icons: dict[str, str] | None = None, url: str | No
             f'<span class="tag {kind}">{kind.upper()}</span></button>'
         )
     nav = f'<nav class="tabs">{"".join(tabs)}</nav>' if tabs else ""
-    home = "../../" if night.kind in ("Settimana", "Boss") else "../"
-    back = '<a href="../">← Serata</a>' if night.kind == "Boss" else ""
-    bar = f'<nav class="bar"><a href="{home}">Home</a>{back}</nav>' if url else ""  # only meaningful when hosted
     return (
         '<!doctype html><html lang="it"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1">'
         f"{_share_head(night, top, url)}"
         f"<title>Il Blazettino · {escape(night.title)} {escape(night.date)}</title>"
-        f"<style>{CSS}{_icon_css(icons)}</style></head><body>{bar}<main>"
+        f"<style>{CSS}{_icon_css(icons)}</style></head><body><main>"
         f"<h1>📰 Il Blazettino</h1><p class='sub'>Pagella — {escape(night.title)} · {escape(night.date)}</p>"
         f"{nav}{''.join(panels)}"
         f"<footer>Voti calcolati dai dati di WarcraftLogs, battute dell'IA. Si fa per ridere.</footer>"

@@ -42,6 +42,20 @@ class PublishTest(unittest.TestCase):
         url, _ = self.run_publish()
         self.assertEqual(url, "https://example.github.io/blazettino-site/2026-10-15/")
 
+    def test_logo_is_copied_to_the_site_root_and_shown_by_the_home(self):
+        self.run_publish()
+        self.assertTrue((self.site / "logo.png").exists())
+        self.assertIn('<img class="logo" src="logo.png"', self.home())
+
+    def test_home_is_dark_only(self):
+        self.run_publish()
+        self.assertNotIn("prefers-color-scheme:light", self.home())
+
+    def test_published_pages_get_the_top_bar_with_the_way_home(self):
+        (self.folder / "pagella.html").write_text("<html><head></head><body><main>x</main></body></html>")
+        self.run_publish()
+        self.assertIn('<nav class="bar"><a class="brand" href="../">', (self.site / "2026-10-15" / "index.html").read_text())
+
     def test_site_is_unlisted_and_static(self):
         self.run_publish()
         self.assertIn("Disallow: /", (self.site / "robots.txt").read_text())
@@ -220,6 +234,19 @@ class RefreshTest(unittest.TestCase):
     def test_does_not_touch_the_night_pages(self):
         publish.refresh(self.site, FakeGit())
         self.assertEqual((self.site / "2026-10-15" / "index.html").read_text(), "2026-10-15")
+
+    def test_dresses_every_page_already_published_without_regenerating_it(self):
+        old = self.site / "2026-10-01" / "index.html"
+        old.write_text("<html><head></head><body><h1>mio</h1><footer>x<br><a href=\"../\">Home</a></footer></body></html>")
+        boss = self.site / "2026-10-01" / "ulatek"
+        boss.mkdir()
+        (boss / "index.html").write_text("<html><head></head><body>boss</body></html>")
+        publish.refresh(self.site, FakeGit())
+        text = old.read_text()
+        self.assertIn("<h1>mio</h1>", text)
+        self.assertIn('<nav class="bar">', text)
+        self.assertNotIn('<br><a href="../">Home</a>', text)
+        self.assertIn("← Serata", (boss / "index.html").read_text())
 
     def test_nothing_changed_means_no_commit(self):
         git = FakeGit(dirty="")
