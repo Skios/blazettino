@@ -135,6 +135,19 @@ class BossPageTest(unittest.TestCase):
         h = page.render_html(build_boss(KILL_A), None, "https://x.github.io/b/2026-10-15/boss-uno/")
         self.assertIn('href="../../">Home', h)
 
+    def test_hosted_boss_page_has_a_top_bar_back_to_its_night(self):
+        h = page.render_html(build_boss(KILL_A), None, "https://x.github.io/b/2026-10-15/boss-uno/")
+        bar = re.search(r'<nav class="bar">(.*?)</nav>', h, re.S).group(1)
+        self.assertIn('href="../../">Home', bar)
+        self.assertIn('href="../">← Serata', bar)
+
+    def test_top_bar_of_a_night_has_only_the_home_and_local_pages_have_none(self):
+        h = page.render_html(build_night(), None, "https://x.github.io/b/2026-10-15/")
+        bar = re.search(r'<nav class="bar">(.*?)</nav>', h, re.S).group(1)
+        self.assertIn('href="../">Home', bar)
+        self.assertNotIn("Serata<", bar)
+        self.assertNotIn('class="bar"', build())
+
 
 class SharingTest(unittest.TestCase):
     URL = "https://example.github.io/blazettino-site/2026-10-15/"
@@ -160,6 +173,7 @@ class SharingTest(unittest.TestCase):
         self.assertIn('data-tab="global" aria-pressed="true">Settimana<', h)
         self.assertIn("<th>Settimana</th>", h)
         self.assertIn('href="../../">Home', h)
+        self.assertNotIn("Serata<", re.search(r'<nav class="bar">(.*?)</nav>', h, re.S).group(1))
 
     def test_page_is_unlisted(self):
         self.assertIn('name="robots" content="noindex"', build())

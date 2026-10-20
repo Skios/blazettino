@@ -25,15 +25,18 @@ SITE_CSS = """
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
 main{max-width:640px;margin:0 auto;padding:24px 16px}
-h1{margin:.2em 0 0;font-size:clamp(1.4rem,4vw,2rem)}
-.sub{color:var(--muted);margin:.2em 0 1.2em}
+h1{margin:.2em 0 0;font:700 clamp(2rem,8vw,3.2rem)/1.1 Georgia,'Times New Roman',serif;text-align:center}
+.sub{color:var(--muted);margin:.4em 0 1.4em;text-align:center;border-bottom:3px double var(--line);padding-bottom:.8em;text-transform:uppercase;letter-spacing:.12em;font-size:.8rem}
+p:has(>.btn){text-align:center}
 a{color:var(--accent)}
 .btn{display:inline-block;background:var(--card);border:1px solid var(--accent);border-radius:10px;padding:10px 16px;text-decoration:none;font-weight:700}
-h2{font-size:1.05rem;margin:1.6em 0 .5em;color:var(--muted)}
+h2{font-size:1.05rem;margin:1.6em 0 .5em;color:var(--muted);border-left:4px solid var(--accent);padding-left:10px}
 .btn{margin-bottom:.4em}
 ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
 li a{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:var(--fg);text-decoration:none}
+li a{transition:transform .12s,border-color .12s}
 li a:hover{border-color:var(--accent)}
+@media (hover:hover){li a:hover{transform:translateY(-2px)}}
 .d{font-weight:700}.t{display:block;color:var(--accent);font-size:.9rem}.s{display:block;color:var(--muted);font-size:.8rem}
 .tag{font-size:.65rem;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:8px;color:#111;background:var(--accent)}
 """
