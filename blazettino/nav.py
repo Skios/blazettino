@@ -14,6 +14,7 @@ CSS = """
 .bar a{color:var(--accent);text-decoration:none;font-weight:700}
 .bar .brand{display:flex;gap:8px;align-items:center;font:700 1.05rem Georgia,'Times New Roman',serif}
 .bar img{height:30px;width:auto}
+h1 .logo{height:1.3em;width:auto;margin-right:.3em;vertical-align:-.25em}
 .pick .panel{display:none}
 .pick .tabs{flex-wrap:wrap;justify-content:center;gap:14px;overflow:visible;margin-top:12vh}
 .pick .tab{font-size:1.15rem;padding:16px 26px}
@@ -38,6 +39,7 @@ def enhance(html: str, rel: str) -> str:
     html = LIGHT_THEME.sub("", OLD_FOOTER_LINK.sub("", html)).replace("color-scheme:dark light", "color-scheme:dark")
     home = "../" * (rel.count("/") + 1)
     back = '<a href="../">← Serata</a>' if re.fullmatch(r"\d{4}-\d{2}-\d{2}/[^/]+", rel) else ""
+    html = html.replace("<h1>📰 Il Blazettino</h1>", f'<h1><img class="logo" src="{home}logo.png" alt="">Il Blazettino</h1>')
     head = f'<!--nav--><link rel="icon" href="{home}logo.png"><style>{CSS}</style><!--/nav-->'
     bar = f'<!--nav--><nav class="bar"><a class="brand" href="{home}"><img src="{home}logo.png" alt="">Il Blazettino</a>{back}</nav><!--/nav-->'
     html = html.replace("</head>", head + "</head>", 1)

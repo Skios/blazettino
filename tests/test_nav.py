@@ -24,6 +24,13 @@ class EnhanceTest(unittest.TestCase):
         self.assertIn('<body><!--nav--><nav class="bar">', h)
         self.assertIn('<link rel="icon" href="../logo.png">', h)
 
+    def test_logo_replaces_the_newspaper_emoji_beside_the_title(self):
+        page = PAGE.replace("<main>", "<main><h1>📰 Il Blazettino</h1>")
+        h = nav.enhance(page, "2026-10-14/ulatek")
+        self.assertIn('<h1><img class="logo" src="../../logo.png" alt="">Il Blazettino</h1>', h)
+        self.assertNotIn("📰", h)
+        self.assertEqual(nav.enhance(h, "2026-10-14/ulatek"), h)
+
     def test_old_footer_link_is_removed(self):
         self.assertNotIn('<br><a href="../">Home</a>', nav.enhance(PAGE, "2026-10-19"))
 

@@ -26,7 +26,7 @@ MONTHS = ("gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno",
 SITE_CSS = """
 :root{color-scheme:dark;--bg:#14161c;--card:#1d2029;--fg:#e8e9ee;--muted:#9aa0b0;--line:#2c3040;--accent:#f0b429}
 *{box-sizing:border-box}
-.logo{display:block;margin:0 auto;height:110px;width:auto}
+h1 .logo{height:1.3em;width:auto;margin-right:.25em;vertical-align:-.25em}
 body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
 main{max-width:640px;margin:0 auto;padding:24px 16px}
 h1{margin:.2em 0 0;font:700 clamp(2rem,8vw,3.2rem)/1.1 Georgia,'Times New Roman',serif;text-align:center}
@@ -104,7 +104,7 @@ def _item(site_dir: Path, folder: str, head: str | None, latest: bool) -> str:
 def _home(site_dir: Path) -> str:
     """The site root: a page to pick the night or the week (the latest night is one tap away)."""
     nights, weeks, bosses = _nights(site_dir), _weeks(site_dir), _bosses(site_dir)
-    body = '<img class="logo" src="logo.png" alt=""><h1>Il Blazettino</h1><p class=\'sub\'>Le pagelle della Blaze of Glory</p>'
+    body = '<h1><img class="logo" src="logo.png" alt="">Il Blazettino</h1><p class=\'sub\'>Le pagelle della Blaze of Glory</p>'
     if not (nights or weeks):
         return _head("Il Blazettino") + f"<body><main>{body}<p>Nessuna pagella pubblicata, per ora.</p></main></body></html>"
     if nights:
