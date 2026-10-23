@@ -32,8 +32,9 @@ SYSTEM = (
     "frase secca. Gli 'Spunti' di ogni giocatore sono i fatti piu' divertenti: usali quando ci sono. Per ogni giocatore segui il 'Tono' "
     "indicato (dipende dal voto). Non inventare numeri ne' eventi. Le morti 'strage generale' "
     "sono colpa di tutti, non del singolo. Il voto e' gia' deciso: non cambiarlo ne' discuterlo. "
-    "Il genere dei giocatori e' ignoto: evita participi, aggettivi e pronomi di genere riferiti a loro (usa il nome o forme impersonali); "
-    "negli esempi il genere e' usato ma tu NON devi copiarlo."
+    "Il genere dei giocatori e' ignoto salvo dove i dati dicono 'genere m' o 'genere f': in quel caso usa il genere giusto; "
+    "altrimenti evita participi, aggettivi e pronomi di genere (usa il nome o forme impersonali). "
+    "Negli esempi il genere e' usato ma per i giocatori senza 'genere' NON devi copiarlo."
 )
 STYLE_HEADER = (
     "Esempi di stile (pagella scritta a mano dalla gilda, da imitare nel tono e nella struttura; "
@@ -139,7 +140,7 @@ def facts(p: kpi.Player, players: list[kpi.Player], tones=TONES) -> str:
     )
     hints = highlights(p, players)
     return (
-        f"{p.name} ({p.spec} {p.cls}, ruolo {p.role}, iLvl {p.ilvl}) - Voto {kpi.grade(p)}. Tono: {tone(kpi.grade(p), tones)}. "
+        f"{p.name} ({p.spec} {p.cls}, ruolo {p.role}, iLvl {p.ilvl}{f', genere {p.gender}' if p.gender else ''}) - Voto {kpi.grade(p)}. Tono: {tone(kpi.grade(p), tones)}. "
         f"Danni {p.damage / 1e6:.2f}M ({p.dps / 1e3:.1f}k DPS, {_rank(p, p.dps_parse, 'parse')}), "
         f"cure {p.healing / 1e6:.2f}M ({p.hps / 1e3:.1f}k HPS, {_rank(p, p.hps_parse, 'parse cure')}), "
         f"danni subiti {p.taken / 1e6:.2f}M. Morti: {deaths}."

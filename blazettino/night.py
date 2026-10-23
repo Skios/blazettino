@@ -5,7 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from typing import Callable
 
-from blazettino import comment, kpi
+from blazettino import comment, kpi, roster
 from blazettino.attempts import Attempt
 from blazettino.comment import Comment
 
@@ -51,8 +51,9 @@ def assemble(
     comments_fn: Callable[..., dict[str, Comment]] = comment.comments,
 ) -> Night:
     """Drop excluded raiders, merge the night and ask the LLM once per boss plus once for the whole night."""
-    exclude = set(cfg.get("exclude", ()))
-    per_boss = [(a, [p for p in ps if p.name not in exclude]) for a, ps in tries]
+    book = cfg.get("players", {})
+    exclude = {roster.canon(n, book) for n in cfg.get("exclude", ())}
+    per_boss = [(a, [p for p in roster.apply(ps, book) if roster.canon(p.name, book) not in exclude]) for a, ps in tries]
     merged = kpi.merge([_tag_boss(ps, a.name) for a, ps in per_boss])
     jobs = [(ps, comment.attempt_context(a)) for a, ps in per_boss]
     jobs.append((merged, comment.night_context([a for a, _ in per_boss])))
@@ -85,8 +86,9 @@ def assemble_boss(
     comments_fn: Callable[..., dict[str, Comment]] = comment.comments,
 ) -> Night:
     """A page for one boss of a night: one LLM call, its comments are the page comments."""
-    exclude = set(cfg.get("exclude", ()))
-    ps = [p for p in players if p.name not in exclude]
+    book = cfg.get("players", {})
+    exclude = {roster.canon(n, book) for n in cfg.get("exclude", ())}
+    ps = [p for p in roster.apply(players, book) if roster.canon(p.name, book) not in exclude]
     notes = comments_fn(ps, cfg, context=comment.attempt_context(attempt))
     return Night(
         f"{attempt.name} ({_day(date)}) · {clean_title(title)}", date, [BossReport(attempt, ps, notes)], ps, notes,

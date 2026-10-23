@@ -32,8 +32,9 @@ class Attempt:
 DIFFICULTIES = {1: "LFR", 3: "Normal", 4: "HC", 5: "Mythic"}
 
 
-def best_tries(fights: list[dict]) -> list[Attempt]:
+def best_tries(fights: list[dict], mode: str = "best") -> list[Attempt]:
     """Boss attempts from a WCL `fights` list (encounterID 0 = trash, ignored), in order of first pull.
+    Without a kill, mode "best" takes the wipe that got the boss lowest, "last" the final pull of the night.
     One attempt per boss and difficulty; the difficulty goes in the name only when a boss was done on several."""
     by_boss: dict[tuple[str, int | None], list[dict]] = {}
     for f in fights:
@@ -45,7 +46,7 @@ def best_tries(fights: list[dict]) -> list[Attempt]:
     out = []
     for (name, diff), tries in by_boss.items():
         kills = [f for f in tries if f["kill"]]
-        best = kills[0] if kills else min(tries, key=lambda f: f["fightPercentage"] or WORST_PCT)
+        best = kills[0] if kills else tries[-1] if mode == "last" else min(tries, key=lambda f: f["fightPercentage"] or WORST_PCT)
         label = f"{name} ({DIFFICULTIES.get(diff, diff)})" if levels[name] > 1 else name
         out.append(Attempt(
             id=best["id"], name=label, kill=bool(best["kill"]),

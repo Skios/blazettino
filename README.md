@@ -83,6 +83,11 @@ Le chiavi `geminiKey2`, `geminiKey3`... sono di riserva: si passa alla successiv
 - **Fasce di tono**: `TONES` in `blazettino/comment.py`, coppie (voto minimo, tono) dall'alto in basso; ogni giocatore riceve nel prompt il tono della sua fascia. Per cambiarle senza toccare il codice, in `config.json`: `"tones": [[8.5, "esalta..."], [6.5, "..."], [0, "..."]]`.
 - **Prompt**: `SYSTEM` e `STYLE_HEADER` in `comment.py`; gli esempi di stile sono in `blazettino/style_examples.txt` (ognuno con il suo voto: il modello imita quello più vicino al voto del giocatore). `"system": "..."` in `config.json` sostituisce il testo di sistema.
 
+## Giocatori, alt e ultimo try
+
+- **`players.json`** (non versionato, modello in `players.example.json`): per ogni nickname il `gender` (`m`/`f`, facoltativo) e gli `alts`. Un alt conta come il suo main in voti, podio, record e `exclude` (escludere il main esclude anche gli alt). Se un main e un suo alt giocano lo stesso boss restano due giocatori. Con il genere indicato i commenti usano il genere giusto; senza, restano neutri.
+- **Ultimo try**: per ogni boss senza kill la pagella usa l'ultimo pull della serata (`"try": "last"`, default); con `"try": "best"` in `config.json` torna il wipe più vicino alla kill. Con una kill non cambia nulla. I dati di tutti i pull restano comunque raccolti nei file dei boss.
+
 ## Dati per boss e record
 
 Con `--publish` ogni log scrive in `site_dir/data/bosses/<encounterID>.json` kill, tempo e tutti i tentativi (una voce per codice log e difficoltà, riscrivere lo stesso log non cambia nulla). Le etichette si ricalcolano ogni volta da tutte le kill: la prima kill mostra solo il tempo, la più veloce di sempre `NEW RECORD`, le altre il distacco (`+0:13`). Le pagine pubblicate leggono il file all'apertura, quindi un record battuto cambia anche le etichette delle serate passate. Il grafico della vita del boss tentativo per tentativo compare nel banner del boss quando ci sono almeno due pull.

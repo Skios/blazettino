@@ -39,6 +39,18 @@ class PullsTest(unittest.TestCase):
         self.assertEqual(a.pulls[0].seconds, 200)
 
 
+class LastTryTest(unittest.TestCase):
+    wipes = [fight(1, 4, False, 20.0), fight(2, 4, False, 60.0)]
+
+    def test_last_mode_takes_the_final_pull_instead_of_the_best_wipe(self):
+        self.assertEqual(attempts.best_tries(self.wipes)[0].id, 1)
+        self.assertEqual(attempts.best_tries(self.wipes, "last")[0].id, 2)
+
+    def test_a_kill_wins_in_both_modes(self):
+        fights = self.wipes + [fight(3, 4, True)]
+        self.assertEqual(attempts.best_tries(fights, "last")[0].id, 3)
+
+
 class BestTriesTest(unittest.TestCase):
     def test_kill_is_chosen_when_present_in_order_of_first_attempt(self):
         got = attempts.best_tries(FIGHTS)

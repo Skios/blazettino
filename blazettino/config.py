@@ -32,5 +32,6 @@ def env_prefix(prefix: str) -> list[str]:
 
 
 def load_config() -> dict:
-    path = ROOT / "config.json"
-    return json.loads(path.read_text()) if path.exists() else {}
+    path, book = ROOT / "config.json", ROOT / "players.json"
+    cfg = json.loads(path.read_text()) if path.exists() else {}
+    return {**cfg, "players": json.loads(book.read_text())} if book.exists() else cfg

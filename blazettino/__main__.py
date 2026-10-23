@@ -39,9 +39,9 @@ def _date(info: dict) -> str:
     return datetime.fromtimestamp(info["startTime"] / 1000).strftime("%Y-%m-%d")
 
 
-def _tries(code: str, info: dict) -> list[attempts.Attempt]:
-    """The report's best attempts, each remembering the log it comes from."""
-    return [dataclasses.replace(a, code=code) for a in attempts.best_tries(info["fights"])]
+def _tries(code: str, info: dict, mode: str = "best") -> list[attempts.Attempt]:
+    """The report's attempts (the kill, else the best or last pull), each remembering the log it comes from."""
+    return [dataclasses.replace(a, code=code) for a in attempts.best_tries(info["fights"], mode)]
 
 
 def _records(codes: list[str], cfg: dict) -> None:
@@ -58,7 +58,7 @@ def _records(codes: list[str], cfg: dict) -> None:
 
 def _build(code: str, cfg: dict) -> night.Night:
     info = wcl.report(code, f"title startTime {FIGHTS}")
-    tries = _tries(code, info)
+    tries = _tries(code, info, cfg.get("try", "last"))
     if not tries:
         raise SystemExit(f"nessun boss nel report {code}")
     loaded = [(a, kpi.load_fight(*wcl.fight_tables(code, a.id))) for a in tries]
@@ -69,7 +69,7 @@ def _build(code: str, cfg: dict) -> night.Night:
 def _boss(code: str, slug: str, cfg: dict) -> night.Night:
     """Only the chosen boss of the report is loaded (fewer WarcraftLogs points, one LLM call)."""
     info = wcl.report(code, f"title startTime {FIGHTS}")
-    tries = {a.slug: a for a in _tries(code, info)}
+    tries = {a.slug: a for a in _tries(code, info, cfg.get("try", "last"))}
     if slug not in tries:
         raise SystemExit(f"boss '{slug}' non trovato nel report; disponibili: {', '.join(tries) or 'nessuno'}")
     a = tries[slug]

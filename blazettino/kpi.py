@@ -50,6 +50,7 @@ class Player:
     deaths: tuple[Death, ...]
     score: float | None = None  # night grade set by merge(); None = compute from the fight
     fights: int = 1  # boss fights this raider took part in
+    gender: str = ""  # "m"/"f" from players.json; empty = unknown, the comments stay neutral
     ranked: bool = True  # False: parses are inside-raid percentiles (no WarcraftLogs ranking on wipes)
 
     @property
