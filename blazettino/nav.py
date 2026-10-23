@@ -15,10 +15,18 @@ KPI_META = re.compile(r'<meta name="blazettino-kpi" content="(\d+)"')
 FIRST_VERSION = 1  # pages published before the version existed used the first formula
 
 
+OLD_META = '<meta name="blazettino-old" content="1">'
+
+
+def mark_old(html: str) -> str:
+    """Flag a page as replaced by a newer version of the same night (kept, never overwritten)."""
+    return html if OLD_META in html else html.replace("</head>", OLD_META + "</head>", 1) if "</head>" in html else OLD_META + html
+
+
 def is_old(html: str) -> bool:
-    """True when the page was made with an older KPI version than the current one."""
+    """True when the page was replaced by a newer one or made with an older KPI version than the current."""
     m = KPI_META.search(html)
-    return int(m[1] if m else FIRST_VERSION) < kpi.KPI_VERSION
+    return OLD_META in html or int(m[1] if m else FIRST_VERSION) < kpi.KPI_VERSION
 
 
 CSS = """
@@ -61,7 +69,7 @@ def enhance(html: str, rel: str) -> str:
     back = '<a href="../">← Serata</a>' if re.fullmatch(r"\d{4}-\d{2}-\d{2}/[^/]+", rel) else ""
     html = html.replace("<h1>📰 Il Blazettino</h1>", f'<h1><img class="logo" src="{home}logo.png" alt="">Il Blazettino</h1>')
     head = f'<!--nav--><link rel="icon" href="{home}logo.png"><style>{CSS}</style><!--/nav-->'
-    old = '<span class="old" title="Voti calcolati con una formula precedente">OLD</span>' if is_old(html) else ""
+    old = '<span class="old" title="Versione sostituita o calcolata con una formula precedente">OLD</span>' if is_old(html) else ""
     bar = f'<!--nav--><nav class="bar"><a class="brand" href="{home}"><img src="{home}logo.png" alt="">Il Blazettino</a>{back}{old}</nav><!--/nav-->'
     html = html.replace("</head>", head + "</head>", 1)
     html = re.sub(r"<body[^>]*>", lambda m: m.group(0) + bar, html, count=1)

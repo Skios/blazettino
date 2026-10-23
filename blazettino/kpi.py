@@ -30,6 +30,8 @@ class Death:
     ability: str
     mass: bool
     boss: str = ""
+    spell: int = 0  # WarcraftLogs id of the killing ability (0 = unknown)
+    label: str = ""  # what the ability asks of the player, from mythictrap.labels()
 
 
 @dataclass(frozen=True)
@@ -77,7 +79,8 @@ def _deaths(events: list[dict]) -> dict[str, tuple[Death, ...]]:
     out: dict[str, list[Death]] = {}
     for e in sorted(events, key=lambda e: e["deathTime"]):
         near = sum(abs(t - e["deathTime"]) <= MASS_WINDOW_S * 1000 for t in times)
-        d = Death(e["deathTime"] // 1000, e.get("ability", {}).get("name", UNKNOWN_ABILITY), near >= MASS_DEATHS)
+        d = Death(e["deathTime"] // 1000, e.get("ability", {}).get("name", UNKNOWN_ABILITY), near >= MASS_DEATHS,
+                  spell=e.get("ability", {}).get("guid", 0))
         out.setdefault(e["name"], []).append(d)
     return {n: tuple(d) for n, d in out.items()}
 

@@ -136,7 +136,7 @@ def tone(g: float, tones=TONES) -> str:
 
 def facts(p: kpi.Player, players: list[kpi.Player], tones=TONES) -> str:
     deaths = "nessuna" if not p.deaths else "; ".join(
-        f"{d.boss + ' ' if d.boss else ''}{kpi.mmss(d.time_s)} {d.ability} ({'strage generale' if d.mass else 'evitabile'})" for d in p.deaths
+        f"{d.boss + ' ' if d.boss else ''}{kpi.mmss(d.time_s)} {d.ability}{f' [{d.label}]' if d.label else ''} ({'strage generale' if d.mass else 'evitabile'})" for d in p.deaths
     )
     hints = highlights(p, players)
     return (

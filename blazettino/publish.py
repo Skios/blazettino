@@ -2,6 +2,7 @@
 import re
 import shutil
 import subprocess
+from itertools import count
 from html import escape, unescape
 from pathlib import Path
 from typing import Callable
@@ -13,7 +14,8 @@ LOGO = ROOT / "assets" / "logo.png"
 Runner = Callable[[list[str], Path], str]
 DATED = re.compile(r"\d{4}-\d{2}-\d{2}")
 SECTION = "settimana"
-REMOVABLE = re.compile(rf"({SECTION}/)?\d{{4}}-\d{{2}}-\d{{2}}(/[a-z0-9-]+)?")
+REMOVABLE = re.compile(rf"({SECTION}/)?\d{{4}}-\d{{2}}-\d{{2}}(-v\d+)?(/[a-z0-9-]+)?")
+VERSIONED = re.compile(r"-v\d+$")  # <name>-vN: an earlier page of <name>, kept and marked OLD
 
 
 def _git(cmd: list[str], cwd: Path) -> str:
@@ -85,7 +87,8 @@ def _weeks(site_dir: Path) -> list[str]:
 
 def _bosses(site_dir: Path) -> list[str]:
     """Single-boss pages (<date>/<boss>/), newest first."""
-    found = [f"{n}/{d.name}" for n in _nights(site_dir) for d in (site_dir / n).iterdir() if (d / "index.html").exists()]
+    found = [f"{n}/{d.name}" for n in _nights(site_dir) for d in (site_dir / n).iterdir()
+             if (d / "index.html").exists() and not VERSIONED.search(d.name)]
     return sorted(found, reverse=True)
 
 
@@ -146,10 +149,26 @@ def _commit_and_push(site_dir: Path, message: str, run: Runner) -> None:
         run(["git", "push"], site_dir)
 
 
+def _keep_previous(dest: Path, new_html: str, site_dir: Path) -> None:
+    """A page already published at dest is moved to <name>-vN (marked OLD) instead of being overwritten;
+    publishing the very same page again changes nothing."""
+    current = dest / "index.html"
+    if not current.exists():
+        return
+    old = current.read_text()
+    if old == nav.enhance(new_html, dest.relative_to(site_dir).as_posix()):
+        return
+    n = next(i for i in count(1) if not (dest.parent / f"{dest.name}-v{i}").exists())
+    keep = dest.parent / f"{dest.name}-v{n}"
+    keep.mkdir()
+    (keep / "index.html").write_text(nav.mark_old(old))
+
+
 def publish(folder: Path, date: str, site_dir: Path, site_url: str, run: Runner = _git, section: str = "") -> str:
     """Copy folder/pagella.html to site_dir/[section/]<date>/index.html, commit and push; return the public URL."""
     dest = site_dir / section / date
     dest.mkdir(parents=True, exist_ok=True)
+    _keep_previous(dest, (folder / "pagella.html").read_text(), site_dir)
     shutil.copy(folder / "pagella.html", dest / "index.html")
     (site_dir / ".nojekyll").touch()
     (site_dir / "robots.txt").write_text("User-agent: *\nDisallow: /\n")

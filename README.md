@@ -88,6 +88,12 @@ Le chiavi `geminiKey2`, `geminiKey3`... sono di riserva: si passa alla successiv
 - **`players.json`** (non versionato, modello in `players.example.json`): per ogni nickname il `gender` (`m`/`f`, facoltativo) e gli `alts`. Un alt conta come il suo main in voti, podio, record e `exclude` (escludere il main esclude anche gli alt). Se un main e un suo alt giocano lo stesso boss restano due giocatori. Con il genere indicato i commenti usano il genere giusto; senza, restano neutri.
 - **Ultimo try**: per ogni boss senza kill la pagella usa l'ultimo pull della serata (`"try": "last"`, default); con `"try": "best"` in `config.json` torna il wipe più vicino alla kill. Con una kill non cambia nulla. I dati di tutti i pull restano comunque raccolti nei file dei boss.
 
+## Pagine sostituite e boss da MythicTrap
+
+- **Mai sovrascrivere:** pubblicando di nuovo una pagina che esiste già (stessa serata, stesso boss, stessa settimana) quella precedente resta a `<data>-v1/` (poi `-v2`...), con la scritta OLD, e la nuova prende il suo posto. Ripubblicare la stessa identica pagina non crea copie. Le versioni vecchie non sono nella home: si aprono dall'indirizzo e si tolgono con `--remove <data>-v1`.
+- **Boss per raid:** `python -m blazettino --mythictrap` legge da MythicTrap i raid indicati in `config.json` (`"raids": ["venomous-abyss"]`, default quello) e salva in `data/raids/<raid>.json` solo fatti: id, nome, etichetta di azione e fase di ogni abilità. Nei commenti le morti portano l'etichetta (per esempio `[Dodge waves]`) abbinata per id o per nome; i voti non cambiano. Se la pagina di MythicTrap cambia formato il comando si ferma con un errore chiaro.
+- I difetti noti stanno in [`docs/difetti.md`](docs/difetti.md).
+
 ## Dati per boss e record
 
 Con `--publish` ogni log scrive in `site_dir/data/bosses/<encounterID>.json` kill, tempo e tutti i tentativi (una voce per codice log e difficoltà, riscrivere lo stesso log non cambia nulla). Le etichette si ricalcolano ogni volta da tutte le kill: la prima kill mostra solo il tempo, la più veloce di sempre `NEW RECORD`, le altre il distacco (`+0:13`). Le pagine pubblicate leggono il file all'apertura, quindi un record battuto cambia anche le etichette delle serate passate. Il grafico della vita del boss tentativo per tentativo compare nel banner del boss quando ci sono almeno due pull.
