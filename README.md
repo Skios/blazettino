@@ -18,7 +18,7 @@ Per ogni boss usa il **miglior tentativo**: la kill se c'è, altrimenti il wipe 
 - `messaggio.txt`: il commento breve da incollare in chat (podio, battute di MVP e LVP, boss, link)
 - `pagella.html`: file unico e autonomo che raccoglie tutto (schede Serata e una per boss, filtri per ruolo, ordinamento, icone di spec incorporate); si può aprire, inviare o ospitare così com'è
 
-Sui wipe WarcraftLogs non calcola i parse ("No kill no ranking!"): il voto usa la posizione del giocatore nel raid per ruolo, indicata come `pos.`. Le risposte WCL sono in cache in `cache/` (rilanciare non spende punti, ma i commenti vengono rigenerati). Le icone di spec vengono scaricate una volta dal CDN di WarcraftLogs e messe in cache; se mancano, la pagina esce senza. Se l'LLM non risponde, le pagelle escono comunque senza commenti.
+Sui wipe WarcraftLogs non calcola i parse ("No kill no ranking!"): il voto usa la posizione del giocatore nel raid per ruolo, indicata come `pos.`. Se i punti orari di WarcraftLogs finiscono (limite 1000 all'ora) il programma aspetta il reset (fino a un giorno) e riprende da dove era, perché ogni risposta è già in cache: la pagella può uscire anche ore dopo, nessun errore. Le risposte WCL sono in cache in `cache/` (rilanciare non spende punti, ma i commenti vengono rigenerati). Le icone di spec vengono scaricate una volta dal CDN di WarcraftLogs e messe in cache; se mancano, la pagina esce senza. Se l'LLM non risponde, le pagelle escono comunque senza commenti.
 
 ## Pubblicare (link cliccabile con anteprima)
 
