@@ -14,6 +14,9 @@ CROSS_ROLE_BONUS = 1.0  # parse in the "other" role at or above the threshold
 CROSS_ROLE_THRESHOLD = 90
 MIN_GRADE, MAX_GRADE = 1.0, 10.0
 
+# Bump when the grade formula or a KPI changes: pages published with an older number get the OLD mark.
+KPI_VERSION = 1
+
 UNKNOWN_ABILITY = "causa sconosciuta"  # WarcraftLogs gives no killing blow for some deaths
 
 # A death is "mass" (not penalised) when this many raiders die within the window.

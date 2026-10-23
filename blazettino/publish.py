@@ -41,6 +41,7 @@ li a{display:block;background:var(--card);border:1px solid var(--line);border-ra
 li a{transition:transform .12s,border-color .12s}
 li a:hover{border-color:var(--accent)}
 @media (hover:hover){li a:hover{transform:translateY(-2px)}}
+li.old a{opacity:.55;filter:grayscale(1)}.tag.old{background:var(--muted)}
 .d{font-weight:700}.t{display:block;color:var(--accent);font-size:.9rem}.s{display:block;color:var(--muted);font-size:.8rem}
 .tag{font-size:.65rem;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:8px;color:#111;background:var(--accent)}
 """
@@ -63,17 +64,17 @@ def _human(date: str) -> str:
     return f"{int(date[8:])} {MONTHS[int(date[5:7]) - 1]} {date[:4]}"
 
 
-def _summary(night_dir: Path) -> tuple[str, str]:
-    """(title, description) read back from the generated page; empty when the page lacks them."""
+def _summary(night_dir: Path) -> tuple[str, str, bool]:
+    """(title, description, old) read back from the generated page; empty when the page lacks them."""
     try:
         html = (night_dir / "index.html").read_text()
     except OSError:
-        return "", ""
+        return "", "", False
     title = re.search(r"<title>(.*?)</title>", html, re.S)
     desc = re.search(r'property="og:description" content="(.*?)"', html)
     clean = lambda m: unescape(m.group(1)) if m else ""
     name = re.sub(r"\s*\d{4}-\d{2}-\d{2}$", "", re.sub(r"^Il Blazettino · ", "", clean(title)))
-    return name, clean(desc)
+    return name, clean(desc), nav.is_old(html)
 
 
 def _weeks(site_dir: Path) -> list[str]:
@@ -90,11 +91,11 @@ def _bosses(site_dir: Path) -> list[str]:
 
 def _item(site_dir: Path, folder: str, head: str | None, latest: bool) -> str:
     """One card of the home: `head` is the line above the title (None: the page title is the head)."""
-    title, desc = _summary(site_dir / folder)
-    tag = '<span class="tag">Ultima</span>' if latest else ""
+    title, desc, old = _summary(site_dir / folder)
+    tag = ('<span class="tag">Ultima</span>' if latest else "") + ('<span class="tag old">OLD</span>' if old else "")
     top = head or title or folder
     return (
-        f'<li><a href="{folder}/"><span class="d">{escape(top)}</span>{tag}'
+        f'<li{" class=old" if old else ""}><a href="{folder}/"><span class="d">{escape(top)}</span>{tag}'
         + (f'<span class="t">{escape(title)}</span>' if head and title else "")
         + (f'<span class="s">{escape(desc)}</span>' if desc else "")
         + "</a></li>"

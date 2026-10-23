@@ -3,20 +3,22 @@ python -m blazettino <report_code> --boss <slug> [--publish]   page of a single 
 python -m blazettino --week <report_code>... [--publish]   one page per night plus the weekly one (settimana/<first date>/)
 python -m blazettino --remove <YYYY-MM-DD>     take a published night off the site
 python -m blazettino --refresh-site            rewrite site root + archive from the published nights
+python -m blazettino --records <report_code>... add the kills/pulls of old logs to the boss files on the site (no page, no LLM)
 
 Writes out/<date>/{global.md, <boss>_kill|wipe.md, pagella.html, messaggio.txt}. With --publish the page is also
 copied to the Pages repo (config: site_dir, site_url), committed and pushed, so the message link works.
 """
+import dataclasses
 import logging
 import sys
 from datetime import datetime
 from pathlib import Path
 
-from blazettino import attempts, icons, kpi, message, night, page, publish, report, wcl
+from blazettino import attempts, bosses, icons, kpi, message, night, page, publish, report, wcl
 from blazettino.config import ROOT, load_config
 
 FIGHTS = "fights{id name encounterID difficulty kill fightPercentage startTime endTime}"
-USAGE = "uso: python -m blazettino <codice_report> [--boss <slug>] [--publish] | --week <codice>... [--publish] | --remove <YYYY-MM-DD|YYYY-MM-DD/<slug>|settimana/YYYY-MM-DD> | --refresh-site"
+USAGE = "uso: python -m blazettino <codice_report> [--boss <slug>] [--publish] | --week <codice>... [--publish] | --remove <YYYY-MM-DD|YYYY-MM-DD/<slug>|settimana/YYYY-MM-DD> | --refresh-site | --records <codice>..."
 
 
 def _remove(date: str, cfg: dict) -> None:
@@ -33,24 +35,45 @@ def _refresh(cfg: dict) -> None:
     sys.stdout.write("indice e archivio del sito aggiornati\n")
 
 
+def _date(info: dict) -> str:
+    return datetime.fromtimestamp(info["startTime"] / 1000).strftime("%Y-%m-%d")
+
+
+def _tries(code: str, info: dict) -> list[attempts.Attempt]:
+    """The report's best attempts, each remembering the log it comes from."""
+    return [dataclasses.replace(a, code=code) for a in attempts.best_tries(info["fights"])]
+
+
+def _records(codes: list[str], cfg: dict) -> None:
+    """Add the kills and pulls of these logs to the boss files on the site, without making any page."""
+    if not cfg.get("site_dir"):
+        raise SystemExit("--records richiede site_dir in config.json (vedi README)")
+    site = Path(cfg["site_dir"]).expanduser()
+    for code in codes:
+        info = wcl.report(code, f"startTime {FIGHTS}")
+        bosses.add_report(site, _date(info), _tries(code, info))
+    publish.refresh(site)
+    sys.stdout.write(f"record aggiornati da {len(codes)} log\n")
+
+
 def _build(code: str, cfg: dict) -> night.Night:
     info = wcl.report(code, f"title startTime {FIGHTS}")
-    tries = attempts.best_tries(info["fights"])
+    tries = _tries(code, info)
     if not tries:
         raise SystemExit(f"nessun boss nel report {code}")
     loaded = [(a, kpi.load_fight(*wcl.fight_tables(code, a.id))) for a in tries]
-    date = datetime.fromtimestamp(info["startTime"] / 1000).strftime("%Y-%m-%d")
+    date = _date(info)
     return night.assemble(info["title"], date, loaded, cfg)
 
 
 def _boss(code: str, slug: str, cfg: dict) -> night.Night:
     """Only the chosen boss of the report is loaded (fewer WarcraftLogs points, one LLM call)."""
     info = wcl.report(code, f"title startTime {FIGHTS}")
-    tries = {a.slug: a for a in attempts.best_tries(info["fights"])}
+    tries = {a.slug: a for a in _tries(code, info)}
     if slug not in tries:
         raise SystemExit(f"boss '{slug}' non trovato nel report; disponibili: {', '.join(tries) or 'nessuno'}")
     a = tries[slug]
-    date = datetime.fromtimestamp(info["startTime"] / 1000).strftime("%Y-%m-%d")
+    date = _date(info)
     return night.assemble_boss(info["title"], date, a, kpi.load_fight(*wcl.fight_tables(code, a.id)), cfg)
 
 
@@ -73,6 +96,10 @@ def main(argv: list[str]) -> None:
         if len(argv) != 3:
             raise SystemExit(USAGE)
         return _remove(argv[2], load_config())
+    if argv[1:2] == ["--records"]:
+        if len(argv) < 3:
+            raise SystemExit(USAGE)
+        return _records(argv[2:], load_config())
     args = argv[1:]
     boss = None
     if "--boss" in args:
@@ -99,6 +126,7 @@ def main(argv: list[str]) -> None:
         slug = n.bosses[0].attempt.slug
         folder, text = _save(n, f"{n.date}/{slug}", f"{base}/{n.date}/{slug}/" if base else None)
         if do_publish:
+            bosses.add_report(out, n.date, [b.attempt for b in n.bosses])
             publish.publish(folder, slug, out, site_url, section=n.date)
         sys.stdout.write(text + "\n")
         logging.getLogger(__name__).warning("salvato in %s%s", folder, " e pubblicato" if do_publish else "")
@@ -109,6 +137,7 @@ def main(argv: list[str]) -> None:
         n = _build(code, cfg)
         folder, text = _save(n, n.date, f"{base}/{n.date}/" if base else None)
         if do_publish:
+            bosses.add_report(out, n.date, [b.attempt for b in n.bosses])
             publish.publish(folder, n.date, out, site_url)
         sys.stdout.write(text + "\n\n")
         nights.append(n)

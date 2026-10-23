@@ -31,6 +31,14 @@ class DifficultyTest(unittest.TestCase):
         self.assertEqual([(a.id, a.pct) for a in got], [(2, 20.0), (3, 70.0)])
 
 
+class PullsTest(unittest.TestCase):
+    def test_attempt_keeps_encounter_difficulty_and_every_pull(self):
+        a = attempts.best_tries([fight(5, 4, False, 91.0), fight(7, 4, False, 40.5), fight(19, 4, True)])[0]
+        self.assertEqual((a.encounter, a.difficulty), (9, 4))
+        self.assertEqual([(p.pct, p.kill) for p in a.pulls], [(91.0, False), (40.5, False), (0.0, True)])
+        self.assertEqual(a.pulls[0].seconds, 200)
+
+
 class BestTriesTest(unittest.TestCase):
     def test_kill_is_chosen_when_present_in_order_of_first_attempt(self):
         got = attempts.best_tries(FIGHTS)

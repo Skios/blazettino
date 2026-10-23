@@ -6,12 +6,23 @@ WORST_PCT = 100.0
 
 
 @dataclass(frozen=True)
+class Pull:
+    pct: float  # boss health left (0 on a kill)
+    seconds: int
+    kill: bool
+
+
+@dataclass(frozen=True)
 class Attempt:
     id: int
     name: str
     kill: bool
     pct: float  # boss health left (0 on a kill)
     seconds: int
+    encounter: int = 0  # WarcraftLogs encounterID (0 = unknown)
+    difficulty: int = 0
+    code: str = ""  # report code, filled in by the caller
+    pulls: tuple[Pull, ...] = ()  # every pull of this boss and difficulty in the log, in order
 
     @property
     def slug(self) -> str:
@@ -40,5 +51,8 @@ def best_tries(fights: list[dict]) -> list[Attempt]:
             id=best["id"], name=label, kill=bool(best["kill"]),
             pct=0.0 if best["kill"] else float(best["fightPercentage"] or WORST_PCT),
             seconds=(best["endTime"] - best["startTime"]) // 1000,
+            encounter=best["encounterID"], difficulty=diff or 0,
+            pulls=tuple(Pull(0.0 if f["kill"] else float(f["fightPercentage"] or WORST_PCT),
+                             (f["endTime"] - f["startTime"]) // 1000, bool(f["kill"])) for f in tries),
         ))
     return out

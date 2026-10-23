@@ -75,6 +75,18 @@ class PublishTest(unittest.TestCase):
         self.assertIn("<style>", home)
         self.assertIn('name="viewport"', home)
 
+    def test_home_greys_and_marks_old_nights(self):
+        from unittest import mock
+        from blazettino import kpi
+        self.run_publish()
+        with mock.patch.object(kpi, "KPI_VERSION", 2):
+            publish.refresh(self.site, FakeGit())
+        home = (self.site / "index.html").read_text()
+        self.assertIn("<li class=old>", home)
+        self.assertIn('<span class="tag old">OLD</span>', home)
+        publish.refresh(self.site, FakeGit())
+        self.assertNotIn("class=old>", (self.site / "index.html").read_text().split("</style>")[1])
+
     def test_home_does_not_redirect_and_offers_the_latest_night_first(self):
         self.run_publish()
         home = self.home()
@@ -256,3 +268,4 @@ class RefreshTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

@@ -1,7 +1,9 @@
+import dataclasses
 import re
 import unittest
 
-from blazettino import night, page, tips
+from blazettino import kpi, night, page, tips
+from blazettino.attempts import Pull
 from blazettino.comment import Comment
 from tests.helpers import KILL_A, KILL_B, WIPE_C, build_boss, build_night, fake_comments, players
 
@@ -15,6 +17,28 @@ def build(night=None, icons=None):
 def panels(html):
     """Panel markup, in order: global first, then one per boss."""
     return ['<div class="panel"' + part for part in html.split('<div class="panel"')[1:]]
+
+
+class BossDataTest(unittest.TestCase):
+    def kill(self, pulls=()):
+        a = dataclasses.replace(KILL_A, encounter=3492, difficulty=4, code="AbC", pulls=pulls)
+        return page.render_html(build_boss(a))
+
+    def test_page_declares_its_kpi_version(self):
+        self.assertIn(f'<meta name="blazettino-kpi" content="{kpi.KPI_VERSION}">', build())
+
+    def test_kill_banner_has_a_placeholder_for_the_record_label(self):
+        self.assertIn('<span class="rec" data-boss="3492" data-diff="4" data-code="AbC"></span>', self.kill())
+
+    def test_no_placeholder_without_log_code(self):
+        self.assertNotIn('class="rec"', build())
+
+    def test_pulls_chart_has_one_bar_per_pull_and_only_with_several(self):
+        pulls = (Pull(80.0, 100, False), Pull(35.5, 200, False), Pull(0.0, 300, True))
+        html = self.kill(pulls)
+        self.assertEqual(html.count("<rect"), 3)
+        self.assertIn("boss al 35.5%", html)
+        self.assertNotIn("<rect", self.kill((Pull(0.0, 300, True),)))
 
 
 class StructureTest(unittest.TestCase):

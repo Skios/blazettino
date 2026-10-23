@@ -77,6 +77,20 @@ Le chiavi `geminiKey2`, `geminiKey3`... sono di riserva: si passa alla successiv
 - `max_missed_fights` (default 1): chi salta più boss della serata resta in pagella ma non entra nel podio.
 - `backend`: `gemini` (default) oppure `ollama` (locale, qualità inferiore: vedi `docs/backlog.md`).
 
+## Regolare formula, tono e prompt
+
+- **Formula del voto**: costanti in cima a `blazettino/kpi.py` (`BASE`, `PARSE_WEIGHT`, `DEATH_PENALTY`, `SURVIVOR_BONUS`, `CROSS_ROLE_*`). Quando cambia la formula o un KPI, alza `KPI_VERSION` nello stesso file: le pagine già pubblicate (che portano la versione in `<meta name="blazettino-kpi">`) escono con la scritta **OLD** in alto e la card grigia nella home dopo `python -m blazettino --refresh-site`. Le pagine senza meta contano come versione 1.
+- **Fasce di tono**: `TONES` in `blazettino/comment.py`, coppie (voto minimo, tono) dall'alto in basso; ogni giocatore riceve nel prompt il tono della sua fascia. Per cambiarle senza toccare il codice, in `config.json`: `"tones": [[8.5, "esalta..."], [6.5, "..."], [0, "..."]]`.
+- **Prompt**: `SYSTEM` e `STYLE_HEADER` in `comment.py`; gli esempi di stile sono in `blazettino/style_examples.txt` (ognuno con il suo voto: il modello imita quello più vicino al voto del giocatore). `"system": "..."` in `config.json` sostituisce il testo di sistema.
+
+## Dati per boss e record
+
+Con `--publish` ogni log scrive in `site_dir/data/bosses/<encounterID>.json` kill, tempo e tutti i tentativi (una voce per codice log e difficoltà, riscrivere lo stesso log non cambia nulla). Le etichette si ricalcolano ogni volta da tutte le kill: la prima kill mostra solo il tempo, la più veloce di sempre `NEW RECORD`, le altre il distacco (`+0:13`). Le pagine pubblicate leggono il file all'apertura, quindi un record battuto cambia anche le etichette delle serate passate. Il grafico della vita del boss tentativo per tentativo compare nel banner del boss quando ci sono almeno due pull.
+
+```
+python -m blazettino --records <codice>...   # aggiunge al file dei boss i log vecchi (nessuna pagina, nessuna chiamata all'LLM)
+```
+
 ## Test
 
 ```

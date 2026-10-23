@@ -59,6 +59,8 @@ main{max-width:1100px;margin:0 auto;padding:16px}h1{margin:.2em 0 0;font-size:cl
 details.nums{font-size:.82rem;color:var(--muted)}details.nums summary{cursor:pointer}
 dl{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;margin:.4em 0}dt{color:var(--muted)}dd{margin:0;color:var(--fg)}
 ul{margin:.3em 0 0;padding-left:1.1em}
+.pulls{margin:.6em 0 0}.pulls figcaption{color:var(--muted);font-size:.8rem;margin-bottom:.2em}.pulls svg{max-width:100%;height:auto}
+.rec:not(:empty){font-weight:700;font-size:.85rem;color:var(--muted);margin-left:.4em}.rec.new{color:#111;background:var(--accent);border-radius:4px;padding:1px 6px}
 footer{color:var(--muted);font-size:.75rem;text-align:center;margin:2em 0 1em}
 """
 
@@ -160,13 +162,37 @@ def _heat(night: Night, ranked: list[kpi.Player]) -> str:
     return f'<div class="heatwrap"><table class="heat"><thead><tr><th>Giocatore</th>{heads}<th>{night.kind}</th></tr></thead><tbody>{rows}</tbody></table></div>'
 
 
+CHART_BAR, CHART_GAP, CHART_H = 22, 6, 100
+
+
+def _pulls_chart(a) -> str:
+    """Boss health left at the end of each pull (bar height = % left; a kill is a green stub at 0)."""
+    if len(a.pulls) < 2:
+        return ""
+    w = len(a.pulls) * (CHART_BAR + CHART_GAP)
+    bars = "".join(
+        f'<g><title>Tentativo {i}: {"KILL" if p.kill else f"boss al {p.pct:g}%"} dopo {kpi.mmss(p.seconds)}</title>'
+        f'<rect x="{(i - 1) * (CHART_BAR + CHART_GAP)}" y="{CHART_H - max(p.pct, 2):g}" width="{CHART_BAR}" height="{max(p.pct, 2):g}" '
+        f'rx="3" fill="var({"--ok" if p.kill else "--bad"})"/>'
+        f'<text x="{(i - 1) * (CHART_BAR + CHART_GAP) + CHART_BAR / 2}" y="{CHART_H + 14}" text-anchor="middle" '
+        f'fill="var(--muted)" font-size="10">{i}</text></g>'
+        for i, p in enumerate(a.pulls, 1)
+    )
+    return (
+        f'<figure class="pulls"><figcaption>Vita del boss rimasta, tentativo per tentativo</figcaption>'
+        f'<svg viewBox="0 0 {w} {CHART_H + 18}" width="{w}" role="img" aria-label="Vita del boss per tentativo">{bars}</svg></figure>'
+    )
+
+
 def _banner(night: Night, boss: BossReport) -> str:
     a = boss.attempt
+    chart = _pulls_chart(a)
     if a.kill:
-        return f'<div class="banner kill"><strong>KILL</strong> in {kpi.mmss(a.seconds)}</div>'
+        rec = f' <span class="rec" data-boss="{a.encounter}" data-diff="{a.difficulty}" data-code="{escape(a.code)}"></span>' if a.encounter and a.code else ""
+        return f'<div class="banner kill"><strong>KILL</strong> in {kpi.mmss(a.seconds)}{rec}{chart}</div>'
     return (
         f'<div class="banner wipe"><strong>{escape(tips.NO_KILL)}</strong> Miglior tentativo: boss a {a.pct:g}% '
-        f"di vita dopo {kpi.mmss(a.seconds)}.<em>{escape(report.tip_for(night, boss))}</em></div>"
+        f"di vita dopo {kpi.mmss(a.seconds)}.<em>{escape(report.tip_for(night, boss))}</em>{chart}</div>"
     )
 
 
@@ -184,6 +210,7 @@ def _share_head(night: Night, top: list[kpi.Player], url: str | None) -> str:
     )
     tags = [
         '<meta name="robots" content="noindex">',
+        f'<meta name="blazettino-kpi" content="{kpi.KPI_VERSION}">',
         '<meta property="og:type" content="website">',
         f'<meta property="og:title" content="Il Blazettino · {escape(night.title)} {escape(night.date)}">',
         f'<meta property="og:description" content="{escape(desc)}">',

@@ -1,6 +1,7 @@
 import unittest
+from unittest import mock
 
-from blazettino import nav
+from blazettino import kpi, nav
 
 PAGE = '<!doctype html><html><head><title>t</title><style>:root{color-scheme:dark light;--bg:#14161c}@media (prefers-color-scheme:light){:root{--bg:#f4f5f8;--fg:#000}}</style></head><body><main>x</main><footer>ridere.<br><a href="../">Home</a></footer></body></html>'
 
@@ -53,3 +54,28 @@ class EnhanceTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class OldMarkTest(unittest.TestCase):
+    def versioned(self, v):
+        return PAGE.replace("<title>", f'<meta name="blazettino-kpi" content="{v}"><title>')
+
+    def test_page_made_with_an_older_kpi_version_gets_the_old_mark(self):
+        with mock.patch.object(kpi, "KPI_VERSION", 2):
+            self.assertIn('<span class="old"', nav.enhance(self.versioned(1), "2026-10-19"))
+            self.assertIn('<span class="old"', nav.enhance(PAGE, "2026-10-19"))  # no meta = first version
+
+    def test_current_version_has_no_mark(self):
+        self.assertNotIn('<span class="old"', nav.enhance(self.versioned(kpi.KPI_VERSION), "2026-10-19"))
+        self.assertNotIn('<span class="old"', nav.enhance(PAGE, "2026-10-19"))
+
+    def test_mark_is_replaced_not_stacked_when_enhancing_again(self):
+        with mock.patch.object(kpi, "KPI_VERSION", 2):
+            twice = nav.enhance(nav.enhance(PAGE, "2026-10-19"), "2026-10-19")
+        self.assertEqual(twice.count('<span class="old"'), 1)
+
+
+class RecordLoaderTest(unittest.TestCase):
+    def test_script_reads_the_boss_file_from_the_site_root(self):
+        self.assertIn("fetch('../data/bosses/'", nav.enhance(PAGE, "2026-10-19"))
+        self.assertIn("fetch('../../data/bosses/'", nav.enhance(PAGE, "settimana/2026-10-07"))
