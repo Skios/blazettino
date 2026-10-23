@@ -1,0 +1,188 @@
+{
+ "labels": {
+  "M6FLgZ8GtKnyTwa7": {},
+  "RaZCT7cxPbwQ4VNA": {
+   "4": ""
+  },
+  "zVgjNA4ChyMx1pG7": {}
+ },
+ "name": "Ula'tek",
+ "records": {
+  "4": {
+   "code": "RaZCT7cxPbwQ4VNA",
+   "kill_s": 602
+  }
+ },
+ "reports": {
+  "M6FLgZ8GtKnyTwa7": {
+   "date": "2026-10-12",
+   "difficulties": {
+    "4": {
+     "kill_s": null,
+     "pulls": [
+      {
+       "kill": false,
+       "pct": 97.0,
+       "s": 21
+      },
+      {
+       "kill": false,
+       "pct": 86.08,
+       "s": 124
+      },
+      {
+       "kill": false,
+       "pct": 26.48,
+       "s": 487
+      },
+      {
+       "kill": false,
+       "pct": 52.45,
+       "s": 290
+      },
+      {
+       "kill": false,
+       "pct": 14.49,
+       "s": 584
+      },
+      {
+       "kill": false,
+       "pct": 8.89,
+       "s": 615
+      },
+      {
+       "kill": false,
+       "pct": 4.44,
+       "s": 617
+      },
+      {
+       "kill": false,
+       "pct": 6.97,
+       "s": 611
+      },
+      {
+       "kill": false,
+       "pct": 52.9,
+       "s": 292
+      },
+      {
+       "kill": false,
+       "pct": 2.26,
+       "s": 619
+      },
+      {
+       "kill": false,
+       "pct": 5.32,
+       "s": 613
+      },
+      {
+       "kill": false,
+       "pct": 35.25,
+       "s": 336
+      },
+      {
+       "kill": false,
+       "pct": 14.25,
+       "s": 534
+      },
+      {
+       "kill": false,
+       "pct": 13.93,
+       "s": 549
+      }
+     ]
+    }
+   }
+  },
+  "RaZCT7cxPbwQ4VNA": {
+   "date": "2026-10-14",
+   "difficulties": {
+    "4": {
+     "kill_s": 602,
+     "pulls": [
+      {
+       "kill": false,
+       "pct": 61.46,
+       "s": 225
+      },
+      {
+       "kill": false,
+       "pct": 16.54,
+       "s": 553
+      },
+      {
+       "kill": false,
+       "pct": 70.22,
+       "s": 185
+      },
+      {
+       "kill": true,
+       "pct": 0.0,
+       "s": 602
+      }
+     ]
+    }
+   }
+  },
+  "zVgjNA4ChyMx1pG7": {
+   "date": "2026-10-08",
+   "difficulties": {
+    "4": {
+     "kill_s": null,
+     "pulls": [
+      {
+       "kill": false,
+       "pct": 100.0,
+       "s": 30
+      },
+      {
+       "kill": false,
+       "pct": 64.44,
+       "s": 224
+      },
+      {
+       "kill": false,
+       "pct": 33.72,
+       "s": 399
+      },
+      {
+       "kill": false,
+       "pct": 28.4,
+       "s": 416
+      },
+      {
+       "kill": false,
+       "pct": 84.23,
+       "s": 124
+      },
+      {
+       "kill": false,
+       "pct": 22.98,
+       "s": 520
+      },
+      {
+       "kill": false,
+       "pct": 17.37,
+       "s": 536
+      },
+      {
+       "kill": false,
+       "pct": 18.36,
+       "s": 519
+      },
+      {
+       "kill": false,
+       "pct": 19.27,
+       "s": 511
+      },
+      {
+       "kill": false,
+       "pct": 22.66,
+       "s": 484
+      }
+     ]
+    }
+   }
+  }
+ }
+}

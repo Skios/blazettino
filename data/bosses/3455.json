@@ -1,0 +1,54 @@
+{
+ "labels": {
+  "MqzAmrHX72PJwRQ8": {
+   "4": ""
+  },
+  "k14HCt3xcZyXbQwq": {
+   "4": "NEW RECORD"
+  }
+ },
+ "name": "Vashnik the Malignant",
+ "records": {
+  "4": {
+   "code": "k14HCt3xcZyXbQwq",
+   "kill_s": 276
+  }
+ },
+ "reports": {
+  "MqzAmrHX72PJwRQ8": {
+   "date": "2026-10-07",
+   "difficulties": {
+    "4": {
+     "kill_s": 357,
+     "pulls": [
+      {
+       "kill": false,
+       "pct": 9.31,
+       "s": 368
+      },
+      {
+       "kill": true,
+       "pct": 0.0,
+       "s": 357
+      }
+     ]
+    }
+   }
+  },
+  "k14HCt3xcZyXbQwq": {
+   "date": "2026-10-22",
+   "difficulties": {
+    "4": {
+     "kill_s": 276,
+     "pulls": [
+      {
+       "kill": true,
+       "pct": 0.0,
+       "s": 276
+      }
+     ]
+    }
+   }
+  }
+ }
+}

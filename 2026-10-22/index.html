@@ -48,6 +48,8 @@ footer{color:var(--muted);font-size:.75rem;text-align:center;margin:2em 0 1em}
 .bar .brand{display:flex;gap:8px;align-items:center;font:700 1.05rem Georgia,'Times New Roman',serif}
 .bar img{height:30px;width:auto}
 h1 .logo{height:1.3em;width:auto;margin-right:.3em;vertical-align:-.25em}
+.bar .old{margin-left:auto;background:var(--muted);color:#111;border-radius:4px;padding:1px 8px;font-size:.75rem}
+body:has(.bar .old) main{filter:grayscale(1);opacity:.8}
 .pick .panel{display:none}
 .pick .tabs{flex-wrap:wrap;justify-content:center;gap:14px;overflow:visible;margin-top:12vh}
 .pick .tab{font-size:1.15rem;padding:16px 26px}
@@ -84,4 +86,7 @@ document.body.classList.add('pick');
 tabs.forEach((t,i)=>{t.style.viewTransitionName='t'+i;
 t.addEventListener('click',()=>{const go=()=>document.body.classList.remove('pick');
 document.startViewTransition?document.startViewTransition(go):go();});});})();
+
+document.querySelectorAll('.rec').forEach(el=>fetch('../data/bosses/'+el.dataset.boss+'.json').then(r=>r.json()).then(d=>{
+const t=((d.labels||{})[el.dataset.code]||{})[el.dataset.diff]||'';el.textContent=t;el.classList.toggle('new',t==='NEW RECORD');}).catch(()=>{}));
 </script><!--/nav--></body></html>

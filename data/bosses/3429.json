@@ -1,0 +1,104 @@
+{
+ "labels": {
+  "RaZCT7cxPbwQ4VNA": {
+   "4": "NEW RECORD"
+  },
+  "zVgjNA4ChyMx1pG7": {
+   "4": ""
+  }
+ },
+ "name": "The Coiled Altar",
+ "records": {
+  "4": {
+   "code": "RaZCT7cxPbwQ4VNA",
+   "kill_s": 404
+  }
+ },
+ "reports": {
+  "RaZCT7cxPbwQ4VNA": {
+   "date": "2026-10-14",
+   "difficulties": {
+    "4": {
+     "kill_s": 404,
+     "pulls": [
+      {
+       "kill": false,
+       "pct": 7.67,
+       "s": 507
+      },
+      {
+       "kill": false,
+       "pct": 47.21,
+       "s": 255
+      },
+      {
+       "kill": false,
+       "pct": 52.67,
+       "s": 230
+      },
+      {
+       "kill": false,
+       "pct": 0.53,
+       "s": 487
+      },
+      {
+       "kill": false,
+       "pct": 79.68,
+       "s": 138
+      },
+      {
+       "kill": true,
+       "pct": 0.0,
+       "s": 404
+      }
+     ]
+    }
+   }
+  },
+  "zVgjNA4ChyMx1pG7": {
+   "date": "2026-10-08",
+   "difficulties": {
+    "4": {
+     "kill_s": 454,
+     "pulls": [
+      {
+       "kill": false,
+       "pct": 44.85,
+       "s": 273
+      },
+      {
+       "kill": false,
+       "pct": 51.33,
+       "s": 267
+      },
+      {
+       "kill": false,
+       "pct": 30.96,
+       "s": 335
+      },
+      {
+       "kill": false,
+       "pct": 70.0,
+       "s": 183
+      },
+      {
+       "kill": false,
+       "pct": 8.51,
+       "s": 449
+      },
+      {
+       "kill": false,
+       "pct": 3.56,
+       "s": 487
+      },
+      {
+       "kill": true,
+       "pct": 0.0,
+       "s": 454
+      }
+     ]
+    }
+   }
+  }
+ }
+}

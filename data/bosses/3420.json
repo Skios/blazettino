@@ -1,0 +1,54 @@
+{
+ "labels": {
+  "MqzAmrHX72PJwRQ8": {
+   "4": ""
+  },
+  "k14HCt3xcZyXbQwq": {
+   "4": "NEW RECORD"
+  }
+ },
+ "name": "Sszorak",
+ "records": {
+  "4": {
+   "code": "k14HCt3xcZyXbQwq",
+   "kill_s": 310
+  }
+ },
+ "reports": {
+  "MqzAmrHX72PJwRQ8": {
+   "date": "2026-10-07",
+   "difficulties": {
+    "4": {
+     "kill_s": 340,
+     "pulls": [
+      {
+       "kill": true,
+       "pct": 0.0,
+       "s": 340
+      }
+     ]
+    }
+   }
+  },
+  "k14HCt3xcZyXbQwq": {
+   "date": "2026-10-22",
+   "difficulties": {
+    "4": {
+     "kill_s": 310,
+     "pulls": [
+      {
+       "kill": false,
+       "pct": 19.75,
+       "s": 273
+      },
+      {
+       "kill": true,
+       "pct": 0.0,
+       "s": 310
+      }
+     ]
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,49 @@
+{
+ "labels": {
+  "MqzAmrHX72PJwRQ8": {
+   "4": ""
+  },
+  "k14HCt3xcZyXbQwq": {
+   "4": "NEW RECORD"
+  }
+ },
+ "name": "The Lost Explorers",
+ "records": {
+  "4": {
+   "code": "k14HCt3xcZyXbQwq",
+   "kill_s": 262
+  }
+ },
+ "reports": {
+  "MqzAmrHX72PJwRQ8": {
+   "date": "2026-10-07",
+   "difficulties": {
+    "4": {
+     "kill_s": 313,
+     "pulls": [
+      {
+       "kill": true,
+       "pct": 0.0,
+       "s": 313
+      }
+     ]
+    }
+   }
+  },
+  "k14HCt3xcZyXbQwq": {
+   "date": "2026-10-22",
+   "difficulties": {
+    "4": {
+     "kill_s": 262,
+     "pulls": [
+      {
+       "kill": true,
+       "pct": 0.0,
+       "s": 262
+      }
+     ]
+    }
+   }
+  }
+ }
+}

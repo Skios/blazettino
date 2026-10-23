@@ -1,0 +1,74 @@
+{
+ "labels": {
+  "MqzAmrHX72PJwRQ8": {
+   "4": ""
+  },
+  "k14HCt3xcZyXbQwq": {
+   "4": "NEW RECORD"
+  }
+ },
+ "name": "The Twin Fangs",
+ "records": {
+  "4": {
+   "code": "k14HCt3xcZyXbQwq",
+   "kill_s": 428
+  }
+ },
+ "reports": {
+  "MqzAmrHX72PJwRQ8": {
+   "date": "2026-10-07",
+   "difficulties": {
+    "4": {
+     "kill_s": 453,
+     "pulls": [
+      {
+       "kill": false,
+       "pct": 99.98,
+       "s": 24
+      },
+      {
+       "kill": false,
+       "pct": 39.22,
+       "s": 367
+      },
+      {
+       "kill": false,
+       "pct": 19.89,
+       "s": 431
+      },
+      {
+       "kill": false,
+       "pct": 2.11,
+       "s": 509
+      },
+      {
+       "kill": false,
+       "pct": 70.5,
+       "s": 133
+      },
+      {
+       "kill": true,
+       "pct": 0.0,
+       "s": 453
+      }
+     ]
+    }
+   }
+  },
+  "k14HCt3xcZyXbQwq": {
+   "date": "2026-10-22",
+   "difficulties": {
+    "4": {
+     "kill_s": 428,
+     "pulls": [
+      {
+       "kill": true,
+       "pct": 0.0,
+       "s": 428
+      }
+     ]
+    }
+   }
+  }
+ }
+}

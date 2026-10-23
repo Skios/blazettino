@@ -1,0 +1,69 @@
+{
+ "labels": {
+  "k14HCt3xcZyXbQwq": {}
+ },
+ "name": "Kith'ix",
+ "records": {},
+ "reports": {
+  "k14HCt3xcZyXbQwq": {
+   "date": "2026-10-22",
+   "difficulties": {
+    "4": {
+     "kill_s": null,
+     "pulls": [
+      {
+       "kill": false,
+       "pct": 58.59,
+       "s": 145
+      },
+      {
+       "kill": false,
+       "pct": 69.59,
+       "s": 157
+      },
+      {
+       "kill": false,
+       "pct": 64.05,
+       "s": 147
+      },
+      {
+       "kill": false,
+       "pct": 40.33,
+       "s": 240
+      },
+      {
+       "kill": false,
+       "pct": 91.68,
+       "s": 52
+      },
+      {
+       "kill": false,
+       "pct": 60.61,
+       "s": 158
+      },
+      {
+       "kill": false,
+       "pct": 73.85,
+       "s": 157
+      },
+      {
+       "kill": false,
+       "pct": 58.66,
+       "s": 190
+      },
+      {
+       "kill": false,
+       "pct": 59.1,
+       "s": 191
+      },
+      {
+       "kill": false,
+       "pct": 42.9,
+       "s": 239
+      }
+     ]
+    }
+   }
+  }
+ }
+}
