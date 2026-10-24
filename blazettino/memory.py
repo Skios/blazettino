@@ -16,7 +16,7 @@ DB = ROOT / "data" / "memoria.db"
 TREND_NIGHTS = 4  # nights looked at (config "trend_nights")
 BETTER, WORSE = 0.5, 1.5  # tonight's hits per fight against the earlier average: below half = better, above 1.5x = worse
 MAX_TREND = 3  # trend lines per person
-MIN_RATE = 0.25  # hits per fight under which a mechanic counts as not taken (a stray hit is not a trend)
+MIN_RATE = 0.5  # hits per fight under which a mechanic counts as not taken (a stray hit is not a trend)
 SCHEMA = """
 create table if not exists fight(codice text, id integer, boss text, encounter integer, data text, kill integer, diff integer, primary key(codice, id));
 create table if not exists presenza(codice text, id integer, persona text, personaggio text, primary key(codice, id, personaggio));

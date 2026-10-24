@@ -30,7 +30,7 @@ class CommentTest(unittest.TestCase):
         import dataclasses
         p = dataclasses.replace(self.players[0], notes=("Falling Debris: 10 colpi, 3.9M",))
         self.assertIn("Falling Debris: 10 colpi", comment.facts(p, self.players))
-        self.assertNotIn("Eventi del fight", comment.facts(self.players[1], self.players))
+        self.assertNotIn("Fatti del fight", comment.facts(self.players[1], self.players))
 
     def test_each_player_line_carries_the_tone_of_its_grade_band(self):
         top = max(self.players, key=kpi.grade)
