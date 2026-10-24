@@ -210,6 +210,14 @@ class SlowDeathTest(unittest.TestCase):
         self.assertEqual(out, {})  # everyone died together: nobody was forgotten
         self.assertEqual(self.run_it([tick(0, 2, 500, 100)], [dead(30000, 2)]), {})  # first seen already hurt: no full-health moment
 
+    def test_damage_and_healing_between_full_health_and_death_are_summed(self):
+        dmg = [tick(0, 2, 900, 100), tick(5000, 2, 700, 200), tick(10000, 2, 100, 600)]
+        heals = [{"timestamp": 1000 + 3000, "targetID": 2, "amount": 150}, {"timestamp": 1000 + 8000, "targetID": 2, "amount": 50},
+                 {"timestamp": 1000 + 8000, "targetID": 3, "amount": 999}, {"timestamp": 1000 + 20000, "targetID": 2, "amount": 777},
+                 {"timestamp": 1000 + 9000, "type": "absorbed", "targetID": 2}, {"timestamp": 1000 + 9000, "type": "removebuff"}]  # events without an amount or a target
+        d = profile.slow_deaths(dmg, [dead(11000, 2)], NAMES, SPELLS, heals)["Dps"]
+        self.assertEqual((d.damage, d.healing), (900, 200))  # only target 2, only inside the window
+
     def test_the_slowest_of_several_deaths_is_kept_and_unknown_targets_are_ignored(self):
         dmg = [tick(0, 2, 900, 100), tick(10000, 2, 100, 900), tick(50000, 2, 950, 50), tick(80000, 2, 100, 850), tick(0, 99, 900, 100)]
         out = self.run_it(dmg, [dead(11000, 2), dead(81000, 2), dead(5000, 99)])

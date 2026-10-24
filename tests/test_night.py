@@ -28,7 +28,7 @@ class AssembleTest(unittest.TestCase):
         from dataclasses import replace
         from blazettino import awards
         seen = []
-        stats = {p.name: replace(p, active_s=480, casts=300, deaths=()) for p in players(21)}
+        stats = {p.name: replace(p, active_s=480, casts=300, deaths=(), dps_bracket=None, hps_bracket=None) for p in players(21)}
         stats["Karabosca"] = replace(stats["Karabosca"], active_s=594)
 
         def spy(ps, cfg, context=""):

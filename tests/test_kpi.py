@@ -144,5 +144,16 @@ class WipeTest(unittest.TestCase):
             self.assertTrue(1 <= kpi.grade(p) <= 10)
 
 
+class BracketTest(unittest.TestCase):
+    def test_item_level_bracket_parse_is_read_from_the_rankings(self):
+        ps = {p.name: p for p in kpi.load_fight(load("summary"), load("taken"), load("rank_dps"), load("rank_hps"))}
+        self.assertEqual(ps["Ghàdyus"].dps_bracket, 28)
+        self.assertIsNotNone(ps["Ghàdyus"].hps_bracket)
+
+    def test_wipes_have_no_bracket(self):
+        from tests.helpers import players
+        self.assertTrue(all(p.dps_bracket is None for p in players(20)))
+
+
 if __name__ == "__main__":
     unittest.main()

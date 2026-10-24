@@ -133,15 +133,17 @@ def with_performance(players: list, code: str, fight_id: int) -> list:
 FULL_HEALTH = 0.99  # a hit that finds the player at or above this share of max health marks "full health"
 
 
-def slow_deaths(damage: list[dict], deaths: list[dict], names: dict[int, str], spells: dict[int, str]) -> dict[str, kpi.SlowDeath]:
+def slow_deaths(damage: list[dict], deaths: list[dict], names: dict[int, str], spells: dict[int, str],
+                heals: list[dict] = ()) -> dict[str, kpi.SlowDeath]:
     """Per player, the slowest death: seconds from the last hit that found them at full health to the death, the hits in
-    between and the biggest one. Needs damage events with resources. Deaths in a crowd or after too many deaths are left out."""
+    between and the biggest one, plus the damage taken and the healing received in that time (heal events given in `heals`).
+    Needs damage events with resources. Deaths in a crowd or after too many deaths are left out."""
     stamps = sorted(d["timestamp"] for d in deaths)
-    hits: dict[int, list[tuple[int, float, float]]] = defaultdict(list)  # target -> (time, health before the hit, hit size), as shares
+    hits: dict[int, list[tuple[int, float, float, int]]] = defaultdict(list)  # target -> (time, health before the hit, hit size as share, amount)
     for e in damage:
         if e.get("maxHitPoints") and "hitPoints" in e and e["targetID"] in names:
             hits[e["targetID"]].append((e["timestamp"], (e["hitPoints"] + e["amount"]) / e["maxHitPoints"],
-                                        (e["amount"] + e.get("absorbed", 0)) / e["maxHitPoints"]))
+                                        (e["amount"] + e.get("absorbed", 0)) / e["maxHitPoints"], e["amount"]))
     out: dict[str, kpi.SlowDeath] = {}
     previous: dict[int, int] = {}
     for i, d in enumerate(sorted(deaths, key=lambda d: d["timestamp"])):
@@ -156,7 +158,9 @@ def slow_deaths(damage: list[dict], deaths: list[dict], names: dict[int, str], s
         if not full:
             continue
         run = mine[full[-1]:]
-        slow = kpi.SlowDeath((t - run[0][0]) / 1000, len(run), round(max(h[2] for h in run) * 100, 1), _name(spells, d.get("killingAbilityGameID", 0)))
+        healed = sum(h.get("amount", 0) for h in heals if h.get("targetID") == who and run[0][0] <= h["timestamp"] <= t)
+        slow = kpi.SlowDeath((t - run[0][0]) / 1000, len(run), round(max(h[2] for h in run) * 100, 1), _name(spells, d.get("killingAbilityGameID", 0)),
+                             sum(h[3] for h in run), healed)
         if who in names and (names[who] not in out or out[names[who]].ttd_s < slow.ttd_s):
             out[names[who]] = slow
     return out
@@ -169,5 +173,5 @@ def with_slow_deaths(players: list, code: str, fight_id: int) -> list:
     names = {a["id"]: a["name"] for a in md["actors"] if a["type"] == "Player"}
     spells = {a["gameID"]: a["name"] for a in md["abilities"]}
     get = lambda kind, resources=False: wcl.events(code, fight_id, f["startTime"], f["endTime"], kind, resources=resources)
-    found = slow_deaths(get("DamageTaken", True), get("Deaths"), names, spells)
+    found = slow_deaths(get("DamageTaken", True), get("Deaths"), names, spells, get("Healing"))
     return [dataclasses.replace(p, slowest_death=found.get(p.name)) for p in players]

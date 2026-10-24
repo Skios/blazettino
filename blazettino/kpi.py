@@ -40,6 +40,8 @@ class SlowDeath:
     hits: int  # hits taken in between
     biggest_pct: float  # biggest single hit, as % of max health
     spell: str  # what killed
+    damage: int = 0  # damage taken between the last full health and the death
+    healing: int = 0  # healing received in the same time
 
 
 @dataclass(frozen=True)
@@ -61,6 +63,8 @@ class Player:
     score: float | None = None  # night grade set by merge(); None = compute from the fight
     fights: int = 1  # boss fights this raider took part in
     gender: str = ""  # "m"/"f" from players.json; empty = unknown, the comments stay neutral
+    dps_bracket: int | None = None  # parse among players of the same item level (WarcraftLogs bracketPercent); None on wipes
+    hps_bracket: int | None = None
     ranked: bool = True  # False: parses are inside-raid percentiles (no WarcraftLogs ranking on wipes)
     active_s: float | None = None  # seconds spent damaging or healing (WarcraftLogs active time), for the prizes
     casts: int | None = None  # spells cast in the fight, for the prizes
@@ -77,13 +81,17 @@ class Player:
         return self.hps_parse if self.role == "healer" else self.dps_parse
 
     @property
+    def bracket_parse(self) -> int | None:
+        return self.hps_bracket if self.role == "healer" else self.dps_bracket
+
+    @property
     def other_parse(self) -> int:
         return self.dps_parse if self.role == "healer" else self.hps_parse
 
 
-def _parses(rankings: dict) -> dict[str, int]:
+def _parses(rankings: dict, key: str = "rankPercent") -> dict[str, int]:
     chars = rankings["data"][0]["roles"].values()
-    return {c["name"]: c["rankPercent"] for r in chars for c in r["characters"]}
+    return {c["name"]: c[key] for r in chars for c in r["characters"] if key in c}
 
 
 def _deaths(events: list[dict]) -> dict[str, tuple[Death, ...]]:
@@ -119,9 +127,11 @@ def load_fight(summary: dict, taken: dict, rank_dps: dict, rank_hps: dict) -> li
     ranked = bool(rank_dps["data"]) and bool(rank_hps["data"])
     if ranked:
         dps_p, hps_p = _parses(rank_dps), _parses(rank_hps)
+        dps_b, hps_b = _parses(rank_dps, "bracketPercent"), _parses(rank_hps, "bracketPercent")
     else:
         dps_p = _percentiles({d["name"]: (role, damage[d["name"]]) for role, d in roster})
         hps_p = _percentiles({d["name"]: (role, healing[d["name"]]) for role, d in roster})
+        dps_b = hps_b = {}
     deaths = _deaths(s["deathEvents"])
     players = []
     for role, d in roster:
@@ -131,7 +141,8 @@ def load_fight(summary: dict, taken: dict, rank_dps: dict, rank_hps: dict) -> li
             name=n, spec=d["specs"][0], cls=d["type"], role=role, ilvl=d["maxItemLevel"],
             damage=damage[n], healing=healing[n], dps=damage[n] / secs, hps=healing[n] / secs,
             taken=t["total"], mitigation=1 - t.get("totalReduced", t["total"]) / t["total"] if t["total"] else 0.0,
-            dps_parse=dps_p[n], hps_parse=hps_p[n], deaths=deaths.get(n, ()), ranked=ranked,
+            dps_parse=dps_p[n], hps_parse=hps_p[n], dps_bracket=dps_b.get(n), hps_bracket=hps_b.get(n),
+            deaths=deaths.get(n, ()), ranked=ranked,
         ))
     return players
 

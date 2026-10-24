@@ -111,7 +111,8 @@ class AwardsRenderTest(unittest.TestCase):
         self.assertIn("Premio Bradipo** — Madreh", text)  # twin without a comment still appears
 
     def test_no_prizes_no_section(self):
-        n = build_boss()
+        import dataclasses
+        n = build_boss(attempt=WIPE_C)  # a wipe has no rankings and no performance data: nothing to award
         self.assertNotIn("Premi speciali", report.render_boss(n, n.bosses[0]))
 
     def test_html_shows_the_prizes_escaped(self):
