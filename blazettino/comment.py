@@ -29,13 +29,24 @@ SYSTEM = (
     "Sei il cronista sarcastico di una gilda di World of Warcraft (italiano, tono affettuoso: ci si prende in giro tra amici, "
     "mai cattivo, mai offese personali). Per ogni giocatore scrivi un TITOLO in MAIUSCOLO che e' gia' una battuta, e un commento di "
     "2-3 frasi basato SOLO sui numeri forniti. Il commento deve contenere almeno un paragone assurdo o un'iperbole e chiudersi con una "
-    "frase secca. Gli 'Spunti' di ogni giocatore sono i fatti piu' divertenti: usali quando ci sono. Piu' il voto e' basso, piu' sei "
-    "caustico (sempre con affetto); con voti alti esalta con enfasi comica. Non inventare numeri ne' eventi. Le morti 'strage generale' "
+    "frase secca. Gli 'Spunti' di ogni giocatore sono i fatti piu' divertenti: usali quando ci sono. Per ogni giocatore segui il 'Tono' "
+    "indicato (dipende dal voto). Non inventare numeri ne' eventi. Le morti 'strage generale' "
     "sono colpa di tutti, non del singolo. Il voto e' gia' deciso: non cambiarlo ne' discuterlo. "
-    "Il genere dei giocatori e' ignoto: evita participi, aggettivi e pronomi di genere riferiti a loro (usa il nome o forme impersonali); "
-    "negli esempi il genere e' usato ma tu NON devi copiarlo."
+    "Il genere dei giocatori e' ignoto salvo dove i dati dicono 'genere m' o 'genere f': in quel caso usa il genere giusto; "
+    "altrimenti evita participi, aggettivi e pronomi di genere (usa il nome o forme impersonali). "
+    "Negli esempi il genere e' usato ma per i giocatori senza 'genere' NON devi copiarlo."
 )
-STYLE_HEADER = "Esempi di stile (pagella scritta a mano dalla gilda, da imitare nel tono e nella struttura):"
+STYLE_HEADER = (
+    "Esempi di stile (pagella scritta a mano dalla gilda, da imitare nel tono e nella struttura; "
+    "per ogni giocatore guarda l'esempio con il voto piu' vicino al suo):"
+)
+# (minimum grade, tone) from the top band down; override with "tones": [[8.5, "..."], ...] in config.json
+TONES = (
+    (8.5, "esalta con enfasi comica, eroe del raid"),
+    (6.5, "complimento con una punzecchiatura affettuosa"),
+    (4.5, "ironia affettuosa, prestazione da comparsa"),
+    (0.0, "presa in giro caustica ma affettuosa, sfottò pesante"),
+)
 STYLE_ENTRIES = Path(__file__).with_name("style_examples.txt").read_text().strip().split("\n\n")
 FORMAT = (
     'Rispondi SOLO con un oggetto JSON: {"Nome": {"titolo": "TITOLO", "commento": "testo"}}, '
@@ -112,25 +123,39 @@ def week_context(attempts: list[Attempt], nights: int) -> str:
     )
 
 
-def facts(p: kpi.Player, players: list[kpi.Player]) -> str:
+def tone(g: float, tones=TONES) -> str:
+    """Tone of the first band whose minimum grade the grade reaches."""
+    try:
+        bands = sorted(((float(floor), str(t)) for floor, t in tones), reverse=True)
+    except (TypeError, ValueError):
+        bands = []
+    if not bands:  # empty or malformed "tones" in config.json: use the built-in ones
+        bands = list(TONES)
+    return next((t for floor, t in bands if g >= floor), bands[-1][1])
+
+
+def facts(p: kpi.Player, players: list[kpi.Player], tones=TONES) -> str:
     deaths = "nessuna" if not p.deaths else "; ".join(
-        f"{d.boss + ' ' if d.boss else ''}{kpi.mmss(d.time_s)} {d.ability} ({'strage generale' if d.mass else 'evitabile'})" for d in p.deaths
+        f"{d.boss + ' ' if d.boss else ''}{kpi.mmss(d.time_s)} {d.ability}{f' [{d.label}]' if d.label else ''} ({'strage generale' if d.mass else 'evitabile'})" for d in p.deaths
     )
     hints = highlights(p, players)
     return (
-        f"{p.name} ({p.spec} {p.cls}, ruolo {p.role}, iLvl {p.ilvl}) - Voto {kpi.grade(p)}. "
+        f"{p.name} ({p.spec} {p.cls}, ruolo {p.role}, iLvl {p.ilvl}{f', genere {p.gender}' if p.gender else ''}) - Voto {kpi.grade(p)}. Tono: {tone(kpi.grade(p), tones)}. "
         f"Danni {p.damage / 1e6:.2f}M ({p.dps / 1e3:.1f}k DPS, {_rank(p, p.dps_parse, 'parse')}), "
         f"cure {p.healing / 1e6:.2f}M ({p.hps / 1e3:.1f}k HPS, {_rank(p, p.hps_parse, 'parse cure')}), "
         f"danni subiti {p.taken / 1e6:.2f}M. Morti: {deaths}."
+        + (f" Eventi del fight: {'; '.join(p.notes)}." if p.notes else "")
         + (f" Spunti: {'; '.join(hints)}." if hints else "")
     )
 
 
-def build_prompt(players: list[kpi.Player], exclude: Iterable[str] = (), context: str = "") -> str:
+def build_prompt(
+    players: list[kpi.Player], exclude: Iterable[str] = (), context: str = "", tones=TONES, system: str = SYSTEM
+) -> str:
     skip = set(exclude)
-    lines = [facts(p, players) for p in players if p.name not in skip]
+    lines = [facts(p, players, tones) for p in players if p.name not in skip]
     style = [e for e in STYLE_ENTRIES if e.split(" ", 1)[0] not in skip]  # opt-out also covers the examples
-    parts = [SYSTEM, STYLE_HEADER, *style, *([context] if context else []), "Dati:\n" + "\n".join(lines), FORMAT]
+    parts = [system, STYLE_HEADER, *style, *([context] if context else []), "Dati:\n" + "\n".join(lines), FORMAT]
     return "\n\n".join(parts)
 
 
@@ -180,7 +205,7 @@ def comments(
     """Name -> Comment for every non-excluded player the model answered for; {} if the backend fails."""
     cfg = {**DEFAULTS, **cfg}
     targets = [p.name for p in players if p.name not in set(cfg.get("exclude", ()))]
-    prompt = build_prompt(players, cfg.get("exclude", ()), context)
+    prompt = build_prompt(players, cfg.get("exclude", ()), context, cfg.get("tones", TONES), cfg.get("system", SYSTEM))
     try:
         data = json.loads(_generate_with_retry(generate, prompt, cfg))
         if not isinstance(data, dict):

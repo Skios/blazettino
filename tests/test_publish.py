@@ -75,6 +75,46 @@ class PublishTest(unittest.TestCase):
         self.assertIn("<style>", home)
         self.assertIn('name="viewport"', home)
 
+    def test_home_greys_and_marks_old_nights(self):
+        from unittest import mock
+        from blazettino import kpi
+        self.run_publish()
+        with mock.patch.object(kpi, "KPI_VERSION", 2):
+            publish.refresh(self.site, FakeGit())
+        home = (self.site / "index.html").read_text()
+        self.assertIn("<li class=old>", home)
+        self.assertIn('<span class="tag old">OLD</span>', home)
+        publish.refresh(self.site, FakeGit())
+        self.assertNotIn("class=old>", (self.site / "index.html").read_text().split("</style>")[1])
+
+    def test_publishing_again_keeps_the_previous_page_as_old_instead_of_overwriting(self):
+        page = lambda text: f"<html><head><title>t</title></head><body>{text}</body></html>"
+        for text in ("PRIMA", "SECONDA", "TERZA"):
+            (self.folder / "pagella.html").write_text(page(text))
+            self.run_publish()
+        self.assertIn("TERZA", (self.site / "2026-10-15" / "index.html").read_text())
+        v1 = (self.site / "2026-10-15-v1" / "index.html").read_text()
+        self.assertIn("PRIMA", v1)
+        self.assertIn('name="blazettino-old"', v1)
+        self.assertIn('class="bar"', v1)  # still dressed after the move
+        self.assertIn("SECONDA", (self.site / "2026-10-15-v2" / "index.html").read_text())
+        home = (self.site / "index.html").read_text()
+        self.assertNotIn("-v1", home)
+
+    def test_publishing_the_same_page_twice_keeps_no_copy(self):
+        self.run_publish()
+        self.run_publish()
+        self.assertFalse((self.site / "2026-10-15-v1").exists())
+
+    def test_old_versions_are_not_listed_as_boss_pages_and_can_be_removed(self):
+        (self.site / "2026-10-15" / "ulatek").mkdir(parents=True)
+        for d in ("ulatek", "ulatek-v1"):
+            (self.site / "2026-10-15" / d).mkdir(exist_ok=True)
+            (self.site / "2026-10-15" / d / "index.html").write_text("<html><head><title>x</title></head></html>")
+        self.assertEqual(publish._bosses(self.site), ["2026-10-15/ulatek"])
+        publish.remove("2026-10-15/ulatek-v1", self.site, FakeGit())
+        self.assertFalse((self.site / "2026-10-15" / "ulatek-v1").exists())
+
     def test_home_does_not_redirect_and_offers_the_latest_night_first(self):
         self.run_publish()
         home = self.home()
@@ -256,3 +296,4 @@ class RefreshTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+

@@ -18,7 +18,7 @@ Per ogni boss usa il **miglior tentativo**: la kill se c'è, altrimenti il wipe 
 - `messaggio.txt`: il commento breve da incollare in chat (podio, battute di MVP e LVP, boss, link)
 - `pagella.html`: file unico e autonomo che raccoglie tutto (schede Serata e una per boss, filtri per ruolo, ordinamento, icone di spec incorporate); si può aprire, inviare o ospitare così com'è
 
-Sui wipe WarcraftLogs non calcola i parse ("No kill no ranking!"): il voto usa la posizione del giocatore nel raid per ruolo, indicata come `pos.`. Le risposte WCL sono in cache in `cache/` (rilanciare non spende punti, ma i commenti vengono rigenerati). Le icone di spec vengono scaricate una volta dal CDN di WarcraftLogs e messe in cache; se mancano, la pagina esce senza. Se l'LLM non risponde, le pagelle escono comunque senza commenti.
+Sui wipe WarcraftLogs non calcola i parse ("No kill no ranking!"): il voto usa la posizione del giocatore nel raid per ruolo, indicata come `pos.`. Se i punti orari di WarcraftLogs finiscono (limite 1000 all'ora) il programma aspetta il reset (fino a un giorno) e riprende da dove era, perché ogni risposta è già in cache: la pagella può uscire anche ore dopo, nessun errore. Le risposte WCL sono in cache in `cache/` (rilanciare non spende punti, ma i commenti vengono rigenerati). Le icone di spec vengono scaricate una volta dal CDN di WarcraftLogs e messe in cache; se mancano, la pagina esce senza. Se l'LLM non risponde, le pagelle escono comunque senza commenti.
 
 ## Pubblicare (link cliccabile con anteprima)
 
@@ -76,6 +76,31 @@ Le chiavi `geminiKey2`, `geminiKey3`... sono di riserva: si passa alla successiv
 - `site_dir`, `site_url`: cartella locale del branch `gh-pages` e suo indirizzo pubblico (servono solo per `--publish` e per il link nel messaggio).
 - `max_missed_fights` (default 1): chi salta più boss della serata resta in pagella ma non entra nel podio.
 - `backend`: `gemini` (default) oppure `ollama` (locale, qualità inferiore: vedi `docs/backlog.md`).
+
+## Regolare formula, tono e prompt
+
+- **Formula del voto**: costanti in cima a `blazettino/kpi.py` (`BASE`, `PARSE_WEIGHT`, `DEATH_PENALTY`, `SURVIVOR_BONUS`, `CROSS_ROLE_*`). Quando cambia la formula o un KPI, alza `KPI_VERSION` nello stesso file: le pagine già pubblicate (che portano la versione in `<meta name="blazettino-kpi">`) escono con la scritta **OLD** in alto e la card grigia nella home dopo `python -m blazettino --refresh-site`. Le pagine senza meta contano come versione 1.
+- **Fasce di tono**: `TONES` in `blazettino/comment.py`, coppie (voto minimo, tono) dall'alto in basso; ogni giocatore riceve nel prompt il tono della sua fascia. Per cambiarle senza toccare il codice, in `config.json`: `"tones": [[8.5, "esalta..."], [6.5, "..."], [0, "..."]]`.
+- **Prompt**: `SYSTEM` e `STYLE_HEADER` in `comment.py`; gli esempi di stile sono in `blazettino/style_examples.txt` (ognuno con il suo voto: il modello imita quello più vicino al voto del giocatore). `"system": "..."` in `config.json` sostituisce il testo di sistema.
+
+## Giocatori, alt e ultimo try
+
+- **`players.json`** (non versionato, modello in `players.example.json`): per ogni nickname il `gender` (`m`/`f`, facoltativo) e gli `alts`. Un alt conta come il suo main in voti, podio, record e `exclude` (escludere il main esclude anche gli alt). Se un main e un suo alt giocano lo stesso boss restano due giocatori. Con il genere indicato i commenti usano il genere giusto; senza, restano neutri.
+- **Ultimo try**: per ogni boss senza kill la pagella usa l'ultimo pull della serata (`"try": "last"`, default); con `"try": "best"` in `config.json` torna il wipe più vicino alla kill. Con una kill non cambia nulla. I dati di tutti i pull restano comunque raccolti nei file dei boss.
+
+## Pagine sostituite e abilità dei boss
+
+- **Mai sovrascrivere:** pubblicando di nuovo una pagina che esiste già (stessa serata, stesso boss, stessa settimana) quella precedente resta a `<data>-v1/` (poi `-v2`...), con la scritta OLD, e la nuova prende il suo posto. Ripubblicare la stessa identica pagina non crea copie. Le versioni vecchie non sono nella home: si aprono dall'indirizzo e si tolgono con `--remove <data>-v1`.
+- **Abilità per boss:** `python -m blazettino --abilities <codice>...` legge da WarcraftLogs ogni pull da boss del log e riempie `data/abilities/<idIncontro>.json` (abilità del boss e degli add, per fase). I campi `it`, `metric`, `note` si compilano a mano e non vengono mai toccati. Guida completa: [`docs/guida-boss.md`](docs/guida-boss.md).
+- I difetti noti stanno in [`docs/difetti.md`](docs/difetti.md).
+
+## Dati per boss e record
+
+Con `--publish` ogni log scrive in `site_dir/data/bosses/<encounterID>.json` kill, tempo e tutti i tentativi (una voce per codice log e difficoltà, riscrivere lo stesso log non cambia nulla). Le etichette si ricalcolano ogni volta da tutte le kill: la prima kill mostra solo il tempo, la più veloce di sempre `NEW RECORD`, le altre il distacco (`+0:13`). Le pagine pubblicate leggono il file all'apertura, quindi un record battuto cambia anche le etichette delle serate passate. Il grafico della vita del boss tentativo per tentativo compare nel banner del boss quando ci sono almeno due pull.
+
+```
+python -m blazettino --records <codice>...   # aggiunge al file dei boss i log vecchi (nessuna pagina, nessuna chiamata all'LLM)
+```
 
 ## Test
 

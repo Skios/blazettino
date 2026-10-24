@@ -14,6 +14,9 @@ CROSS_ROLE_BONUS = 1.0  # parse in the "other" role at or above the threshold
 CROSS_ROLE_THRESHOLD = 90
 MIN_GRADE, MAX_GRADE = 1.0, 10.0
 
+# Bump when the grade formula or a KPI changes: pages published with an older number get the OLD mark.
+KPI_VERSION = 1
+
 UNKNOWN_ABILITY = "causa sconosciuta"  # WarcraftLogs gives no killing blow for some deaths
 
 # A death is "mass" (not penalised) when this many raiders die within the window.
@@ -27,6 +30,8 @@ class Death:
     ability: str
     mass: bool
     boss: str = ""
+    spell: int = 0  # WarcraftLogs id of the killing ability (0 = unknown)
+    label: str = ""  # what the ability asks of the player, from the ability's metric (abilities.tag_deaths)
 
 
 @dataclass(frozen=True)
@@ -47,7 +52,9 @@ class Player:
     deaths: tuple[Death, ...]
     score: float | None = None  # night grade set by merge(); None = compute from the fight
     fights: int = 1  # boss fights this raider took part in
+    gender: str = ""  # "m"/"f" from players.json; empty = unknown, the comments stay neutral
     ranked: bool = True  # False: parses are inside-raid percentiles (no WarcraftLogs ranking on wipes)
+    notes: tuple[str, ...] = ()  # notable fight events (profile.notes), told to the LLM, never used in the grade
 
     @property
     def icon(self) -> str:
@@ -73,7 +80,8 @@ def _deaths(events: list[dict]) -> dict[str, tuple[Death, ...]]:
     out: dict[str, list[Death]] = {}
     for e in sorted(events, key=lambda e: e["deathTime"]):
         near = sum(abs(t - e["deathTime"]) <= MASS_WINDOW_S * 1000 for t in times)
-        d = Death(e["deathTime"] // 1000, e.get("ability", {}).get("name", UNKNOWN_ABILITY), near >= MASS_DEATHS)
+        d = Death(e["deathTime"] // 1000, e.get("ability", {}).get("name", UNKNOWN_ABILITY), near >= MASS_DEATHS,
+                  spell=e.get("ability", {}).get("guid", 0))
         out.setdefault(e["name"], []).append(d)
     return {n: tuple(d) for n, d in out.items()}
 

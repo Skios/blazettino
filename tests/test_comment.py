@@ -26,6 +26,35 @@ class CommentTest(unittest.TestCase):
         self.assertIn("8:49", prompt)  # minuto della morte
         self.assertIn("strage", prompt)  # morti di massa marcate come non colpa del singolo
 
+    def test_fight_events_noted_on_a_player_reach_the_prompt(self):
+        import dataclasses
+        p = dataclasses.replace(self.players[0], notes=("Falling Debris: 10 colpi, 3.9M",))
+        self.assertIn("Falling Debris: 10 colpi", comment.facts(p, self.players))
+        self.assertNotIn("Eventi del fight", comment.facts(self.players[1], self.players))
+
+    def test_each_player_line_carries_the_tone_of_its_grade_band(self):
+        top = max(self.players, key=kpi.grade)
+        low = min(self.players, key=kpi.grade)
+        self.assertIn(f"Tono: {comment.tone(kpi.grade(top))}", comment.facts(top, self.players))
+        self.assertIn(f"Tono: {comment.tone(kpi.grade(low))}", comment.facts(low, self.players))
+        self.assertNotEqual(comment.tone(9.5), comment.tone(2))
+
+    def test_tone_bands_include_their_floor_and_can_be_overridden_from_config(self):
+        self.assertEqual(comment.tone(8.5), comment.TONES[0][1])
+        self.assertEqual(comment.tone(8.4), comment.TONES[1][1])
+        prompt = comment.build_prompt(self.players, tones=[[0, "TONO UNICO"]])
+        self.assertIn("Tono: TONO UNICO", prompt)
+
+    def test_bad_tones_in_config_fall_back_and_unsorted_bands_still_work(self):
+        self.assertEqual(comment.tone(5, []), comment.tone(5))
+        self.assertEqual(comment.tone(5, ["x"]), comment.tone(5))
+        self.assertEqual(comment.tone(9, [[0, "basso"], [8.5, "alto"]]), "alto")
+
+    def test_system_prompt_can_be_replaced_from_config(self):
+        seen = []
+        comment.comments(self.players, {"system": "SISTEMA NOSTRO"}, generate=lambda p, c: seen.append(p) or "{}")
+        self.assertTrue(seen[0].startswith("SISTEMA NOSTRO"))
+
     def test_excluded_players_are_not_in_prompt(self):
         prompt = comment.build_prompt(self.players, exclude={"Sleãze"})
         self.assertNotIn("Sleãze", prompt)

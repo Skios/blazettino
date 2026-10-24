@@ -2,6 +2,7 @@
 import re
 import shutil
 import subprocess
+from itertools import count
 from html import escape, unescape
 from pathlib import Path
 from typing import Callable
@@ -13,7 +14,8 @@ LOGO = ROOT / "assets" / "logo.png"
 Runner = Callable[[list[str], Path], str]
 DATED = re.compile(r"\d{4}-\d{2}-\d{2}")
 SECTION = "settimana"
-REMOVABLE = re.compile(rf"({SECTION}/)?\d{{4}}-\d{{2}}-\d{{2}}(/[a-z0-9-]+)?")
+REMOVABLE = re.compile(rf"({SECTION}/)?\d{{4}}-\d{{2}}-\d{{2}}(-v\d+)?(/[a-z0-9-]+)?")
+VERSIONED = re.compile(r"-v\d+$")  # <name>-vN: an earlier page of <name>, kept and marked OLD
 
 
 def _git(cmd: list[str], cwd: Path) -> str:
@@ -41,6 +43,7 @@ li a{display:block;background:var(--card);border:1px solid var(--line);border-ra
 li a{transition:transform .12s,border-color .12s}
 li a:hover{border-color:var(--accent)}
 @media (hover:hover){li a:hover{transform:translateY(-2px)}}
+li.old a{opacity:.55;filter:grayscale(1)}.tag.old{background:var(--muted)}
 .d{font-weight:700}.t{display:block;color:var(--accent);font-size:.9rem}.s{display:block;color:var(--muted);font-size:.8rem}
 .tag{font-size:.65rem;font-weight:700;border-radius:4px;padding:1px 6px;margin-left:8px;color:#111;background:var(--accent)}
 """
@@ -63,17 +66,17 @@ def _human(date: str) -> str:
     return f"{int(date[8:])} {MONTHS[int(date[5:7]) - 1]} {date[:4]}"
 
 
-def _summary(night_dir: Path) -> tuple[str, str]:
-    """(title, description) read back from the generated page; empty when the page lacks them."""
+def _summary(night_dir: Path) -> tuple[str, str, bool]:
+    """(title, description, old) read back from the generated page; empty when the page lacks them."""
     try:
         html = (night_dir / "index.html").read_text()
     except OSError:
-        return "", ""
+        return "", "", False
     title = re.search(r"<title>(.*?)</title>", html, re.S)
     desc = re.search(r'property="og:description" content="(.*?)"', html)
     clean = lambda m: unescape(m.group(1)) if m else ""
     name = re.sub(r"\s*\d{4}-\d{2}-\d{2}$", "", re.sub(r"^Il Blazettino · ", "", clean(title)))
-    return name, clean(desc)
+    return name, clean(desc), nav.is_old(html)
 
 
 def _weeks(site_dir: Path) -> list[str]:
@@ -84,17 +87,18 @@ def _weeks(site_dir: Path) -> list[str]:
 
 def _bosses(site_dir: Path) -> list[str]:
     """Single-boss pages (<date>/<boss>/), newest first."""
-    found = [f"{n}/{d.name}" for n in _nights(site_dir) for d in (site_dir / n).iterdir() if (d / "index.html").exists()]
+    found = [f"{n}/{d.name}" for n in _nights(site_dir) for d in (site_dir / n).iterdir()
+             if (d / "index.html").exists() and not VERSIONED.search(d.name)]
     return sorted(found, reverse=True)
 
 
 def _item(site_dir: Path, folder: str, head: str | None, latest: bool) -> str:
     """One card of the home: `head` is the line above the title (None: the page title is the head)."""
-    title, desc = _summary(site_dir / folder)
-    tag = '<span class="tag">Ultima</span>' if latest else ""
+    title, desc, old = _summary(site_dir / folder)
+    tag = ('<span class="tag">Ultima</span>' if latest else "") + ('<span class="tag old">OLD</span>' if old else "")
     top = head or title or folder
     return (
-        f'<li><a href="{folder}/"><span class="d">{escape(top)}</span>{tag}'
+        f'<li{" class=old" if old else ""}><a href="{folder}/"><span class="d">{escape(top)}</span>{tag}'
         + (f'<span class="t">{escape(title)}</span>' if head and title else "")
         + (f'<span class="s">{escape(desc)}</span>' if desc else "")
         + "</a></li>"
@@ -145,10 +149,26 @@ def _commit_and_push(site_dir: Path, message: str, run: Runner) -> None:
         run(["git", "push"], site_dir)
 
 
+def _keep_previous(dest: Path, new_html: str, site_dir: Path) -> None:
+    """A page already published at dest is moved to <name>-vN (marked OLD) instead of being overwritten;
+    publishing the very same page again changes nothing."""
+    current = dest / "index.html"
+    if not current.exists():
+        return
+    old = current.read_text()
+    if old == nav.enhance(new_html, dest.relative_to(site_dir).as_posix()):
+        return
+    n = next(i for i in count(1) if not (dest.parent / f"{dest.name}-v{i}").exists())
+    keep = dest.parent / f"{dest.name}-v{n}"
+    keep.mkdir()
+    (keep / "index.html").write_text(nav.mark_old(old))
+
+
 def publish(folder: Path, date: str, site_dir: Path, site_url: str, run: Runner = _git, section: str = "") -> str:
     """Copy folder/pagella.html to site_dir/[section/]<date>/index.html, commit and push; return the public URL."""
     dest = site_dir / section / date
     dest.mkdir(parents=True, exist_ok=True)
+    _keep_previous(dest, (folder / "pagella.html").read_text(), site_dir)
     shutil.copy(folder / "pagella.html", dest / "index.html")
     (site_dir / ".nojekyll").touch()
     (site_dir / "robots.txt").write_text("User-agent: *\nDisallow: /\n")
