@@ -86,13 +86,17 @@ Le chiavi `geminiKey2`, `geminiKey3`... sono di riserva: si passa alla successiv
 ## Giocatori, alt e ultimo try
 
 - **`players.json`** (non versionato, modello in `players.example.json`): per ogni nickname il `gender` (`m`/`f`, facoltativo) e gli `alts`. Un alt conta come il suo main in voti, podio, record e `exclude` (escludere il main esclude anche gli alt). Se un main e un suo alt giocano lo stesso boss restano due giocatori. Con il genere indicato i commenti usano il genere giusto; senza, restano neutri.
-- **Ultimo try**: per ogni boss senza kill la pagella usa l'ultimo pull della serata (`"try": "last"`, default); con `"try": "best"` in `config.json` torna il wipe più vicino alla kill. Con una kill non cambia nulla. I dati di tutti i pull restano comunque raccolti nei file dei boss.
+- **Try della pagella**: per ogni boss senza kill la pagella usa il wipe più vicino alla kill (`"try": "best"`, default); con `"try": "last"` in `config.json` usa l'ultimo pull della serata. Con una kill non cambia nulla. I dati di tutti i pull restano comunque raccolti nei file dei boss.
 
 ## Pagine sostituite e abilità dei boss
 
 - **Mai sovrascrivere:** pubblicando di nuovo una pagina che esiste già (stessa serata, stesso boss, stessa settimana) quella precedente resta a `<data>-v1/` (poi `-v2`...), con la scritta OLD, e la nuova prende il suo posto. Ripubblicare la stessa identica pagina non crea copie. Le versioni vecchie non sono nella home: si aprono dall'indirizzo e si tolgono con `--remove <data>-v1`.
 - **Abilità per boss:** `python -m blazettino --abilities <codice>...` legge da WarcraftLogs ogni pull da boss del log e riempie `data/abilities/<idIncontro>.json` (abilità del boss e degli add, per fase). I campi `it`, `metric`, `note` si compilano a mano e non vengono mai toccati. Guida completa: [`docs/guida-boss.md`](docs/guida-boss.md).
 - I difetti noti stanno in [`docs/difetti.md`](docs/difetti.md).
+
+## Raccolta dati e memoria
+
+Due flussi separati. **Raccolta**: `python -m blazettino --collect <codice>...` legge ogni pull da boss del log (wipe compresi), aggiorna i file delle abilità e scrive la memoria in `data/memoria.db` (SQLite, versionato: sono dati pubblici). Niente LLM, niente pubblicazione; se i punti di WarcraftLogs finiscono aspetta il reset. Rilanciare lo stesso log non duplica nulla. **Pagelle**: leggono la memoria (se esiste) e aggiungono al prompt le tendenze di ogni persona sulle abilità con `metric: avoid`: la prende ancora, la prende di più o di meno, non la prende più, o muore sulla stessa abilità da più serate. Le tendenze non cambiano il voto. Le serate guardate sono 4, cambiabili con `"trend_nights"` in `config.json`. Gli alt contano insieme alla persona (chiave di `players.json`, elenca tutti i suoi personaggi in `alts`). Ordine consigliato: prima `--collect` dei log nuovi, poi la pagella.
 
 ## Dati per boss e record
 

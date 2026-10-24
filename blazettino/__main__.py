@@ -11,14 +11,13 @@ copied to the Pages repo (config: site_dir, site_url), committed and pushed, so 
 import dataclasses
 import logging
 import sys
-from datetime import datetime
 from pathlib import Path
 
-from blazettino import abilities, attempts, bosses, icons, kpi, message, night, page, profile, publish, report, wcl
+from blazettino import abilities, attempts, bosses, icons, kpi, memory, message, night, page, profile, publish, report, roster, wcl
 from blazettino.config import ROOT, load_config
 
 FIGHTS = "fights{id name encounterID difficulty kill fightPercentage startTime endTime}"
-USAGE = "uso: python -m blazettino <codice_report> [--boss <slug>] [--publish] | --week <codice>... [--publish] | --remove <YYYY-MM-DD|YYYY-MM-DD/<slug>|settimana/YYYY-MM-DD> | --refresh-site | --records <codice>... | --abilities <codice>..."
+USAGE = "uso: python -m blazettino <codice_report> [--boss <slug>] [--publish] | --week <codice>... [--publish] | --remove <YYYY-MM-DD|YYYY-MM-DD/<slug>|settimana/YYYY-MM-DD> | --refresh-site | --records <codice>... | --abilities <codice>... | --collect <codice>..."
 
 
 def _remove(date: str, cfg: dict) -> None:
@@ -35,8 +34,7 @@ def _refresh(cfg: dict) -> None:
     sys.stdout.write("indice e archivio del sito aggiornati\n")
 
 
-def _date(info: dict) -> str:
-    return datetime.fromtimestamp(info["startTime"] / 1000).strftime("%Y-%m-%d")
+_date = wcl.report_date
 
 
 def _tries(code: str, info: dict, mode: str = "best") -> list[attempts.Attempt]:
@@ -56,6 +54,14 @@ def _records(codes: list[str], cfg: dict) -> None:
     sys.stdout.write(f"record aggiornati da {len(codes)} log\n")
 
 
+def _collect(codes: list[str], cfg: dict) -> None:
+    """Data collection, apart from the report cards: every boss pull of these logs goes into the abilities files and the
+    memory (data/memoria.db). No LLM, no publishing; it waits for the WarcraftLogs points reset when they run out."""
+    db = memory.connect()
+    for code in codes:
+        sys.stdout.write(f"{code}: {memory.collect(code, cfg, db)} pull raccolti\n")
+
+
 def _abilities(codes: list[str]) -> None:
     """Add the abilities seen in every boss pull of these logs to data/abilities/<encounterID>.json (hand fields are kept)."""
     for code in codes:
@@ -64,31 +70,37 @@ def _abilities(codes: list[str]) -> None:
                 sys.stdout.write(f"{code} #{f['id']} {abilities.learn(code, f['id'])}\n")
 
 
-def _players(code: str, a: attempts.Attempt, cfg: dict) -> list[kpi.Player]:
-    """The raiders of one attempt, with the notable events of the fight (avoidable damage, interrupts, dispels) attached."""
-    players = kpi.load_fight(*wcl.fight_tables(code, a.id))
-    return profile.annotate(players, code, a.id, cfg["spells"])
+def _players(code: str, a: attempts.Attempt, cfg: dict, date: str) -> list[kpi.Player]:
+    """The raiders of one attempt, with the notable events of the fight (avoidable damage, interrupts, dispels)
+    and, if the logs were collected (--collect), how each person's mechanics are going over the last nights."""
+    players = profile.annotate(kpi.load_fight(*wcl.fight_tables(code, a.id)), code, a.id, cfg["spells"])
+    if not memory.DB.exists():
+        return players
+    db, book = memory.connect(), cfg.get("players", {})
+    nights = cfg.get("trend_nights", memory.TREND_NIGHTS)
+    return [dataclasses.replace(p, notes=(*p.notes, *memory.trend_notes(db, roster.canon(p.name, book), a.encounter, cfg["spells"], date, nights)))
+            for p in players]
 
 
 def _build(code: str, cfg: dict) -> night.Night:
     info = wcl.report(code, f"title startTime {FIGHTS}")
-    tries = _tries(code, info, cfg.get("try", "last"))
+    tries = _tries(code, info, cfg.get("try", "best"))
     if not tries:
         raise SystemExit(f"nessun boss nel report {code}")
-    loaded = [(a, _players(code, a, cfg)) for a in tries]
     date = _date(info)
+    loaded = [(a, _players(code, a, cfg, date)) for a in tries]
     return night.assemble(info["title"], date, loaded, cfg)
 
 
 def _boss(code: str, slug: str, cfg: dict) -> night.Night:
     """Only the chosen boss of the report is loaded (fewer WarcraftLogs points, one LLM call)."""
     info = wcl.report(code, f"title startTime {FIGHTS}")
-    tries = {a.slug: a for a in _tries(code, info, cfg.get("try", "last"))}
+    tries = {a.slug: a for a in _tries(code, info, cfg.get("try", "best"))}
     if slug not in tries:
         raise SystemExit(f"boss '{slug}' non trovato nel report; disponibili: {', '.join(tries) or 'nessuno'}")
     a = tries[slug]
     date = _date(info)
-    return night.assemble_boss(info["title"], date, a, _players(code, a, cfg), cfg)
+    return night.assemble_boss(info["title"], date, a, _players(code, a, cfg, date), cfg)
 
 
 def _save(n: night.Night, name: str, url: str | None) -> tuple[Path, str]:
@@ -110,6 +122,10 @@ def main(argv: list[str]) -> None:
         if len(argv) != 3:
             raise SystemExit(USAGE)
         return _remove(argv[2], load_config())
+    if argv[1:2] == ["--collect"]:
+        if len(argv) < 3:
+            raise SystemExit(USAGE)
+        return _collect(argv[2:], load_config())
     if argv[1:2] == ["--abilities"]:
         if len(argv) < 3:
             raise SystemExit(USAGE)

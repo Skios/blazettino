@@ -21,3 +21,6 @@ Aggiungere in fondo, spuntare quando risolto o scartato (con il motivo).
 - [x] **D15 · Fatti del fight limitati dalle etichette.** Superato: il danno evitabile legge `metric: avoid` dei file `data/abilities`.
 - [ ] **D16 · Le metriche `soak`, `break`, `interrupt`, `dispel` non sono ancora misurate.** Oggi etichettano le morti e il testo; solo `avoid` produce numeri (danno e colpi evitabili). Interruzioni e dispel escono come conteggi generici.
 - [ ] **D17 · Nomi di abilità in inglese nei fatti per Gemini.** Nessuna traduzione ancora (piano: tabella id → nome italiano da Wowhead). Soglie (`DEAD_CUTOFF` 5, `OUTLIER_X` 3, `MIN_REPEAT` 3) scelte a occhio, mai provate con Gemini.
+
+- [ ] **D18 · Tendenze mai provate con Gemini.** Le soglie (`BETTER` 0,5 / `WORSE` 1,5, 4 serate, al massimo 3 righe a testa) sono scelte a occhio; il database è un file binario nel repo, due raccolte su due branch diversi non si uniscono (si rifà la raccolta dai log in cache).
+- [ ] **D19 · Tendenze solo sulle abilità `avoid`.** Interruzioni, dispel e le altre metriche non entrano nella memoria come tendenza (solo i conteggi del singolo fight).

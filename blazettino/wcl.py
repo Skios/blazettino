@@ -4,6 +4,7 @@ import hashlib
 import json
 import logging
 import time
+from datetime import datetime
 import urllib.error
 import urllib.request
 
@@ -84,6 +85,11 @@ def gql(query: str) -> dict:
         raise RuntimeError(out["errors"])
     path.write_text(json.dumps(out))
     return out
+
+
+def report_date(info: dict) -> str:
+    """YYYY-MM-DD of a report from its startTime (ms)."""
+    return datetime.fromtimestamp(info["startTime"] / 1000).strftime("%Y-%m-%d")
 
 
 def report(code: str, body: str) -> dict:
