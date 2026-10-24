@@ -30,6 +30,16 @@ class AwardsTest(unittest.TestCase):
         self.assertEqual((got["spaccatastiere"].winner, got["tastiera"].winner), ("Yorda", "Madreh"))
         self.assertIn("70 azioni al minuto", got["spaccatastiere"].value)
 
+    def test_healers_are_compared_with_healers_not_with_the_dps(self):
+        ps = with_stats({})
+        healer = next(p for p in ps if p.role == "healer")
+        healers = [p for p in ps if p.role == "healer"]
+        tuned = [replace(p, active_s=590) if p.role == "healer" else p for p in ps]  # every healer ~98%: that is just healing
+        self.assertEqual(self.by_key(tuned), {})
+        tuned = [replace(p, active_s=590 if p is not healers[0] else 450) if p.role == "healer" else p for p in ps]
+        self.assertEqual(self.by_key(tuned)["bradipo"].winner, healers[0].name)
+        self.assertIn("healer", self.by_key(tuned)["bradipo"].value)
+
     def test_nobody_wins_when_nobody_stands_out(self):
         self.assertEqual(self.by_key(with_stats({"Yorda": (492, 310)})), {})  # +2 points, +3%: inside the noise
 
