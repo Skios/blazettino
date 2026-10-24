@@ -15,11 +15,11 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from blazettino import attempts, bosses, icons, kpi, message, mythictrap, night, page, profile, publish, report, wcl
+from blazettino import abilities, attempts, bosses, icons, kpi, message, mythictrap, night, page, profile, publish, report, wcl
 from blazettino.config import ROOT, load_config
 
 FIGHTS = "fights{id name encounterID difficulty kill fightPercentage startTime endTime}"
-USAGE = "uso: python -m blazettino <codice_report> [--boss <slug>] [--publish] | --week <codice>... [--publish] | --remove <YYYY-MM-DD|YYYY-MM-DD/<slug>|settimana/YYYY-MM-DD> | --refresh-site | --records <codice>... | --mythictrap"
+USAGE = "uso: python -m blazettino <codice_report> [--boss <slug>] [--publish] | --week <codice>... [--publish] | --remove <YYYY-MM-DD|YYYY-MM-DD/<slug>|settimana/YYYY-MM-DD> | --refresh-site | --records <codice>... | --abilities <codice>... | --mythictrap"
 
 
 def _remove(date: str, cfg: dict) -> None:
@@ -55,6 +55,14 @@ def _records(codes: list[str], cfg: dict) -> None:
         bosses.add_report(site, _date(info), _tries(code, info))
     publish.refresh(site)
     sys.stdout.write(f"record aggiornati da {len(codes)} log\n")
+
+
+def _abilities(codes: list[str]) -> None:
+    """Add the abilities seen in every boss pull of these logs to data/abilities/<encounterID>.json (hand fields are kept)."""
+    for code in codes:
+        for f in wcl.report(code, FIGHTS)["fights"]:
+            if f["encounterID"]:
+                sys.stdout.write(f"{code} #{f['id']} {abilities.learn(code, f['id'])}\n")
 
 
 def _mythictrap(cfg: dict) -> None:
@@ -112,6 +120,10 @@ def main(argv: list[str]) -> None:
         return _remove(argv[2], load_config())
     if argv[1:2] == ["--mythictrap"]:
         return _mythictrap(load_config())
+    if argv[1:2] == ["--abilities"]:
+        if len(argv) < 3:
+            raise SystemExit(USAGE)
+        return _abilities(argv[2:])
     if argv[1:2] == ["--records"]:
         if len(argv) < 3:
             raise SystemExit(USAGE)
