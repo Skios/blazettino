@@ -34,8 +34,12 @@ class ClassifyTest(unittest.TestCase):
         c = memory.classify
         self.assertEqual(c(0, 0), "")
         self.assertEqual(c(0.1, 0), "")  # below the noise floor on both sides: nothing to say
+        self.assertEqual(c(0, 0.9), "")  # from nothing to less than a hit per fight is not a trend
         self.assertEqual(c(0.1, 3), "nuova")
         self.assertEqual(c(3, 0.1), "risolta")
+        self.assertEqual(c(1.0, 1.6), "invariata")  # +60% but only +0.6 hits per fight: not worth a line
+        self.assertEqual(c(5, 8), "peggiora")
+        self.assertEqual(c(0, 0.9, min_rate=0.5, min_delta=0.5), "nuova")  # thresholds can be changed
         self.assertEqual(c(0, 2), "nuova")
         self.assertEqual(c(3, 0), "risolta")
         self.assertEqual(c(4, 1), "migliora")

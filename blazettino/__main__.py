@@ -77,8 +77,9 @@ def _players(code: str, a: attempts.Attempt, cfg: dict, date: str) -> list[kpi.P
     if not memory.DB.exists():
         return players
     db, book = memory.connect(), cfg.get("players", {})
-    nights = cfg.get("trend_nights", memory.TREND_NIGHTS)
-    return [dataclasses.replace(p, notes=(*p.notes, *memory.trend_notes(db, roster.canon(p.name, book), a.encounter, cfg["spells"], date, nights)))
+    limits = {"nights": cfg.get("trend_nights", memory.TREND_NIGHTS), "min_rate": cfg.get("trend_min_rate", memory.MIN_RATE),
+              "min_delta": cfg.get("trend_min_delta", memory.MIN_DELTA)}
+    return [dataclasses.replace(p, notes=(*p.notes, *memory.trend_notes(db, roster.canon(p.name, book), a.encounter, cfg["spells"], date, **limits)))
             for p in players]
 
 

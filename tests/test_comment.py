@@ -96,6 +96,20 @@ class CommentTest(unittest.TestCase):
         self.assertEqual(len(calls), 3)
         self.assertEqual(len(out), 20)
 
+    def test_a_read_timeout_is_retried_like_a_busy_backend(self):
+        names = [p.name for p in self.players]
+        calls = []
+
+        def slow(prompt, cfg):
+            calls.append(1)
+            if len(calls) < 2:
+                raise TimeoutError("The read operation timed out")
+            return fake_reply(names)
+
+        with mock.patch.object(comment, "RETRY_WAIT_S", (0, 0)):
+            self.assertEqual(len(comment.comments(self.players, {}, generate=slow)), 20)
+        self.assertEqual(len(calls), 2)
+
     def test_overloaded_backend_gives_up_after_the_retries(self):
         def down(prompt, cfg):
             raise urllib.error.HTTPError("u", 429, "Too Many Requests", {}, None)

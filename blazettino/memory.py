@@ -16,7 +16,8 @@ DB = ROOT / "data" / "memoria.db"
 TREND_NIGHTS = 4  # nights looked at (config "trend_nights")
 BETTER, WORSE = 0.5, 1.5  # tonight's hits per fight against the earlier average: below half = better, above 1.5x = worse
 MAX_TREND = 3  # trend lines per person
-MIN_RATE = 0.5  # hits per fight under which a mechanic counts as not taken (a stray hit is not a trend)
+MIN_RATE = 1.0  # hits per fight under which a mechanic counts as not taken (a stray hit is not a trend)
+MIN_DELTA = 1.0  # a better or worse trend needs at least this change in hits per fight (config "trend_min_rate", "trend_min_delta")
 SCHEMA = """
 create table if not exists fight(codice text, id integer, boss text, encounter integer, data text, kill integer, diff integer, primary key(codice, id));
 create table if not exists presenza(codice text, id integer, persona text, personaggio text, primary key(codice, id, personaggio));
@@ -40,15 +41,17 @@ def connect(path: Path = DB) -> sqlite3.Connection:
     return db
 
 
-def classify(prev: float, cur: float) -> str:
+def classify(prev: float, cur: float, min_rate: float = MIN_RATE, min_delta: float = MIN_DELTA) -> str:
     """Tonight against the earlier nights: '' (never taken), nuova, risolta, migliora, peggiora or invariata (the grey zone)."""
-    prev, cur = (x if x >= MIN_RATE else 0 for x in (prev, cur))
+    prev, cur = (x if x >= min_rate else 0 for x in (prev, cur))
     if not prev and not cur:
         return ""
     if not prev:
         return "nuova"
     if not cur:
         return "risolta"
+    if abs(cur - prev) < min_delta:
+        return "invariata"
     return "migliora" if cur <= prev * BETTER else "peggiora" if cur >= prev * WORSE else "invariata"
 
 
@@ -97,7 +100,8 @@ def _display(spells: dict, ability: str) -> str:
     return spells.get(ability.lower(), {}).get("it") or ability
 
 
-def trend_notes(db: sqlite3.Connection, person: str, encounter: int, spells: dict, date: str, nights: int = TREND_NIGHTS) -> list[str]:
+def trend_notes(db: sqlite3.Connection, person: str, encounter: int, spells: dict, date: str, nights: int = TREND_NIGHTS,
+                min_rate: float = MIN_RATE, min_delta: float = MIN_DELTA) -> list[str]:
     """What changed for a person on a boss over the last `nights` nights (tonight included): mechanics they stopped
     failing, still fail, fail more or less, and the same death night after night. Empty without history or if absent tonight."""
     dates = [r[0] for r in db.execute(
@@ -119,7 +123,7 @@ def trend_notes(db: sqlite3.Connection, person: str, encounter: int, spells: dic
     for entry in {v["en"]: v for v in spells.values() if v.get("metric") == "avoid"}.values():
         rate = lambda d: hits.get((d, entry["en"]), 0) / fights[d]
         prev, cur = mean(rate(d) for d in dates[:-1]), rate(date)
-        kind = classify(prev, cur)
+        kind = classify(prev, cur, min_rate, min_delta)
         if kind:
             found.append((ORDER.index(kind), f"{entry['it'] or entry['en']}: " + TEXT[kind].format(prev=prev, cur=cur)))
     died: dict[str, set[str]] = {}
