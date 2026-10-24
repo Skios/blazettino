@@ -1,7 +1,19 @@
 """Profile of one fight from its raw WarcraftLogs events: what each player took from each ability and when,
 deaths, interrupts and dispels. Pure functions: events in, plain dict out (JSON-friendly)."""
 import bisect
+import dataclasses
+import json
 from collections import defaultdict
+from statistics import mean
+
+from blazettino import wcl
+from blazettino.config import ROOT
+
+AVOIDABLE_LABELS = ("dodge", "move out", "spread", "avoid")  # MythicTrap action labels: damage taken here was a choice
+DEAD_CUTOFF = 5  # hits taken when more raiders than this are already dead are ignored (Wipefest does the same)
+MAX_NOTES = 3  # facts per player given to the LLM
+OUTLIER_X = 3  # a player is notable when he took this many times the average of the others
+MIN_REPEAT = 3  # interruptions or dispels needed to be worth a mention
 
 
 def _name(table: dict, key: int) -> str:
@@ -30,3 +42,72 @@ def build(start: int, damage: list[dict], deaths: list[dict], interrupts: list[d
             out[key][_name(names, e["sourceID"])].append({"s": secs(e), "spell": _name(spells, e["extraAbilityGameID"])})
         out[key] = dict(out[key])
     return out
+
+
+def avoidable(prof: dict, labels: dict, cutoff: int = DEAD_CUTOFF) -> dict[str, dict[str, dict]]:
+    """{ability: {player: {dmg, hits}}} for the abilities whose MythicTrap label says to dodge them,
+    without the hits taken when more than `cutoff` raiders were already dead."""
+    out = {}
+    for ability, a in prof["damage"].items():
+        if not labels.get(ability.lower(), "").lower().startswith(AVOIDABLE_LABELS):
+            continue
+        per = {}
+        for player, v in a["players"].items():
+            hits = [h for h in v["list"] if h[2] <= cutoff]
+            if hits:
+                per[player] = {"dmg": sum(h[1] for h in hits), "hits": len(hits)}
+        if per:
+            out[ability] = per
+    return out
+
+
+def _repeats(prof: dict, key: str, text: str) -> dict[str, list[tuple[int, str]]]:
+    out = {}
+    for player, items in prof[key].items():
+        if len(items) >= MIN_REPEAT:
+            spell = max({i["spell"] for i in items}, key=lambda s: sum(i["spell"] == s for i in items))
+            out[player] = [(len(items), f"{len(items)} {text} (soprattutto {spell})")]
+    return out
+
+
+def notes(prof: dict, labels: dict, hand: dict, cutoff: int = DEAD_CUTOFF) -> dict[str, list[str]]:
+    """The few facts worth telling about each player, strongest first (damage taken from avoidable abilities
+    far above the others, many interruptions or dispels); `hand` adds our own text for an ability when it shows up."""
+    scored: dict[str, list[tuple[float, str]]] = defaultdict(list)
+    for ability, per in avoidable(prof, labels, cutoff).items():
+        for player, v in per.items():
+            others = [o["dmg"] for p, o in per.items() if p != player]
+            base = mean(others) if others else 0
+            if v["hits"] < 2 or (others and v["dmg"] < OUTLIER_X * base):
+                continue
+            ratio = f", {v['dmg'] / base:.0f}x la media degli altri" if base else ""
+            extra = f" ({hand[ability]})" if ability in hand else ""
+            scored[player].append((v["dmg"], f"{ability} [{labels[ability.lower()]}]: {v['hits']} colpi, {v['dmg'] / 1e6:.1f}M{ratio}{extra}"))
+    for key, text in (("interrupts", "interruzioni"), ("dispels", "dispel")):
+        for player, [(n, line)] in _repeats(prof, key, text).items():
+            scored[player].append((n * 1e3, line))
+    return {p: [t for _, t in sorted(v, reverse=True)[:MAX_NOTES]] for p, v in scored.items()}
+
+
+HAND_NOTES = ROOT / "data" / "notes.json"  # our own words per ability, told to the LLM only when that ability shows up
+
+
+def hand_notes(path=HAND_NOTES) -> dict[str, str]:
+    return json.loads(path.read_text()) if path.exists() else {}
+
+
+def fight_profile(code: str, fight_id: int) -> dict:
+    """Download (cached) the events of one fight and profile them; pets and totems count for their owner."""
+    f = wcl.report(code, "fights(fightIDs:[%d]){startTime endTime}" % fight_id)["fights"][0]
+    md = wcl.report(code, "masterData{actors{id name type subType petOwner}abilities{gameID name type}}")["masterData"]
+    actors = {a["id"]: a for a in md["actors"]}
+    names = {i: actors.get(a.get("petOwner"), a)["name"] for i, a in actors.items()}
+    spells = {a["gameID"]: a["name"] for a in md["abilities"]}
+    get = lambda kind: wcl.events(code, fight_id, f["startTime"], f["endTime"], kind)
+    return build(f["startTime"], get("DamageTaken"), get("Deaths"), get("Interrupts"), get("Dispels"), names, spells)
+
+
+def annotate(players: list, code: str, fight_id: int, labels: dict, hand: dict) -> list:
+    """Players with the notable events of the fight attached (read-only for the grade)."""
+    found = notes(fight_profile(code, fight_id), labels, hand)
+    return [dataclasses.replace(p, notes=tuple(found.get(p.name, ()))) for p in players]

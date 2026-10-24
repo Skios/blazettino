@@ -17,3 +17,7 @@ Aggiungere in fondo, spuntare quando risolto o scartato (con il motivo).
 - [ ] **D12 · Fasce di tono e prompt mai provati con Gemini dopo la modifica.** I test controllano il testo del prompt, non la qualità dei commenti.
 - [ ] **D13 · Pagine vecchie senza segnaposto del record e senza grafico dei pull.** Solo le pagine generate da ora in poi li hanno.
 - [x] **D14 · Attesa del limite di punti.** Verificato dal vivo il 2026-10-24: oltre i 1000 punti WarcraftLogs risponde HTTP 429 (`Too many requests from this IP address.`) con l'header `retry-after` in secondi; anche la query `rateLimitData` viene rifiutata, quindi `wcl.gql` ora usa quell'header. Resta non visto un ciclo completo di attesa e ripresa.
+
+- [ ] **D15 · Fatti del fight limitati dalle etichette di MythicTrap.** Il danno evitabile conta solo le abilità con etichetta "Dodge/Move out/Spread" nel file del boss: Macerie Cadenti (Falling Debris) di Ula'tek non è nella guida, quindi non compare. Serve un elenco a mano di abilità evitabili (da decidere con te).
+- [ ] **D16 · Note scritte a mano usate solo sulle abilità evitabili.** `data/notes.json` ("Malignant Shell…") finisce nel prompt solo se quell'abilità esce tra i fatti di un giocatore; Malignant Shell ha l'etichetta "Keep eggs safe", quindi oggi non esce mai. Servono le uova (eventi dedicati).
+- [ ] **D17 · Nomi di abilità in inglese nei fatti per Gemini.** Nessuna traduzione ancora (piano: tabella id → nome italiano da Wowhead). Soglie (`DEAD_CUTOFF` 5, `OUTLIER_X` 3, `MIN_REPEAT` 3) scelte a occhio, mai provate con Gemini.

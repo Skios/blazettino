@@ -15,7 +15,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from blazettino import attempts, bosses, icons, kpi, message, mythictrap, night, page, publish, report, wcl
+from blazettino import attempts, bosses, icons, kpi, message, mythictrap, night, page, profile, publish, report, wcl
 from blazettino.config import ROOT, load_config
 
 FIGHTS = "fights{id name encounterID difficulty kill fightPercentage startTime endTime}"
@@ -64,12 +64,18 @@ def _mythictrap(cfg: dict) -> None:
         sys.stdout.write(f"{raid}: salvato in {path}\n")
 
 
+def _players(code: str, a: attempts.Attempt, cfg: dict) -> list[kpi.Player]:
+    """The raiders of one attempt, with the notable events of the fight (avoidable damage, interrupts, dispels) attached."""
+    players = kpi.load_fight(*wcl.fight_tables(code, a.id))
+    return profile.annotate(players, code, a.id, cfg["spell_labels"], cfg["spell_notes"])
+
+
 def _build(code: str, cfg: dict) -> night.Night:
     info = wcl.report(code, f"title startTime {FIGHTS}")
     tries = _tries(code, info, cfg.get("try", "last"))
     if not tries:
         raise SystemExit(f"nessun boss nel report {code}")
-    loaded = [(a, kpi.load_fight(*wcl.fight_tables(code, a.id))) for a in tries]
+    loaded = [(a, _players(code, a, cfg)) for a in tries]
     date = _date(info)
     return night.assemble(info["title"], date, loaded, cfg)
 
@@ -82,7 +88,7 @@ def _boss(code: str, slug: str, cfg: dict) -> night.Night:
         raise SystemExit(f"boss '{slug}' non trovato nel report; disponibili: {', '.join(tries) or 'nessuno'}")
     a = tries[slug]
     date = _date(info)
-    return night.assemble_boss(info["title"], date, a, kpi.load_fight(*wcl.fight_tables(code, a.id)), cfg)
+    return night.assemble_boss(info["title"], date, a, _players(code, a, cfg), cfg)
 
 
 def _save(n: night.Night, name: str, url: str | None) -> tuple[Path, str]:
@@ -124,7 +130,7 @@ def main(argv: list[str]) -> None:
         raise SystemExit(USAGE)
     do_publish, weekly = "--publish" in flags, "--week" in flags
     logging.basicConfig(level=logging.WARNING, format="%(levelname)s: %(message)s")
-    cfg = {**load_config(), "spell_labels": mythictrap.labels()}
+    cfg = {**load_config(), "spell_labels": mythictrap.labels(), "spell_notes": profile.hand_notes()}
     site_dir, site_url = cfg.get("site_dir"), cfg.get("site_url")
     if do_publish and not (site_dir and site_url):
         raise SystemExit("--publish richiede site_dir e site_url in config.json (vedi README)")

@@ -26,6 +26,12 @@ class CommentTest(unittest.TestCase):
         self.assertIn("8:49", prompt)  # minuto della morte
         self.assertIn("strage", prompt)  # morti di massa marcate come non colpa del singolo
 
+    def test_fight_events_noted_on_a_player_reach_the_prompt(self):
+        import dataclasses
+        p = dataclasses.replace(self.players[0], notes=("Falling Debris: 10 colpi, 3.9M",))
+        self.assertIn("Falling Debris: 10 colpi", comment.facts(p, self.players))
+        self.assertNotIn("Eventi del fight", comment.facts(self.players[1], self.players))
+
     def test_each_player_line_carries_the_tone_of_its_grade_band(self):
         top = max(self.players, key=kpi.grade)
         low = min(self.players, key=kpi.grade)

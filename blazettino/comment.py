@@ -144,6 +144,7 @@ def facts(p: kpi.Player, players: list[kpi.Player], tones=TONES) -> str:
         f"Danni {p.damage / 1e6:.2f}M ({p.dps / 1e3:.1f}k DPS, {_rank(p, p.dps_parse, 'parse')}), "
         f"cure {p.healing / 1e6:.2f}M ({p.hps / 1e3:.1f}k HPS, {_rank(p, p.hps_parse, 'parse cure')}), "
         f"danni subiti {p.taken / 1e6:.2f}M. Morti: {deaths}."
+        + (f" Eventi del fight: {'; '.join(p.notes)}." if p.notes else "")
         + (f" Spunti: {'; '.join(hints)}." if hints else "")
     )
 

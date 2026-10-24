@@ -54,6 +54,7 @@ class Player:
     fights: int = 1  # boss fights this raider took part in
     gender: str = ""  # "m"/"f" from players.json; empty = unknown, the comments stay neutral
     ranked: bool = True  # False: parses are inside-raid percentiles (no WarcraftLogs ranking on wipes)
+    notes: tuple[str, ...] = ()  # notable fight events (profile.notes), told to the LLM, never used in the grade
 
     @property
     def icon(self) -> str:
