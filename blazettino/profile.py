@@ -121,12 +121,12 @@ def performance(code: str, fight_id: int) -> dict[str, dict]:
 
 
 def with_performance(players: list, code: str, fight_id: int) -> list:
-    """Players with active seconds (the healing time for healers, the damage time for the others) and casts attached."""
+    """Players with active seconds (time spent dealing damage, for everyone: a healer healing is always busy) and casts attached."""
     perf = performance(code, fight_id)
     out = []
     for p in players:
         d = perf.get(p.name)
-        out.append(dataclasses.replace(p, active_s=d["healing_s" if p.role == "healer" else "damage_s"], casts=d["casts"]) if d else p)
+        out.append(dataclasses.replace(p, active_s=d["damage_s"], casts=d["casts"]) if d else p)
     return out
 
 

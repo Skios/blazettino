@@ -23,6 +23,7 @@ class AwardsTest(unittest.TestCase):
         got = self.by_key(with_stats({"Karabosca": (594, 300), "Sleãze": (300, 300)}))
         self.assertEqual((got["anfetamina"].winner, got["bradipo"].winner), ("Karabosca", "Sleãze"))
         self.assertIn("99%", got["anfetamina"].value)
+        self.assertIn("infliggere danni", got["anfetamina"].value)
         self.assertIn("50%", got["bradipo"].value)
 
     def test_most_and_fewest_casts_per_minute(self):

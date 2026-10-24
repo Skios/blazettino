@@ -159,7 +159,7 @@ class PerformanceTest(unittest.TestCase):
         self.assertEqual(got["Heal"], {"damage_s": 10.0, "healing_s": 570.0, "casts": 1})
         self.assertNotIn("Pet", got)
 
-    def test_stats_go_on_the_players_by_role(self):
+    def test_stats_go_on_the_players_with_the_damage_time_for_every_role(self):
         from unittest import mock
         from blazettino import kpi
         from tests.test_kpi import load
@@ -169,7 +169,7 @@ class PerformanceTest(unittest.TestCase):
         perf = {healer.name: {"damage_s": 5.0, "healing_s": 500.0, "casts": 40}, dps.name: {"damage_s": 400.0, "healing_s": 3.0, "casts": 90}}
         with mock.patch.object(profile, "performance", return_value=perf):
             out = {p.name: p for p in profile.with_performance(ps, "CODE", 21)}
-        self.assertEqual((out[healer.name].active_s, out[healer.name].casts), (500.0, 40))
+        self.assertEqual((out[healer.name].active_s, out[healer.name].casts), (5.0, 40))  # damage time, not healing time
         self.assertEqual(out[dps.name].active_s, 400.0)
         other = next(p for p in ps if p.name not in perf)
         self.assertIsNone(out[other.name].active_s)

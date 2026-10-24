@@ -95,7 +95,7 @@ def compute(players: list[kpi.Player], duration_s: int) -> list[Award]:
         *_forgotten(players),
         *_scilla(players),
         *_extremes(active, alive, ("anfetamina", "Premio Fatto di Anfetamina"), ("bradipo", "Premio Bradipo"),
-                   lambda v, m: f"{v:.0f}% di tempo attivo (mediana del raid {m:.0f}%)"),
+                   lambda v, m: f"{v:.0f}% del tempo a infliggere danni (mediana del raid {m:.0f}%)"),
         *_extremes(apm, alive, ("spaccatastiere", "Premio Spaccatastiere"), ("tastiera", "Premio Tastiera Arrugginita"),
                    lambda v, m: f"{v:.0f} azioni al minuto (mediana del raid {m:.0f})"),
     ]
