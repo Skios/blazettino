@@ -92,6 +92,14 @@ class TrendTest(DbCase):
         self.assertEqual(self.trend(nights=2), [])  # the old night is out of the window: 0 -> 0
         self.assertTrue(self.trend(nights=3))
 
+    def test_a_oneshot_mechanic_counts_even_for_a_single_hit_a_wave_does_not(self):
+        self.night("A", "2026-10-07", [{"Tore": 0}, {"Tore": 0}])
+        self.night("B", "2026-10-14", [{"Tore": 1}, {"Tore": 0}, {"Tore": 0}])  # one hit in three fights
+        wave = {"falling debris": {**SPELLS["falling debris"], "kind": "wave"}}
+        oneshot = {"falling debris": {**SPELLS["falling debris"], "kind": "oneshot"}}
+        self.assertEqual(memory.trend_notes(self.db, "Tore", 3492, wave, "2026-10-14"), [])
+        self.assertIn("prima non la prendeva", memory.trend_notes(self.db, "Tore", 3492, oneshot, "2026-10-14")[0])
+
     def test_other_bosses_do_not_count_and_abilities_without_a_metric_are_ignored(self):
         self.night("A", "2026-10-07", [{"Tore": 40}], enc=1)
         self.night("B", "2026-10-14", [{"Tore": 4}])

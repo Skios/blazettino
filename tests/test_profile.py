@@ -80,6 +80,13 @@ class NotesTest(unittest.TestCase):
         self.assertIn("cade solo in fase 1", notes["Tank"][0])
         self.assertNotIn("Dps", notes)
 
+    def test_a_oneshot_ability_is_noted_for_a_single_hit_even_without_being_an_outlier(self):
+        dmg = many(10, {1: (1, 100), 2: (1, 100)})
+        wave = {"falling debris": {**LABELS["falling debris"], "kind": "wave"}}
+        oneshot = {"falling debris": {**LABELS["falling debris"], "kind": "oneshot"}}
+        self.assertEqual(profile.notes(build(damage=dmg), wave), {})
+        self.assertEqual(sorted(profile.notes(build(damage=dmg), oneshot)), ["Dps", "Tank"])
+
     def test_notable_interrupters_are_named_and_a_player_has_at_most_three_notes(self):
         interrupts = [{"timestamp": 1000 + 1000 * i, "sourceID": 2, "abilityGameID": 20, "extraAbilityGameID": 11} for i in range(3)]
         notes = profile.notes(build(interrupts=interrupts), LABELS)

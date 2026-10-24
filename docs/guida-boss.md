@@ -23,6 +23,7 @@ Per ogni pull da boss del log il programma scarica gli eventi (restano in cache,
    "en": "Falling Debris",
    "it": "Macerie Cadenti",
    "metric": "avoid",
+   "kind": "oneshot",
    "note": "cadono a terra: si schivano uscendo dal cerchio",
    "sources": ["Ula'tek"],
    "phases": {"1": {"casts": 0, "hits": 2, "fights": 1}, "4": {"casts": 0, "hits": 9, "fights": 1}}
@@ -32,7 +33,7 @@ Per ogni pull da boss del log il programma scarica gli eventi (restano in cache,
 ```
 
 - **Li riempie il programma** (non modificateli, vengono riscritti): `en`, `sources` (chi la usa: boss o add), `phases` (in quali fasi compare, quanti lanci `casts` e quanti colpi `hits` sui giocatori, in quanti fight), `logs`, `phases` di primo livello (nomi delle fasi).
-- **Li riempite voi** (non vengono mai toccati): `it`, `metric`, `note`. Potete aggiungere altri campi vostri.
+- **Li riempite voi** (non vengono mai toccati): `it`, `metric`, `kind`, `note`. Potete aggiungere altri campi vostri.
 - `en` è il nome dell'abilità nel log. `it` è il nome italiano da usare nei commenti: se è vuoto resta l'inglese. L'`id` (la chiave) è lo stesso che si vede su WarcraftLogs.
 
 ## 3. Le metriche
@@ -46,6 +47,13 @@ Per ogni pull da boss del log il programma scarica gli eventi (restano in cache,
 | `break` | si rompe solo nel modo giusto | come sopra |
 
 Lasciate `metric` vuoto per le abilità che non vi interessano (un'abilità senza `metric` né `it` viene ignorata). Un nome di metrica sbagliato ferma il programma con un messaggio che indica il file e le metriche valide, per non misurare niente in silenzio.
+
+## 3 bis. Quanto pesa un colpo (`kind`)
+
+- **`wave`** (default, campo vuoto): un colpo ogni tanto va bene. Entra tra gli spunti solo se il giocatore la prende almeno 1 volta a fight e molto più degli altri; una tendenza richiede almeno 1 colpo a fight in più o in meno.
+- **`oneshot`**: anche un solo colpo conta (meccanica da schivare sempre, per esempio Macerie Cadenti). Compare tra gli spunti e tra le tendenze già dal primo colpo.
+
+In ogni caso una morte su un'abilità `avoid` resta importante e viene segnalata anche se si ripete su più serate.
 
 ## 4. La nota (`note`)
 

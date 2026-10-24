@@ -16,7 +16,8 @@ METRIC_TEXT = {  # metric -> what the ability asks of the player (also the label
     "avoid": "da schivare", "interrupt": "da interrompere", "dispel": "da dispellare",
     "soak": "da assorbire in gruppo", "break": "da rompere nel modo giusto",
 }
-HAND = {"it": "", "metric": "", "note": ""}  # filled in by people: Italian name, how to measure it, text for the LLM
+KINDS = ("wave", "oneshot")  # wave (default): a hit now and then is fine; oneshot: even one hit counts
+HAND = {"it": "", "metric": "", "kind": "", "note": ""}  # filled in by people: Italian name, how to measure it, text for the LLM
 
 
 def _enemy(actors: dict, source_id: int) -> str | None:
@@ -99,8 +100,10 @@ def table(folder: Path = DATA) -> dict[int | str, dict]:
         for spell, a in load(folder, int(path.stem)).get("abilities", {}).items():
             if a.get("metric") and a["metric"] not in METRIC_TEXT:
                 raise SystemExit(f"{path}: metrica '{a['metric']}' sconosciuta per {a.get('en', spell)}; valide: {', '.join(METRIC_TEXT)}")
+            if a.get("kind") and a["kind"] not in KINDS:
+                raise SystemExit(f"{path}: kind '{a['kind']}' sconosciuto per {a.get('en', spell)}; validi: {', '.join(KINDS)}")
             if a.get("metric") or a.get("it"):
-                entry = {k: a.get(k, "") for k in ("en", "it", "metric", "note")}
+                entry = {k: a.get(k, "") for k in ("en", "it", "metric", "kind", "note")}
                 out.setdefault(int(spell), entry)
                 out.setdefault(a["en"].lower(), entry)
     return out

@@ -24,6 +24,7 @@ create table if not exists presenza(codice text, id integer, persona text, perso
 create table if not exists evento(codice text, id integer, persona text, abilita text, colpi integer, danno integer, primary key(codice, id, persona, abilita));
 create table if not exists morte(codice text, id integer, persona text, secondo integer, abilita text, prima integer);
 """
+ONESHOT_LIMIT = 0.01  # a oneshot mechanic is noted from a single hit ("kind": "oneshot" in the abilities file)
 ORDER = ("peggiora", "nuova", "risolta", "invariata", "migliora")
 TEXT = {
     "risolta": "non la prende più (prima {prev:.1f} colpi a fight, ora {cur:.1f})",
@@ -123,7 +124,8 @@ def trend_notes(db: sqlite3.Connection, person: str, encounter: int, spells: dic
     for entry in {v["en"]: v for v in spells.values() if v.get("metric") == "avoid"}.values():
         rate = lambda d: hits.get((d, entry["en"]), 0) / fights[d]
         prev, cur = mean(rate(d) for d in dates[:-1]), rate(date)
-        kind = classify(prev, cur, min_rate, min_delta)
+        one = entry.get("kind") == "oneshot"
+        kind = classify(prev, cur, ONESHOT_LIMIT if one else min_rate, ONESHOT_LIMIT if one else min_delta)
         if kind:
             found.append((ORDER.index(kind), f"{entry['it'] or entry['en']}: " + TEXT[kind].format(prev=prev, cur=cur)))
     died: dict[str, set[str]] = {}

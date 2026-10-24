@@ -89,8 +89,15 @@ class TableTest(unittest.TestCase):
             t = abilities.table(self.folder(tmp))
             self.assertEqual(t[1292403], t["caustic waves"])
             self.assertEqual(t["caustic waves"]["it"], "Onde Caustiche")
+            self.assertEqual(t["caustic waves"]["kind"], "")  # missing hand field: treated as a wave
             self.assertEqual(abilities.table(self.folder(tmp, metric="", it="")), {})
         self.assertEqual(abilities.table(Path("/nonexistent")), {})
+
+    def test_unknown_kind_stops_too(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaises(SystemExit) as cm:
+                abilities.table(self.folder(tmp, kind="oneshoot"))
+        self.assertIn("oneshot", str(cm.exception))
 
     def test_unknown_metric_stops_with_the_file_and_the_valid_ones(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -77,7 +77,7 @@ def notes(prof: dict, spells: dict, cutoff: int = DEAD_CUTOFF) -> dict[str, list
         for player, v in per.items():
             others = [o["dmg"] for p, o in per.items() if p != player]
             base = mean(others) if others else 0
-            if v["hits"] < 2 or (others and v["dmg"] < OUTLIER_X * base):
+            if spells[ability.lower()].get("kind") != "oneshot" and (v["hits"] < 2 or (others and v["dmg"] < OUTLIER_X * base)):
                 continue
             ratio = f", {v['dmg'] / base:.0f}x la media degli altri" if base else ""
             a = spells[ability.lower()]

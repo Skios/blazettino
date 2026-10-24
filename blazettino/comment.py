@@ -19,7 +19,7 @@ from blazettino.config import env_prefix
 log = logging.getLogger(__name__)
 
 DEFAULTS = {"backend": "gemini", "model": "gemini-3.8-flash"}
-TIMEOUT_S = 1800  # nobody is waiting for the report cards: let a slow backend take its time
+TIMEOUT_S = 600  # nobody is waiting for the report cards: let a slow backend take its time
 RETRY_WAIT_S = (10, 30, 60)  # free tiers answer 429/503 when busy: wait and retry before giving up
 TRANSIENT = (429, 503)
 OLLAMA_URL = "http://localhost:11434/api/generate"
