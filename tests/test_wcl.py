@@ -56,6 +56,11 @@ class RateLimitTest(unittest.TestCase):
         self.run_with([http429(), http429(), {"data": {}}])
         self.assertEqual(self.sleeps, [wcl.RESET_GUESS_S + wcl.RESET_MARGIN_S])
 
+    def test_real_429_carries_retry_after_so_no_extra_query_is_needed(self):
+        e = urllib.error.HTTPError("u", 429, "Too Many Requests", {"retry-after": "3078"}, io.BytesIO(b""))
+        self.run_with([e, {"data": {}}])  # a second 429 or a limit query would exhaust the replies
+        self.assertEqual(self.sleeps, [3078 + wcl.RESET_MARGIN_S])
+
     def test_other_errors_are_not_retried(self):
         with self.assertRaises(RuntimeError):
             self.run_with([{"errors": [{"message": "syntax"}]}])

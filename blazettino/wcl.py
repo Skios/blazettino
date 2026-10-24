@@ -48,10 +48,11 @@ def _is_rate_limit(out: dict) -> bool:
     return "rate limit" in json.dumps(out.get("errors", "")).lower()
 
 
-def _wait_for_reset(attempt: int) -> None:
-    """The hourly points are used up: sleep until they come back (collecting data is not urgent, the cache keeps progress)."""
+def _wait_for_reset(attempt: int, retry_after: str | None = None) -> None:
+    """The hourly points are used up: sleep until they come back (collecting data is not urgent, the cache keeps progress).
+    A real 429 says how long in its Retry-After header; the limit query is refused too while over the limit."""
     try:
-        secs = _post("{rateLimitData{pointsResetIn}}")["data"]["rateLimitData"]["pointsResetIn"]
+        secs = int(retry_after) if retry_after else _post("{rateLimitData{pointsResetIn}}")["data"]["rateLimitData"]["pointsResetIn"]
     except (OSError, KeyError, TypeError, ValueError):
         secs = RESET_GUESS_S
     log.warning("punti WarcraftLogs esauriti: aspetto %d minuti (attesa %d/%d), i dati gia' scaricati restano in cache",
@@ -67,15 +68,16 @@ def gql(query: str) -> dict:
     if path.exists():
         return json.loads(path.read_text())
     for attempt in range(1, MAX_WAITS + 1):
+        retry_after = None
         try:
             out = _post(query)
         except urllib.error.HTTPError as e:
             if e.code != 429:
                 raise
-            out = {"errors": "rate limit"}
+            out, retry_after = {"errors": "rate limit"}, e.headers.get("retry-after")
         if not _is_rate_limit(out):
             break
-        _wait_for_reset(attempt)
+        _wait_for_reset(attempt, retry_after)
     else:
         raise RuntimeError("WarcraftLogs: limite di punti ancora esaurito dopo un giorno di attesa")
     if "errors" in out:
