@@ -24,6 +24,21 @@ class AssembleTest(unittest.TestCase):
         self.assertEqual(sum("WIPE (miglior tentativo" in c for c in seen), 1)
         self.assertEqual(sum("Serata completa" in c for c in seen), 1)
 
+    def test_a_boss_gets_its_awards_and_the_llm_hears_about_them(self):
+        from dataclasses import replace
+        from blazettino import awards
+        seen = []
+        stats = {p.name: replace(p, active_s=480, casts=300, deaths=()) for p in players(21)}
+        stats["Karabosca"] = replace(stats["Karabosca"], active_s=594)
+
+        def spy(ps, cfg, context=""):
+            seen.append(context)
+            return fake_comments(ps, cfg, context)
+
+        n = build_night(tries=[(KILL_B, list(stats.values()))], comments_fn=spy)
+        self.assertEqual([a.key for a in n.bosses[0].awards], ["anfetamina"])
+        self.assertTrue(any("premio:anfetamina" in c for c in seen))
+
     def test_every_boss_and_the_night_have_their_own_comments(self):
         n = build_night()
         self.assertEqual(len(n.comments), 20)

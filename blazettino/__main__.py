@@ -74,6 +74,7 @@ def _players(code: str, a: attempts.Attempt, cfg: dict, date: str) -> list[kpi.P
     """The raiders of one attempt, with the notable events of the fight (avoidable damage, interrupts, dispels)
     and, if the logs were collected (--collect), how each person's mechanics are going over the last nights."""
     players = profile.annotate(kpi.load_fight(*wcl.fight_tables(code, a.id)), code, a.id, cfg["spells"])
+    players = profile.with_performance(players, code, a.id)
     if not memory.DB.exists():
         return players
     db, book = memory.connect(), cfg.get("players", {})

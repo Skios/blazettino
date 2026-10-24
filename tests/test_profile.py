@@ -137,5 +137,43 @@ class FightProfileTest(unittest.TestCase):
         self.assertEqual(sorted(calls), ["DamageTaken", "Deaths", "Dispels", "Interrupts"])
 
 
+class PerformanceTest(unittest.TestCase):
+    def test_active_seconds_by_role_and_casts_per_player(self):
+        from unittest import mock
+
+        def fake_report(code, body):
+            if "fights(" in body:
+                return {"fights": [{"startTime": 0, "endTime": 600_000}]}
+            if "masterData" in body:
+                return {"masterData": {"actors": [{"id": 1, "name": "Tank", "type": "Player"}, {"id": 2, "name": "Heal", "type": "Player"},
+                                                  {"id": 9, "name": "Pet", "type": "Pet"}]}}
+            entries = {"DamageDone": [{"name": "Tank", "activeTime": 500_000}, {"name": "Heal", "activeTime": 10_000}],
+                       "Healing": [{"name": "Heal", "activeTime": 570_000}]}
+            kind = "DamageDone" if "DamageDone" in body else "Healing"
+            return {"table": {"data": {"entries": entries[kind]}}}
+
+        casts = [{"type": "cast", "sourceID": 1}] * 3 + [{"type": "begincast", "sourceID": 1}, {"type": "cast", "sourceID": 2}, {"type": "cast", "sourceID": 9}]
+        with mock.patch.object(profile.wcl, "report", fake_report), mock.patch.object(profile.wcl, "events", return_value=casts):
+            got = profile.performance("CODE", 5)
+        self.assertEqual(got["Tank"], {"damage_s": 500.0, "healing_s": 0.0, "casts": 3})
+        self.assertEqual(got["Heal"], {"damage_s": 10.0, "healing_s": 570.0, "casts": 1})
+        self.assertNotIn("Pet", got)
+
+    def test_stats_go_on_the_players_by_role(self):
+        from unittest import mock
+        from blazettino import kpi
+        from tests.test_kpi import load
+        ps = kpi.load_fight(load("summary"), load("taken"), load("rank_dps"), load("rank_hps"))
+        healer = next(p for p in ps if p.role == "healer")
+        dps = next(p for p in ps if p.role == "dps")
+        perf = {healer.name: {"damage_s": 5.0, "healing_s": 500.0, "casts": 40}, dps.name: {"damage_s": 400.0, "healing_s": 3.0, "casts": 90}}
+        with mock.patch.object(profile, "performance", return_value=perf):
+            out = {p.name: p for p in profile.with_performance(ps, "CODE", 21)}
+        self.assertEqual((out[healer.name].active_s, out[healer.name].casts), (500.0, 40))
+        self.assertEqual(out[dps.name].active_s, 400.0)
+        other = next(p for p in ps if p.name not in perf)
+        self.assertIsNone(out[other.name].active_s)
+
+
 if __name__ == "__main__":
     unittest.main()

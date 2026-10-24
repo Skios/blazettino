@@ -90,5 +90,39 @@ class BossFilesTest(unittest.TestCase):
         self.assertEqual(set(report.files(build_boss(WIPE_C))), {"boss-tre_wipe.md"})
 
 
+class AwardsRenderTest(unittest.TestCase):
+    def boss(self):
+        import dataclasses
+        from blazettino import awards
+        from blazettino.comment import Comment
+        n = build_boss()
+        b = n.bosses[0]
+        aw = (awards.Award("anfetamina", "Premio Fatto di Anfetamina", "Yorda", "99% di tempo attivo (mediana del raid 80%)"),
+              awards.Award("bradipo", "Premio Bradipo", "Madreh", "50% di tempo attivo (mediana del raid 80%)"))
+        b = dataclasses.replace(b, awards=aw, comments={**b.comments, "premio:anfetamina": Comment("IL FRULLATORE", "Mai fermo <b>.")})
+        return n, b
+
+    def test_markdown_lists_the_prizes_with_their_comment_when_there_is_one(self):
+        n, b = self.boss()
+        text = report.render_boss(n, b)
+        self.assertIn("## Premi speciali", text)
+        self.assertIn("Premio Fatto di Anfetamina** — Yorda: 99% di tempo attivo", text)
+        self.assertIn("IL FRULLATORE", text)
+        self.assertIn("Premio Bradipo** — Madreh", text)  # twin without a comment still appears
+
+    def test_no_prizes_no_section(self):
+        n = build_boss()
+        self.assertNotIn("Premi speciali", report.render_boss(n, n.bosses[0]))
+
+    def test_html_shows_the_prizes_escaped(self):
+        import dataclasses
+        from blazettino import page
+        n, b = self.boss()
+        html = page.render_html(dataclasses.replace(n, bosses=[b]))
+        self.assertIn("Premi speciali", html)
+        self.assertIn("Mai fermo &lt;b&gt;.", html)
+        self.assertNotIn("Mai fermo <b>", html)
+
+
 if __name__ == "__main__":
     unittest.main()

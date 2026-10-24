@@ -54,6 +54,21 @@ FORMAT = (
 )
 
 
+PRIZE_KEY = "premio:"  # prize comments come back in the same reply, under "premio:<key>"
+
+
+def awards_context(awards) -> str:
+    """The prizes of a boss fight, told to the model; empty when there are none."""
+    if not awards:
+        return ""
+    lines = [f'- {a.title} (chiave "{PRIZE_KEY}{a.key}"): {a.winner}, {a.value}' for a in awards]
+    return (
+        "Premi speciali di questo boss (assegnati dai dati, non discutibili). Per ognuno aggiungi alla risposta la chiave indicata con "
+        '{"titolo": "...", "commento": "..."}: il titolo e\' un nomignolo per il vincitore, il commento (1-2 frasi) lo premia o lo sfotte, '
+        "citando il numero e senza inventare altro; i premi 'gemelli' (il rovescio della medaglia) sono sfottò affettuosi.\n" + "\n".join(lines)
+    )
+
+
 @dataclass(frozen=True)
 class Comment:
     title: str
@@ -219,5 +234,5 @@ def comments(
     return {
         n: Comment(str(v["titolo"]), str(v["commento"]))
         for n, v in data.items()
-        if n in targets and isinstance(v, dict) and "titolo" in v and "commento" in v
+        if (n in targets or n.startswith(PRIZE_KEY)) and isinstance(v, dict) and "titolo" in v and "commento" in v
     }

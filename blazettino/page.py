@@ -31,6 +31,9 @@ main{max-width:1100px;margin:0 auto;padding:16px}h1{margin:.2em 0 0;font-size:cl
 .banner{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:1em}
 .banner.kill{border-left:5px solid var(--ok)}.banner.wipe{border-left:5px solid var(--bad)}
 .banner em{display:block;color:var(--muted);margin-top:.2em}
+.awards h2{font-size:1.05em;margin:.2em 0 .5em}.awardlist{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px;margin-bottom:1em}
+.award{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px}.award .at{color:var(--muted);font-size:.85em}
+.award .aw{font-weight:700;font-size:1.1em}.award .av{color:var(--muted);font-size:.9em}.award p{margin:.5em 0 0}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 1em}
 .chip{background:var(--card);border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:.8rem;color:var(--muted)}
 .podium{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:1.2em}
@@ -184,6 +187,18 @@ def _pulls_chart(a) -> str:
     )
 
 
+def _awards(boss: BossReport) -> str:
+    if not boss.awards:
+        return ""
+    cards = ""
+    for a in boss.awards:
+        c = boss.comments.get(f"premio:{a.key}")
+        say = f"<p><b>{escape(c.title)}</b> {escape(c.text)}</p>" if c else ""
+        cards += (f'<div class="award"><div class="at">{escape(a.title)}</div><div class="aw">{escape(a.winner)}</div>'
+                  f'<div class="av">{escape(a.value)}</div>{say}</div>')
+    return f'<section class="awards"><h2>Premi speciali</h2><div class="awardlist">{cards}</div></section>'
+
+
 def _banner(night: Night, boss: BossReport) -> str:
     a = boss.attempt
     chart = _pulls_chart(a)
@@ -226,7 +241,7 @@ def render_html(night: Night, icons: dict[str, str] | None = None, url: str | No
     ranked, pool, top = report.standings(night.players, len(night.bosses), night.max_missed)
     chips = "".join(f'<span class="chip">{escape(b.attempt.name)}</span>' for b in night.bosses)
     if night.kind == "Boss":  # one boss: a single panel, no tabs
-        head, show_fights, boss_tabs = _banner(night, night.bosses[0]), False, []
+        head, show_fights, boss_tabs = _banner(night, night.bosses[0]) + _awards(night.bosses[0]), False, []
     else:
         head, show_fights, boss_tabs = f'<div class="chips">{chips}</div>{_heat(night, ranked)}', True, night.bosses
     panels = [_panel("global", False, head, ranked, top, pool, night.comments, icons, show_fights)]
@@ -234,7 +249,7 @@ def render_html(night: Night, icons: dict[str, str] | None = None, url: str | No
     for i, b in enumerate(boss_tabs, 1):
         pid = f"b{i}-{b.attempt.slug}"
         ranked_b = kpi.ranking(b.players)
-        panels.append(_panel(pid, True, _banner(night, b), ranked_b, ranked_b, ranked_b, b.comments, icons, False))
+        panels.append(_panel(pid, True, _banner(night, b) + _awards(b), ranked_b, ranked_b, ranked_b, b.comments, icons, False))
         kind = "kill" if b.attempt.kill else "wipe"
         tabs.append(
             f'<button class="tab" data-tab="{pid}" aria-pressed="false">{escape(b.attempt.name)} '

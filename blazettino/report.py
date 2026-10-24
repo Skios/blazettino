@@ -66,6 +66,16 @@ def _sections(ranked: list[kpi.Player], comments: dict[str, Comment], pool: list
     return out
 
 
+def _awards(boss: BossReport) -> list[str]:
+    if not boss.awards:
+        return []
+    lines = []
+    for a in boss.awards:
+        c = boss.comments.get(f"premio:{a.key}")
+        lines.append(f"**{a.title}** — {a.winner}: {a.value}" + (f"\n*{c.title}* — {c.text}" if c else ""))
+    return ["## Premi speciali", "\n\n".join(lines)]
+
+
 def boss_label(a) -> str:
     return "KILL" if a.kill else f"WIPE a {a.pct:g}%"
 
@@ -80,7 +90,7 @@ def render_boss(night: Night, boss: BossReport) -> str:
     out = [f"# {a.name} — {boss_label(a)} ({kpi.mmss(a.seconds)})", f"{night.title} · {night.date}"]
     if not a.kill:
         out.append(f"**{tips.NO_KILL}** Miglior tentativo: boss a {a.pct:g}% di vita.\n> {tip_for(night, boss)}")
-    out += ["## Podio", _podium(ranked), *_sections(ranked, boss.comments, ranked)]
+    out += ["## Podio", _podium(ranked), *_awards(boss), *_sections(ranked, boss.comments, ranked)]
     return "\n\n".join(out) + "\n"
 
 

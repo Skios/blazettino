@@ -5,7 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from typing import Callable
 
-from blazettino import abilities, comment, kpi, roster
+from blazettino import abilities, awards, comment, kpi, roster
 from blazettino.attempts import Attempt
 from blazettino.comment import Comment
 
@@ -16,7 +16,8 @@ LLM_WORKERS = 2  # free tiers rate-limit: two calls at a time is enough for ~4 p
 class BossReport:
     attempt: Attempt
     players: list[kpi.Player]
-    comments: dict[str, Comment]
+    comments: dict[str, Comment]  # also the prize comments, under "premio:<key>"
+    awards: tuple[awards.Award, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -56,11 +57,12 @@ def assemble(
     spells = cfg.get("spells", {})
     per_boss = [(a, abilities.tag_deaths([p for p in roster.apply(ps, book) if roster.canon(p.name, book) not in exclude], spells)) for a, ps in tries]
     merged = kpi.merge([_tag_boss(ps, a.name) for a, ps in per_boss])
-    jobs = [(ps, comment.attempt_context(a)) for a, ps in per_boss]
+    prizes = [tuple(awards.compute(ps, a.seconds)) for a, ps in per_boss]
+    jobs = [(ps, "\n\n".join(filter(None, [comment.attempt_context(a), comment.awards_context(w)]))) for (a, ps), w in zip(per_boss, prizes)]
     jobs.append((merged, comment.night_context([a for a, _ in per_boss])))
     with ThreadPoolExecutor(max_workers=LLM_WORKERS) as pool:
         notes = list(pool.map(lambda job: comments_fn(job[0], cfg, context=job[1]), jobs))
-    bosses = [BossReport(a, ps, n) for (a, ps), n in zip(per_boss, notes)]
+    bosses = [BossReport(a, ps, n, w) for (a, ps), n, w in zip(per_boss, notes, prizes)]
     return Night(clean_title(title), date, bosses, merged, notes[-1], cfg.get("max_missed_fights", 1))
 
 
@@ -90,8 +92,9 @@ def assemble_boss(
     book = cfg.get("players", {})
     exclude = {roster.canon(n, book) for n in cfg.get("exclude", ())}
     ps = abilities.tag_deaths([p for p in roster.apply(players, book) if roster.canon(p.name, book) not in exclude], cfg.get("spells", {}))
-    notes = comments_fn(ps, cfg, context=comment.attempt_context(attempt))
+    prizes = tuple(awards.compute(ps, attempt.seconds))
+    notes = comments_fn(ps, cfg, context="\n\n".join(filter(None, [comment.attempt_context(attempt), comment.awards_context(prizes)])))
     return Night(
-        f"{attempt.name} ({_day(date)}) · {clean_title(title)}", date, [BossReport(attempt, ps, notes)], ps, notes,
+        f"{attempt.name} ({_day(date)}) · {clean_title(title)}", date, [BossReport(attempt, ps, notes, prizes)], ps, notes,
         cfg.get("max_missed_fights", 1), "Boss",
     )

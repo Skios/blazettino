@@ -3,7 +3,7 @@ deaths, interrupts and dispels. Pure functions: events in, plain dict out (JSON-
 import bisect
 import dataclasses
 import json
-from collections import defaultdict
+from collections import Counter, defaultdict
 from statistics import mean
 
 from blazettino import wcl
@@ -104,3 +104,27 @@ def annotate(players: list, code: str, fight_id: int, spells: dict) -> list:
     """Players with the notable events of the fight attached (read-only for the grade)."""
     found = notes(fight_profile(code, fight_id), spells)
     return [dataclasses.replace(p, notes=tuple(found.get(p.name, ()))) for p in players]
+
+
+def performance(code: str, fight_id: int) -> dict[str, dict]:
+    """Per player of one fight: seconds spent damaging and healing (WarcraftLogs active time) and spells cast."""
+    f = wcl.report(code, "fights(fightIDs:[%d]){startTime endTime}" % fight_id)["fights"][0]
+    actors = wcl.report(code, "masterData{actors{id name type}}")["masterData"]["actors"]
+    names = {a["id"]: a["name"] for a in actors if a["type"] == "Player"}
+    active = {kind: {e["name"]: e["activeTime"] / 1000 for e in
+                     wcl.report(code, "table(dataType:%s,fightIDs:[%d])" % (kind, fight_id))["table"]["data"]["entries"]}
+              for kind in ("DamageDone", "Healing")}
+    casts = Counter(names[e["sourceID"]] for e in wcl.events(code, fight_id, f["startTime"], f["endTime"], "Casts")
+                    if e["type"] == "cast" and e["sourceID"] in names)
+    return {n: {"damage_s": active["DamageDone"].get(n, 0.0), "healing_s": active["Healing"].get(n, 0.0), "casts": casts[n]}
+            for n in names.values()}
+
+
+def with_performance(players: list, code: str, fight_id: int) -> list:
+    """Players with active seconds (the healing time for healers, the damage time for the others) and casts attached."""
+    perf = performance(code, fight_id)
+    out = []
+    for p in players:
+        d = perf.get(p.name)
+        out.append(dataclasses.replace(p, active_s=d["healing_s" if p.role == "healer" else "damage_s"], casts=d["casts"]) if d else p)
+    return out

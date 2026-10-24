@@ -32,6 +32,20 @@ class CommentTest(unittest.TestCase):
         self.assertIn("Falling Debris: 10 colpi", comment.facts(p, self.players))
         self.assertNotIn("Fatti del fight", comment.facts(self.players[1], self.players))
 
+    def test_award_comments_ride_in_the_same_reply_under_premio_keys(self):
+        from blazettino import awards
+        aw = [awards.Award("anfetamina", "Premio Fatto di Anfetamina", self.players[0].name, "99% di tempo attivo (mediana del raid 80%)")]
+        ctx = comment.awards_context(aw)
+        self.assertIn("premio:anfetamina", ctx)
+        self.assertIn(self.players[0].name, ctx)
+        names = [p.name for p in self.players]
+        reply = json.loads(fake_reply(names))
+        reply["premio:anfetamina"] = {"titolo": "IL FRULLATORE", "commento": "Mai fermo."}
+        reply["premio:inventato"] = {"titolo": "X", "commento": "Y"}
+        out = comment.comments(self.players, {}, generate=lambda p, c: json.dumps(reply), context=ctx)
+        self.assertEqual(out["premio:anfetamina"].text, "Mai fermo.")
+        self.assertEqual(comment.awards_context([]), "")
+
     def test_each_player_line_carries_the_tone_of_its_grade_band(self):
         top = max(self.players, key=kpi.grade)
         low = min(self.players, key=kpi.grade)
