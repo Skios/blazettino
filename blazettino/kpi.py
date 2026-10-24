@@ -35,6 +35,14 @@ class Death:
 
 
 @dataclass(frozen=True)
+class SlowDeath:
+    ttd_s: float  # seconds from the last time at full health to the death
+    hits: int  # hits taken in between
+    biggest_pct: float  # biggest single hit, as % of max health
+    spell: str  # what killed
+
+
+@dataclass(frozen=True)
 class Player:
     name: str
     spec: str
@@ -56,6 +64,7 @@ class Player:
     ranked: bool = True  # False: parses are inside-raid percentiles (no WarcraftLogs ranking on wipes)
     active_s: float | None = None  # seconds spent damaging or healing (WarcraftLogs active time), for the prizes
     casts: int | None = None  # spells cast in the fight, for the prizes
+    slowest_death: SlowDeath | None = None  # for the prize 'Il Dimenticato'
     notes: tuple[str, ...] = ()  # notable fight events (profile.notes), told to the LLM, never used in the grade
 
     @property

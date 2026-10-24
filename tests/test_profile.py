@@ -175,5 +175,47 @@ class PerformanceTest(unittest.TestCase):
         self.assertIsNone(out[other.name].active_s)
 
 
+def tick(t_ms, target, hp, amount, max_hp=1000, absorbed=0):
+    """A hit on `target` leaving it at `hp`, with the resources WarcraftLogs adds."""
+    return {"timestamp": 1000 + t_ms, "type": "damage", "targetID": target, "abilityGameID": 10, "amount": amount, "absorbed": absorbed,
+            "hitPoints": hp, "maxHitPoints": max_hp, "resourceActor": 2}
+
+
+def dead(t_ms, target, spell=11):
+    return {"timestamp": 1000 + t_ms, "type": "death", "targetID": target, "killingAbilityGameID": spell}
+
+
+class SlowDeathTest(unittest.TestCase):
+    def run_it(self, damage, deaths):
+        return profile.slow_deaths(damage, deaths, NAMES, SPELLS)
+
+    def test_time_runs_from_the_last_time_at_full_health_to_the_death(self):
+        dmg = [tick(0, 2, 900, 100), tick(5000, 2, 800, 100), tick(30000, 2, 950, 50), tick(40000, 2, 500, 450), tick(60000, 2, 100, 400)]
+        # at 5 s: 100/1000 lost, healed back; at 30 s the hit finds the player at 1000 (950+50): that is the last full health
+        out = self.run_it(dmg, [dead(61000, 2)])
+        d = out["Dps"]
+        self.assertEqual((d.ttd_s, d.hits), (31.0, 3))
+        self.assertEqual(d.biggest_pct, 45.0)
+        self.assertEqual(d.spell, "Stone Venom")
+
+    def test_hits_before_a_previous_death_do_not_count(self):
+        dmg = [tick(0, 2, 900, 100), tick(5000, 2, 400, 500), tick(20000, 2, 500, 100)]
+        out = self.run_it(dmg, [dead(6000, 2), dead(30000, 2)])
+        self.assertEqual(out["Dps"].ttd_s, 6.0)  # the second death never saw full health again: it must not borrow the first moment
+
+    def test_mass_deaths_late_deaths_and_players_never_seen_full_are_left_out(self):
+        crowd = {i: f"P{i}" for i in range(1, 12)}
+        dmg = [tick(0, i, 500, 500) for i in crowd]
+        out = profile.slow_deaths(dmg, [dead(20000, i) for i in crowd], crowd, SPELLS)
+        self.assertEqual(out, {})  # everyone died together: nobody was forgotten
+        self.assertEqual(self.run_it([tick(0, 2, 500, 100)], [dead(30000, 2)]), {})  # first seen already hurt: no full-health moment
+
+    def test_the_slowest_of_several_deaths_is_kept_and_unknown_targets_are_ignored(self):
+        dmg = [tick(0, 2, 900, 100), tick(10000, 2, 100, 900), tick(50000, 2, 950, 50), tick(80000, 2, 100, 850), tick(0, 99, 900, 100)]
+        out = self.run_it(dmg, [dead(11000, 2), dead(81000, 2), dead(5000, 99)])
+        self.assertEqual(list(out), ["Dps"])
+        self.assertEqual(out["Dps"].ttd_s, 31.0)
+
+
 if __name__ == "__main__":
     unittest.main()

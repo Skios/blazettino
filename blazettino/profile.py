@@ -6,7 +6,7 @@ import json
 from collections import Counter, defaultdict
 from statistics import mean
 
-from blazettino import wcl
+from blazettino import kpi, wcl
 from blazettino.abilities import METRIC_TEXT
 
 DEAD_CUTOFF = 5  # hits taken when more raiders than this are already dead are ignored (Wipefest does the same)
@@ -128,3 +128,46 @@ def with_performance(players: list, code: str, fight_id: int) -> list:
         d = perf.get(p.name)
         out.append(dataclasses.replace(p, active_s=d["healing_s" if p.role == "healer" else "damage_s"], casts=d["casts"]) if d else p)
     return out
+
+
+FULL_HEALTH = 0.99  # a hit that finds the player at or above this share of max health marks "full health"
+
+
+def slow_deaths(damage: list[dict], deaths: list[dict], names: dict[int, str], spells: dict[int, str]) -> dict[str, kpi.SlowDeath]:
+    """Per player, the slowest death: seconds from the last hit that found them at full health to the death, the hits in
+    between and the biggest one. Needs damage events with resources. Deaths in a crowd or after too many deaths are left out."""
+    stamps = sorted(d["timestamp"] for d in deaths)
+    hits: dict[int, list[tuple[int, float, float]]] = defaultdict(list)  # target -> (time, health before the hit, hit size), as shares
+    for e in damage:
+        if e.get("maxHitPoints") and "hitPoints" in e and e["targetID"] in names:
+            hits[e["targetID"]].append((e["timestamp"], (e["hitPoints"] + e["amount"]) / e["maxHitPoints"],
+                                        (e["amount"] + e.get("absorbed", 0)) / e["maxHitPoints"]))
+    out: dict[str, kpi.SlowDeath] = {}
+    previous: dict[int, int] = {}
+    for i, d in enumerate(sorted(deaths, key=lambda d: d["timestamp"])):
+        t, who = d["timestamp"], d["targetID"]
+        since = previous.get(who, 0)
+        previous[who] = t
+        crowd = sum(abs(s - t) <= kpi.MASS_WINDOW_S * 1000 for s in stamps)
+        if who not in names or i > DEAD_CUTOFF or crowd >= kpi.MASS_DEATHS:
+            continue
+        mine = [h for h in sorted(hits[who]) if since < h[0] <= t]
+        full = [j for j, h in enumerate(mine) if h[1] >= FULL_HEALTH]
+        if not full:
+            continue
+        run = mine[full[-1]:]
+        slow = kpi.SlowDeath((t - run[0][0]) / 1000, len(run), round(max(h[2] for h in run) * 100, 1), _name(spells, d.get("killingAbilityGameID", 0)))
+        if who in names and (names[who] not in out or out[names[who]].ttd_s < slow.ttd_s):
+            out[names[who]] = slow
+    return out
+
+
+def with_slow_deaths(players: list, code: str, fight_id: int) -> list:
+    """Players with their slowest death attached (for the prize 'Il Dimenticato')."""
+    f = wcl.report(code, "fights(fightIDs:[%d]){startTime endTime}" % fight_id)["fights"][0]
+    md = wcl.report(code, "masterData{actors{id name type}abilities{gameID name}}")["masterData"]
+    names = {a["id"]: a["name"] for a in md["actors"] if a["type"] == "Player"}
+    spells = {a["gameID"]: a["name"] for a in md["abilities"]}
+    get = lambda kind, resources=False: wcl.events(code, fight_id, f["startTime"], f["endTime"], kind, resources=resources)
+    found = slow_deaths(get("DamageTaken", True), get("Deaths"), names, spells)
+    return [dataclasses.replace(p, slowest_death=found.get(p.name)) for p in players]

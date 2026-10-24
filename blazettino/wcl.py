@@ -97,12 +97,13 @@ def report(code: str, body: str) -> dict:
     return gql('{reportData{report(code:"%s"){%s}}}' % (code, body))["data"]["reportData"]["report"]
 
 
-def events(code: str, fight_id: int, start: int, end: int, data_type: str, hostility: str = "Friendlies") -> list[dict]:
-    """Every event of one fight and kind, page after page (10000 per page, each page cached by gql)."""
+def events(code: str, fight_id: int, start: int, end: int, data_type: str, hostility: str = "Friendlies", resources: bool = False) -> list[dict]:
+    """Every event of one fight and kind, page after page (10000 per page, each page cached by gql).
+    `resources` adds hit points and position to the events of the players."""
     out = []
     while start is not None:
-        body = ("events(fightIDs:[%d],startTime:%d,endTime:%d,dataType:%s,hostilityType:%s,limit:10000)"
-                "{data nextPageTimestamp}") % (fight_id, start, end, data_type, hostility)
+        body = ("events(fightIDs:[%d],startTime:%d,endTime:%d,dataType:%s,hostilityType:%s,limit:10000%s)"
+                "{data nextPageTimestamp}") % (fight_id, start, end, data_type, hostility, ",includeResources:true" if resources else "")
         page = report(code, body)["events"]
         out += page["data"]
         start = page["nextPageTimestamp"]

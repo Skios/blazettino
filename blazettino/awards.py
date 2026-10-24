@@ -9,6 +9,7 @@ MIN_FIGHT_S = 90  # shorter pulls say nothing about activity or speed
 MIN_ALIVE_SHARE = 0.3  # a raider dead before this share of the fight is left out
 ACTIVE_GAP = 5.0  # percentage points from the median to win the activity prizes
 APM_GAP = 0.25  # share of the median to win the actions-per-minute prizes
+MIN_TTD_S = 20  # a death is 'slow' from this many seconds after the last time at full health
 
 
 @dataclass(frozen=True)
@@ -47,6 +48,16 @@ def _pair(rows: dict[str, tuple[float, str]], alive: dict[str, float], gap: floa
     return out
 
 
+def _forgotten(players: list[kpi.Player]) -> list[Award]:
+    slow = [p for p in players if p.slowest_death and p.slowest_death.ttd_s >= MIN_TTD_S]
+    if not slow:
+        return []
+    p = max(sorted(slow, key=lambda p: p.name), key=lambda p: p.slowest_death.ttd_s)
+    d = p.slowest_death
+    return [Award("dimenticato", "Premio Il Dimenticato", p.name,
+                  f"{d.ttd_s:.0f} secondi dall'ultima volta a vita piena alla morte, {d.hits} colpi, il più grosso il {d.biggest_pct:g}% della vita, ucciso da {d.spell}")]
+
+
 def compute(players: list[kpi.Player], duration_s: int) -> list[Award]:
     if duration_s < MIN_FIGHT_S:
         return []
@@ -55,6 +66,7 @@ def compute(players: list[kpi.Player], duration_s: int) -> list[Award]:
     active = {p.name: (min(100.0, p.active_s / alive[p.name] * 100), _pool(p)) for p in seen if p.active_s is not None}
     apm = {p.name: (p.casts / (alive[p.name] / 60), _pool(p)) for p in seen if p.casts is not None}
     return [
+        *_forgotten(players),
         *_pair(active, alive, ACTIVE_GAP, False, ("anfetamina", "Premio Fatto di Anfetamina"), ("bradipo", "Premio Bradipo"),
                lambda v, m, who: f"{v:.0f}% di tempo attivo (mediana {who}: {m:.0f}%)"),
         *_pair(apm, alive, APM_GAP, True, ("spaccatastiere", "Premio Spaccatastiere"), ("tastiera", "Premio Tastiera Arrugginita"),

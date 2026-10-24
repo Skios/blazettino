@@ -58,6 +58,18 @@ class AwardsTest(unittest.TestCase):
         died = [replace(p, deaths=(kpi.Death(300, "Test", False),), active_s=290) if p.name == "Yorda" else p for p in ps]
         self.assertEqual(self.by_key(died)["anfetamina"].winner, "Yorda")  # 290 s active in the 300 s alive = 97%
 
+    def test_the_forgotten_is_the_slowest_death_if_it_is_slow_enough(self):
+        ps = with_stats({})
+        slow = kpi.SlowDeath(75.0, 14, 6.0, "Stone Venom")
+        quick = kpi.SlowDeath(8.0, 2, 40.0, "Fury Unleashed")
+        ps = [replace(p, slowest_death=slow if p.name == "Madreh" else quick if p.name == "Yorda" else None) for p in ps]
+        got = self.by_key(ps)
+        self.assertEqual(got["dimenticato"].winner, "Madreh")
+        self.assertIn("75 secondi", got["dimenticato"].value)
+        self.assertIn("14 colpi", got["dimenticato"].value)
+        only_quick = [replace(p, slowest_death=quick if p.name == "Yorda" else None) for p in with_stats({})]
+        self.assertNotIn("dimenticato", self.by_key(only_quick))  # 8 s is not a slow death: not given tonight
+
     def test_players_without_data_are_ignored(self):
         ps = [replace(p, active_s=None, casts=None) for p in players(21)]
         self.assertEqual(awards.compute(ps, 600), [])
