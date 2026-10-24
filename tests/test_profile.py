@@ -37,6 +37,11 @@ class ProfileTest(unittest.TestCase):
         self.assertEqual(p["interrupts"], {"Tank": [{"s": 1, "spell": "Stone Venom"}]})
         self.assertEqual(p["dispels"], {"Heal": [{"s": 1, "spell": "Falling Debris"}]})
 
+    def test_an_interrupt_or_dispel_without_the_target_spell_does_not_crash(self):
+        p = build(interrupts=[{"timestamp": 2000, "sourceID": 1, "abilityGameID": 20}], dispels=[{"timestamp": 2000, "sourceID": 3, "abilityGameID": 30}])
+        self.assertEqual(p["interrupts"]["Tank"][0]["s"], 1)
+        self.assertEqual(len(p["dispels"]["Heal"]), 1)
+
     def test_unknown_actor_or_spell_does_not_crash(self):
         p = build(damage=[hit(0, 99, 777, 5)])
         self.assertEqual(p["damage"]["777"]["players"]["99"]["dmg"], 5)

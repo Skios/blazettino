@@ -38,7 +38,7 @@ def build(start: int, damage: list[dict], deaths: list[dict], interrupts: list[d
                      for e in sorted(deaths, key=lambda e: e["timestamp"])]
     for key, events in (("interrupts", interrupts), ("dispels", dispels)):
         for e in events:
-            out[key][_name(names, e["sourceID"])].append({"s": secs(e), "spell": _name(spells, e["extraAbilityGameID"])})
+            out[key][_name(names, e["sourceID"])].append({"s": secs(e), "spell": _name(spells, e.get("extraAbilityGameID", 0))})
         out[key] = dict(out[key])
     return out
 
