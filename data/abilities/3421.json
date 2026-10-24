@@ -1,0 +1,723 @@
+{
+ "name": "The Twin Fangs",
+ "encounter": 3421,
+ "phases": {},
+ "logs": [
+  "MqzAmrHX72PJwRQ8#34",
+  "MqzAmrHX72PJwRQ8#36",
+  "MqzAmrHX72PJwRQ8#37",
+  "MqzAmrHX72PJwRQ8#38",
+  "MqzAmrHX72PJwRQ8#39",
+  "MqzAmrHX72PJwRQ8#40",
+  "k14HCt3xcZyXbQwq#29"
+ ],
+ "abilities": {
+  "1": {
+   "en": "Melee",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Ithraz",
+    "Vexhul"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 941,
+     "fights": 6
+    }
+   }
+  },
+  "32409": {
+   "en": "Shadow Word: Death",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 59,
+     "fights": 5
+    }
+   }
+  },
+  "145629": {
+   "en": "Anti-Magic Zone",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 12,
+     "hits": 0,
+     "fights": 1
+    }
+   }
+  },
+  "1288538": {
+   "en": "Stone Breaker",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Ithraz"
+   ],
+   "phases": {
+    "1": {
+     "casts": 85,
+     "hits": 0,
+     "fights": 6
+    }
+   }
+  },
+  "1289092": {
+   "en": "Stone Breaker",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Ithraz"
+   ],
+   "phases": {
+    "1": {
+     "casts": 83,
+     "hits": 0,
+     "fights": 6
+    }
+   }
+  },
+  "1289153": {
+   "en": "Stone Breaker",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Ithraz"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 52,
+     "fights": 2
+    }
+   }
+  },
+  "1289154": {
+   "en": "Stone Breaker",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 1,
+     "fights": 1
+    }
+   }
+  },
+  "1289192": {
+   "en": "Caustic Deluge",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vexhul"
+   ],
+   "phases": {
+    "1": {
+     "casts": 32,
+     "hits": 0,
+     "fights": 7
+    }
+   }
+  },
+  "1289201": {
+   "en": "Caustic Globule",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 298,
+     "hits": 298,
+     "fights": 7
+    }
+   }
+  },
+  "1289237": {
+   "en": "Caustic Deluge",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vexhul"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 345,
+     "fights": 7
+    }
+   }
+  },
+  "1289994": {
+   "en": "Caustic Deluge",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vexhul"
+   ],
+   "phases": {
+    "1": {
+     "casts": 312,
+     "hits": 34,
+     "fights": 7
+    }
+   }
+  },
+  "1290336": {
+   "en": "Eternal Venom",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Spawn of Vexhul",
+    "Vexhul"
+   ],
+   "phases": {
+    "1": {
+     "casts": 1125,
+     "hits": 0,
+     "fights": 7
+    }
+   }
+  },
+  "1290338": {
+   "en": "Caustic Globule",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vexhul"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 76,
+     "fights": 4
+    }
+   }
+  },
+  "1290480": {
+   "en": "Eternal Venom",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vexhul"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 32012,
+     "fights": 7
+    }
+   }
+  },
+  "1290516": {
+   "en": "Ravenous Feast",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Ithraz"
+   ],
+   "phases": {
+    "1": {
+     "casts": 26,
+     "hits": 0,
+     "fights": 6
+    }
+   }
+  },
+  "1290662": {
+   "en": "Ravenous Feast",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Ithraz"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 422,
+     "fights": 6
+    }
+   }
+  },
+  "1290809": {
+   "en": "Coiling Ichor",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Ithraz"
+   ],
+   "phases": {
+    "1": {
+     "casts": 27,
+     "hits": 0,
+     "fights": 6
+    }
+   }
+  },
+  "1290878": {
+   "en": "Coiling Ichor",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Ithraz"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 3366,
+     "fights": 6
+    }
+   }
+  },
+  "1290956": {
+   "en": "Stir the Depths",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vexhul"
+   ],
+   "phases": {
+    "1": {
+     "casts": 27,
+     "hits": 0,
+     "fights": 6
+    }
+   }
+  },
+  "1291404": {
+   "en": "Venomous Emergence",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vexhul"
+   ],
+   "phases": {
+    "1": {
+     "casts": 27,
+     "hits": 0,
+     "fights": 6
+    }
+   }
+  },
+  "1291478": {
+   "en": "Corrosive Spit",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Spawn of Vexhul"
+   ],
+   "phases": {
+    "1": {
+     "casts": 64,
+     "hits": 0,
+     "fights": 6
+    }
+   }
+  },
+  "1292348": {
+   "en": "Eternal Venom",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vexhul"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 7,
+     "fights": 2
+    }
+   }
+  },
+  "1292552": {
+   "en": "Congealed Gore",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Ithraz"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 207,
+     "fights": 6
+    }
+   }
+  },
+  "1292806": {
+   "en": "Stir the Depths",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vexhul"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 1691,
+     "fights": 6
+    }
+   }
+  },
+  "1292807": {
+   "en": "Stir the Depths",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vexhul"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 23,
+     "fights": 6
+    }
+   }
+  },
+  "1293295": {
+   "en": "Corrosive Spit",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Spawn of Vexhul"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 73,
+     "fights": 6
+    }
+   }
+  },
+  "1294293": {
+   "en": "Vile Flood",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vexhul"
+   ],
+   "phases": {
+    "1": {
+     "casts": 10,
+     "hits": 0,
+     "fights": 5
+    }
+   }
+  },
+  "1294605": {
+   "en": "Vile Flood",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vexhul"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 47,
+     "fights": 5
+    }
+   }
+  },
+  "1294976": {
+   "en": "Toxic Fumes",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 18102,
+     "fights": 7
+    }
+   }
+  },
+  "1295107": {
+   "en": "Concentrated Spittle",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vexhul"
+   ],
+   "phases": {
+    "1": {
+     "casts": 19,
+     "hits": 17,
+     "fights": 6
+    }
+   }
+  },
+  "1295115": {
+   "en": "Clotted Bolt",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Ithraz"
+   ],
+   "phases": {
+    "1": {
+     "casts": 10,
+     "hits": 10,
+     "fights": 4
+    }
+   }
+  },
+  "1297338": {
+   "en": "Deadly Venom",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 209,
+     "fights": 7
+    }
+   }
+  },
+  "1306872": {
+   "en": "Sanguine Storm",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Ithraz"
+   ],
+   "phases": {
+    "1": {
+     "casts": 10,
+     "hits": 0,
+     "fights": 5
+    }
+   }
+  },
+  "1306876": {
+   "en": "Sanguine Storm",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Ithraz"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 21,
+     "fights": 5
+    }
+   }
+  },
+  "1306925": {
+   "en": "Congealed Gore",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Ithraz"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 15,
+     "fights": 4
+    }
+   }
+  },
+  "1307764": {
+   "en": "Venomous Emergence",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vexhul"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 3,
+     "fights": 2
+    }
+   }
+  },
+  "1308122": {
+   "en": "Venomous Emergence",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vexhul"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 428,
+     "fights": 6
+    }
+   }
+  },
+  "1308835": {
+   "en": "Caustic Rain",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vexhul"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 105,
+     "fights": 1
+    }
+   }
+  },
+  "1309471": {
+   "en": "Noxious Slick",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Ithraz",
+    "Vexhul"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 42,
+     "fights": 5
+    }
+   }
+  },
+  "1310211": {
+   "en": "Ravenous Feast",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 2,
+     "fights": 1
+    }
+   }
+  },
+  "1310287": {
+   "en": "Flames of Ula'tek",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vexhul"
+   ],
+   "phases": {
+    "1": {
+     "casts": 13,
+     "hits": 16,
+     "fights": 1
+    }
+   }
+  },
+  "1310360": {
+   "en": "Envenomed",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vexhul"
+   ],
+   "phases": {
+    "1": {
+     "casts": 345,
+     "hits": 0,
+     "fights": 7
+    }
+   }
+  },
+  "1310371": {
+   "en": "Stone Breaker",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Ithraz"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 83,
+     "fights": 6
+    }
+   }
+  },
+  "1313533": {
+   "en": "Sanguine Storm",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Ithraz"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 105,
+     "fights": 1
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,492 @@
+{
+ "name": "Vashnik the Malignant",
+ "encounter": 3455,
+ "phases": {},
+ "logs": [
+  "MqzAmrHX72PJwRQ8#15",
+  "MqzAmrHX72PJwRQ8#16",
+  "k14HCt3xcZyXbQwq#7"
+ ],
+ "abilities": {
+  "1": {
+   "en": "Melee",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vashnik"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 269,
+     "fights": 3
+    }
+   }
+  },
+  "32409": {
+   "en": "Shadow Word: Death",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 17,
+     "fights": 2
+    }
+   }
+  },
+  "145629": {
+   "en": "Anti-Magic Zone",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 36,
+     "hits": 0,
+     "fights": 1
+    }
+   }
+  },
+  "1280189": {
+   "en": "Malignant Burst",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Shrouded Venom"
+   ],
+   "phases": {
+    "1": {
+     "casts": 2,
+     "hits": 140,
+     "fights": 1
+    }
+   }
+  },
+  "1280934": {
+   "en": "Dripping Fangs",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vashnik"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 540,
+     "fights": 3
+    }
+   }
+  },
+  "1280935": {
+   "en": "Dripping Fangs",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vashnik"
+   ],
+   "phases": {
+    "1": {
+     "casts": 36,
+     "hits": 36,
+     "fights": 3
+    }
+   }
+  },
+  "1281925": {
+   "en": "Plague Froth",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vashnik"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 1264,
+     "fights": 3
+    }
+   }
+  },
+  "1282509": {
+   "en": "Malignant Catalyst",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vashnik"
+   ],
+   "phases": {
+    "1": {
+     "casts": 23,
+     "hits": 0,
+     "fights": 3
+    }
+   }
+  },
+  "1282516": {
+   "en": "Malignant Catalyst",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vashnik"
+   ],
+   "phases": {
+    "1": {
+     "casts": 22,
+     "hits": 0,
+     "fights": 3
+    }
+   }
+  },
+  "1282525": {
+   "en": "Malignant Catalyst",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vashnik"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 376,
+     "fights": 3
+    }
+   }
+  },
+  "1282602": {
+   "en": "Catalytic Bile",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vashnik"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 121,
+     "fights": 3
+    }
+   }
+  },
+  "1282616": {
+   "en": "Catalytic Bile",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vashnik"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 90,
+     "fights": 2
+    }
+   }
+  },
+  "1284561": {
+   "en": "Toxic Vapor",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vashnik"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 8376,
+     "fights": 3
+    }
+   }
+  },
+  "1284663": {
+   "en": "Imbibe",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vashnik"
+   ],
+   "phases": {
+    "1": {
+     "casts": 13,
+     "hits": 0,
+     "fights": 3
+    }
+   }
+  },
+  "1285979": {
+   "en": "Caustic Surge",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Burning Venom"
+   ],
+   "phases": {
+    "1": {
+     "casts": 22,
+     "hits": 1909,
+     "fights": 3
+    }
+   }
+  },
+  "1286872": {
+   "en": "Malignant Burst",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Shrouded Venom"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 1,
+     "fights": 1
+    }
+   }
+  },
+  "1291461": {
+   "en": "Virulent Fumes",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 4,
+     "fights": 2
+    }
+   }
+  },
+  "1291467": {
+   "en": "Virulent Fumes",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vashnik"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 718,
+     "fights": 3
+    }
+   }
+  },
+  "1294994": {
+   "en": "Stygian Infection",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vashnik"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 123,
+     "fights": 3
+    }
+   }
+  },
+  "1295173": {
+   "en": "Exploding Infection",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vashnik"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 307,
+     "fights": 3
+    }
+   }
+  },
+  "1295209": {
+   "en": "Caustic Explosion",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vashnik"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 717,
+     "fights": 3
+    }
+   }
+  },
+  "1295798": {
+   "en": "Plague Wave",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vashnik"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 85,
+     "fights": 3
+    }
+   }
+  },
+  "1297338": {
+   "en": "Deadly Venom",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 13,
+     "fights": 2
+    }
+   }
+  },
+  "1298583": {
+   "en": "Gloom Expulsion",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vashnik"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 211,
+     "fights": 3
+    }
+   }
+  },
+  "1298587": {
+   "en": "Conflagrating Expulsion",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vashnik"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 211,
+     "fights": 3
+    }
+   }
+  },
+  "1302489": {
+   "en": "Stygian Burst",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Vashnik"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 39,
+     "fights": 3
+    }
+   }
+  },
+  "1305826": {
+   "en": "Congealing Bolt",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Shrouded Venom"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 2,
+     "fights": 2
+    }
+   }
+  },
+  "1305832": {
+   "en": "Congealing Bolt",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Shrouded Venom"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 2,
+     "fights": 2
+    }
+   }
+  },
+  "1305833": {
+   "en": "Congealing Bolt",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Shrouded Venom"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 495,
+     "fights": 3
+    }
+   }
+  },
+  "1305901": {
+   "en": "Burning Presence",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Burning Venom"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 1490,
+     "fights": 3
+    }
+   }
+  }
+ }
+}

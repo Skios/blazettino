@@ -1,0 +1,451 @@
+{
+ "name": "Sszorak",
+ "encounter": 3420,
+ "phases": {
+  "1": "Sszorak",
+  "2": "Howling Maelstrom"
+ },
+ "logs": [
+  "MqzAmrHX72PJwRQ8#28",
+  "k14HCt3xcZyXbQwq#15",
+  "k14HCt3xcZyXbQwq#16"
+ ],
+ "abilities": {
+  "1": {
+   "en": "Melee",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Sszorak"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 235,
+     "fights": 3
+    }
+   }
+  },
+  "3": {
+   "en": "Falling",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 1,
+     "fights": 1
+    }
+   }
+  },
+  "32409": {
+   "en": "Shadow Word: Death",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 12,
+     "fights": 1
+    },
+    "2": {
+     "casts": 0,
+     "hits": 2,
+     "fights": 1
+    }
+   }
+  },
+  "132466": {
+   "en": "Chi Wave",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Sszorak"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 1,
+     "fights": 1
+    }
+   }
+  },
+  "1277002": {
+   "en": "Ravage",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Sszorak"
+   ],
+   "phases": {
+    "1": {
+     "casts": 28,
+     "hits": 0,
+     "fights": 3
+    }
+   }
+  },
+  "1277027": {
+   "en": "Mutilate",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Sszorak"
+   ],
+   "phases": {
+    "1": {
+     "casts": 29,
+     "hits": 0,
+     "fights": 3
+    }
+   }
+  },
+  "1277031": {
+   "en": "Mutilate",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Sszorak"
+   ],
+   "phases": {
+    "1": {
+     "casts": 29,
+     "hits": 0,
+     "fights": 3
+    }
+   }
+  },
+  "1277101": {
+   "en": "Ravage",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Sszorak"
+   ],
+   "phases": {
+    "1": {
+     "casts": 28,
+     "hits": 28,
+     "fights": 3
+    }
+   }
+  },
+  "1285419": {
+   "en": "Raging Crosswinds",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 13,
+     "hits": 0,
+     "fights": 3
+    }
+   }
+  },
+  "1285425": {
+   "en": "Raging Crosswinds",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Sszorak"
+   ],
+   "phases": {
+    "1": {
+     "casts": 39,
+     "hits": 0,
+     "fights": 3
+    }
+   }
+  },
+  "1285444": {
+   "en": "Raging Crosswinds",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 1,
+     "fights": 1
+    }
+   }
+  },
+  "1285453": {
+   "en": "Raging Crosswinds",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Sszorak"
+   ],
+   "phases": {
+    "1": {
+     "casts": 39,
+     "hits": 0,
+     "fights": 3
+    }
+   }
+  },
+  "1285616": {
+   "en": "Raging Crosswinds",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Sszorak"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 85,
+     "fights": 3
+    }
+   }
+  },
+  "1285965": {
+   "en": "Ula'tek's Presence",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 5861,
+     "fights": 3
+    },
+    "2": {
+     "casts": 0,
+     "hits": 1043,
+     "fights": 3
+    }
+   }
+  },
+  "1285998": {
+   "en": "Mutilated Gash",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Sszorak"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 4166,
+     "fights": 3
+    }
+   }
+  },
+  "1285999": {
+   "en": "Mutilate",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Sszorak"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 206,
+     "fights": 3
+    }
+   }
+  },
+  "1286033": {
+   "en": "Dig In",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Sszorak"
+   ],
+   "phases": {
+    "2": {
+     "casts": 6,
+     "hits": 0,
+     "fights": 3
+    }
+   }
+  },
+  "1287072": {
+   "en": "Tempest",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Sszorak"
+   ],
+   "phases": {
+    "1": {
+     "casts": 14,
+     "hits": 0,
+     "fights": 3
+    }
+   }
+  },
+  "1287083": {
+   "en": "Tempest",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Sszorak"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 1197,
+     "fights": 3
+    },
+    "2": {
+     "casts": 0,
+     "hits": 46,
+     "fights": 3
+    }
+   }
+  },
+  "1287177": {
+   "en": "Venomous Surge",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 1,
+     "fights": 1
+    }
+   }
+  },
+  "1287205": {
+   "en": "Viscous Cyst",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Sszorak"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 1323,
+     "fights": 3
+    },
+    "1": {
+     "casts": 0,
+     "hits": 596,
+     "fights": 3
+    }
+   }
+  },
+  "1305959": {
+   "en": "Venomous Surge",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Sszorak"
+   ],
+   "phases": {
+    "1": {
+     "casts": 14,
+     "hits": 0,
+     "fights": 3
+    }
+   }
+  },
+  "1305998": {
+   "en": "Caustic Claws",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Sszorak"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 10,
+     "fights": 3
+    }
+   }
+  },
+  "1306120": {
+   "en": "Venomous Surge",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Sszorak"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 396,
+     "fights": 3
+    }
+   }
+  },
+  "1312156": {
+   "en": "Venomous Surge",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Sszorak"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 253,
+     "fights": 3
+    }
+   }
+  },
+  "1312219": {
+   "en": "Raging Crosswinds",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Sszorak"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 618,
+     "fights": 3
+    }
+   }
+  }
+ }
+}

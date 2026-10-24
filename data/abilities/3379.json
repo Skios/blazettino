@@ -1,0 +1,315 @@
+{
+ "name": "Nymrissa Wavecaller",
+ "encounter": 3379,
+ "phases": {},
+ "logs": [
+  "MqzAmrHX72PJwRQ8#1"
+ ],
+ "abilities": {
+  "1": {
+   "en": "Melee",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Bubblefin Berserker",
+    "Nymrissa Wavecaller"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 61,
+     "fights": 1
+    }
+   }
+  },
+  "32409": {
+   "en": "Shadow Word: Death",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 9,
+     "fights": 1
+    }
+   }
+  },
+  "1257654": {
+   "en": "Lingering Frost",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nymrissa Wavecaller"
+   ],
+   "phases": {
+    "1": {
+     "casts": 129,
+     "hits": 63,
+     "fights": 1
+    }
+   }
+  },
+  "1257717": {
+   "en": "Alluring Bubble",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nymrissa Wavecaller"
+   ],
+   "phases": {
+    "1": {
+     "casts": 4,
+     "hits": 0,
+     "fights": 1
+    }
+   }
+  },
+  "1258150": {
+   "en": "Pop!",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 3,
+     "hits": 0,
+     "fights": 1
+    }
+   }
+  },
+  "1258154": {
+   "en": "Pop!",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nymrissa Wavecaller"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 3,
+     "fights": 1
+    }
+   }
+  },
+  "1258673": {
+   "en": "Swirling Whirlpools",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nymrissa Wavecaller"
+   ],
+   "phases": {
+    "1": {
+     "casts": 3,
+     "hits": 0,
+     "fights": 1
+    }
+   }
+  },
+  "1258677": {
+   "en": "Swirling Whirlpools",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 11,
+     "fights": 1
+    }
+   }
+  },
+  "1258894": {
+   "en": "Pulsing Tides",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Bubblefin Berserker"
+   ],
+   "phases": {
+    "1": {
+     "casts": 1,
+     "hits": 0,
+     "fights": 1
+    }
+   }
+  },
+  "1260012": {
+   "en": "Alluring Bubble",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Bubblefin Shorerunner"
+   ],
+   "phases": {
+    "1": {
+     "casts": 82,
+     "hits": 0,
+     "fights": 1
+    }
+   }
+  },
+  "1260837": {
+   "en": "Abyssal Rain",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nymrissa Wavecaller"
+   ],
+   "phases": {
+    "1": {
+     "casts": 8,
+     "hits": 0,
+     "fights": 1
+    }
+   }
+  },
+  "1260843": {
+   "en": "Abyssal Rain",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nymrissa Wavecaller"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 2108,
+     "fights": 1
+    }
+   }
+  },
+  "1266340": {
+   "en": "Pop!",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 44,
+     "fights": 1
+    }
+   }
+  },
+  "1271380": {
+   "en": "Pulsing Tides",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Bubblefin Berserker"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 56,
+     "fights": 1
+    }
+   }
+  },
+  "1282937": {
+   "en": "Iceblade Flurry",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nymrissa Wavecaller"
+   ],
+   "phases": {
+    "1": {
+     "casts": 14,
+     "hits": 0,
+     "fights": 1
+    }
+   }
+  },
+  "1282945": {
+   "en": "Iceblade Flurry",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nymrissa Wavecaller"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 84,
+     "fights": 1
+    }
+   }
+  },
+  "1284015": {
+   "en": "Alluring Bubble",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nymrissa Wavecaller"
+   ],
+   "phases": {
+    "1": {
+     "casts": 4,
+     "hits": 0,
+     "fights": 1
+    }
+   }
+  },
+  "1313393": {
+   "en": "Chilling Frost",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nymrissa Wavecaller"
+   ],
+   "phases": {
+    "1": {
+     "casts": 7,
+     "hits": 63,
+     "fights": 1
+    }
+   }
+  },
+  "1313448": {
+   "en": "Frost Orb",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nymrissa Wavecaller"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 307,
+     "fights": 1
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,1169 @@
+{
+ "name": "The Coiled Altar",
+ "encounter": 3429,
+ "phases": {
+  "1": "Stage One: Serpent's Bargain",
+  "2": "Stage Two: Usurper's Reprisal",
+  "3": "Intermission: The Claimed Vessel",
+  "4": "Stage Three: Coiled Union"
+ },
+ "logs": [
+  "zVgjNA4ChyMx1pG7#1",
+  "zVgjNA4ChyMx1pG7#2",
+  "zVgjNA4ChyMx1pG7#3",
+  "zVgjNA4ChyMx1pG7#4",
+  "zVgjNA4ChyMx1pG7#5",
+  "zVgjNA4ChyMx1pG7#6",
+  "zVgjNA4ChyMx1pG7#7",
+  "RaZCT7cxPbwQ4VNA#12",
+  "RaZCT7cxPbwQ4VNA#13",
+  "RaZCT7cxPbwQ4VNA#14",
+  "RaZCT7cxPbwQ4VNA#15",
+  "RaZCT7cxPbwQ4VNA#16",
+  "RaZCT7cxPbwQ4VNA#17"
+ ],
+ "abilities": {
+  "1": {
+   "en": "Melee",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 416,
+     "fights": 13
+    },
+    "4": {
+     "casts": 0,
+     "hits": 490,
+     "fights": 7
+    }
+   }
+  },
+  "32409": {
+   "en": "Shadow Word: Death",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 65,
+     "fights": 13
+    },
+    "2": {
+     "casts": 0,
+     "hits": 41,
+     "fights": 12
+    },
+    "3": {
+     "casts": 0,
+     "hits": 9,
+     "fights": 7
+    },
+    "4": {
+     "casts": 0,
+     "hits": 50,
+     "fights": 6
+    }
+   }
+  },
+  "132466": {
+   "en": "Chi Wave",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Hex Lord Malacrass",
+    "Zul'jan"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 2,
+     "fights": 2
+    },
+    "2": {
+     "casts": 0,
+     "hits": 3,
+     "fights": 2
+    },
+    "4": {
+     "casts": 0,
+     "hits": 2,
+     "fights": 1
+    }
+   }
+  },
+  "145629": {
+   "en": "Anti-Magic Zone",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "2": {
+     "casts": 151,
+     "hits": 0,
+     "fights": 7
+    },
+    "4": {
+     "casts": 15,
+     "hits": 0,
+     "fights": 1
+    },
+    "1": {
+     "casts": 14,
+     "hits": 0,
+     "fights": 1
+    }
+   }
+  },
+  "1282287": {
+   "en": "Venomfang",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "1": {
+     "casts": 35,
+     "hits": 0,
+     "fights": 13
+    }
+   }
+  },
+  "1282288": {
+   "en": "Volatile Venom",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 2146,
+     "fights": 13
+    },
+    "4": {
+     "casts": 0,
+     "hits": 1161,
+     "fights": 7
+    }
+   }
+  },
+  "1282408": {
+   "en": "Coalesced Venom",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 64391,
+     "fights": 13
+    },
+    "4": {
+     "casts": 0,
+     "hits": 84294,
+     "fights": 7
+    }
+   }
+  },
+  "1282487": {
+   "en": "Fangs of the Coiled Altar",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "1": {
+     "casts": 26,
+     "hits": 0,
+     "fights": 13
+    }
+   }
+  },
+  "1282512": {
+   "en": "Fangs of the Coiled Altar",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 3960,
+     "fights": 13
+    }
+   }
+  },
+  "1283290": {
+   "en": "Noxious Ground",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "1": {
+     "casts": 167,
+     "hits": 401,
+     "fights": 13
+    }
+   }
+  },
+  "1283485": {
+   "en": "Guillotine",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "1": {
+     "casts": 15,
+     "hits": 0,
+     "fights": 13
+    }
+   }
+  },
+  "1283489": {
+   "en": "Guillotine",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "1": {
+     "casts": 13,
+     "hits": 0,
+     "fights": 13
+    }
+   }
+  },
+  "1283594": {
+   "en": "Guillotine",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 75,
+     "fights": 13
+    }
+   }
+  },
+  "1283606": {
+   "en": "Execution",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 22,
+     "fights": 1
+    }
+   }
+  },
+  "1283623": {
+   "en": "Widow's Kiss",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 3,
+     "fights": 2
+    }
+   }
+  },
+  "1283631": {
+   "en": "Widow's Touch",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 243,
+     "fights": 13
+    }
+   }
+  },
+  "1283832": {
+   "en": "Axegrinder",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "1": {
+     "casts": 26,
+     "hits": 0,
+     "fights": 13
+    }
+   }
+  },
+  "1283840": {
+   "en": "Axegrinder",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 2,
+     "fights": 2
+    }
+   }
+  },
+  "1283841": {
+   "en": "Axegrinder",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Axegrinder"
+   ],
+   "phases": {
+    "1": {
+     "casts": 130,
+     "hits": 0,
+     "fights": 13
+    }
+   }
+  },
+  "1285017": {
+   "en": "Axegrinder",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Axegrinder"
+   ],
+   "phases": {
+    "1": {
+     "casts": 458,
+     "hits": 1707,
+     "fights": 13
+    },
+    "2": {
+     "casts": 217,
+     "hits": 717,
+     "fights": 12
+    }
+   }
+  },
+  "1285643": {
+   "en": "Dreadmarch",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Hex Lord Malacrass"
+   ],
+   "phases": {
+    "2": {
+     "casts": 37,
+     "hits": 0,
+     "fights": 13
+    },
+    "4": {
+     "casts": 13,
+     "hits": 0,
+     "fights": 6
+    }
+   }
+  },
+  "1285847": {
+   "en": "Unassailable",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Manifestation of Dread"
+   ],
+   "phases": {
+    "2": {
+     "casts": 262,
+     "hits": 0,
+     "fights": 12
+    },
+    "4": {
+     "casts": 99,
+     "hits": 0,
+     "fights": 7
+    }
+   }
+  },
+  "1285911": {
+   "en": "Unnerving Fixation",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Manifestation of Dread"
+   ],
+   "phases": {
+    "2": {
+     "casts": 259,
+     "hits": 0,
+     "fights": 12
+    },
+    "4": {
+     "casts": 92,
+     "hits": 0,
+     "fights": 7
+    },
+    "3": {
+     "casts": 2,
+     "hits": 0,
+     "fights": 1
+    }
+   }
+  },
+  "1286399": {
+   "en": "Wail of Terror",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Spiteful Soulcoiler"
+   ],
+   "phases": {
+    "3": {
+     "casts": 2,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1286441": {
+   "en": "Spiritcackle",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Hex Lord Malacrass"
+   ],
+   "phases": {
+    "2": {
+     "casts": 35,
+     "hits": 0,
+     "fights": 12
+    }
+   }
+  },
+  "1286620": {
+   "en": "Soul Sever",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Hex Lord Malacrass"
+   ],
+   "phases": {
+    "2": {
+     "casts": 25,
+     "hits": 29,
+     "fights": 12
+    }
+   }
+  },
+  "1286918": {
+   "en": "Eternal Nightfall",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Hex Lord Malacrass"
+   ],
+   "phases": {
+    "4": {
+     "casts": 1,
+     "hits": 46,
+     "fights": 1
+    }
+   }
+  },
+  "1286947": {
+   "en": "Suffocating Darkness",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Hex Lord Malacrass"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 14,
+     "fights": 3
+    },
+    "4": {
+     "casts": 0,
+     "hits": 17,
+     "fights": 4
+    }
+   }
+  },
+  "1287722": {
+   "en": "Spirit Erasure",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Hex Lord Malacrass"
+   ],
+   "phases": {
+    "3": {
+     "casts": 0,
+     "hits": 5448,
+     "fights": 8
+    },
+    "4": {
+     "casts": 0,
+     "hits": 81,
+     "fights": 3
+    }
+   }
+  },
+  "1288624": {
+   "en": "Dreadful Presence",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Hex Lord Malacrass"
+   ],
+   "phases": {
+    "2": {
+     "casts": 13,
+     "hits": 0,
+     "fights": 13
+    }
+   }
+  },
+  "1288635": {
+   "en": "Dreadful Presence",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Hex Lord Malacrass"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 10872,
+     "fights": 13
+    }
+   }
+  },
+  "1297906": {
+   "en": "Gravebound",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Hex Lord Malacrass"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 17,
+     "fights": 5
+    },
+    "4": {
+     "casts": 0,
+     "hits": 10,
+     "fights": 5
+    }
+   }
+  },
+  "1298381": {
+   "en": "Defilement of the Coiled Altar",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "4": {
+     "casts": 16,
+     "hits": 0,
+     "fights": 7
+    }
+   }
+  },
+  "1298594": {
+   "en": "Defilement of the Coiled Altar",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "4": {
+     "casts": 0,
+     "hits": 4,
+     "fights": 2
+    }
+   }
+  },
+  "1298795": {
+   "en": "Corrupted Toxin",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "4": {
+     "casts": 0,
+     "hits": 666,
+     "fights": 7
+    }
+   }
+  },
+  "1299266": {
+   "en": "Grim Guillotine",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "4": {
+     "casts": 11,
+     "hits": 0,
+     "fights": 7
+    }
+   }
+  },
+  "1299267": {
+   "en": "Grim Guillotine",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "4": {
+     "casts": 11,
+     "hits": 0,
+     "fights": 7
+    }
+   }
+  },
+  "1299296": {
+   "en": "Grim Guillotine",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "4": {
+     "casts": 0,
+     "hits": 43,
+     "fights": 7
+    }
+   }
+  },
+  "1299301": {
+   "en": "Grim Execution",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "4": {
+     "casts": 0,
+     "hits": 50,
+     "fights": 4
+    }
+   }
+  },
+  "1299396": {
+   "en": "Death's Embrace",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "4": {
+     "casts": 0,
+     "hits": 1,
+     "fights": 1
+    }
+   }
+  },
+  "1299401": {
+   "en": "Death's Whisper",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "4": {
+     "casts": 0,
+     "hits": 139,
+     "fights": 6
+    }
+   }
+  },
+  "1299684": {
+   "en": "Sever",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "1": {
+     "casts": 68,
+     "hits": 71,
+     "fights": 13
+    }
+   }
+  },
+  "1299838": {
+   "en": "Venom Rupture",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 7593,
+     "fights": 13
+    },
+    "2": {
+     "casts": 0,
+     "hits": 1460,
+     "fights": 13
+    },
+    "4": {
+     "casts": 0,
+     "hits": 3116,
+     "fights": 6
+    }
+   }
+  },
+  "1299960": {
+   "en": "Toxic Deluge",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "1": {
+     "casts": 39,
+     "hits": 0,
+     "fights": 13
+    },
+    "4": {
+     "casts": 27,
+     "hits": 0,
+     "fights": 7
+    }
+   }
+  },
+  "1300137": {
+   "en": "Toxic Deluge",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 17,
+     "fights": 6
+    },
+    "4": {
+     "casts": 0,
+     "hits": 11,
+     "fights": 4
+    }
+   }
+  },
+  "1300322": {
+   "en": "Twinfang Toxin",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 415,
+     "fights": 13
+    }
+   }
+  },
+  "1304028": {
+   "en": "Deathguard",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Hex Lord Malacrass"
+   ],
+   "phases": {
+    "3": {
+     "casts": 9,
+     "hits": 0,
+     "fights": 9
+    }
+   }
+  },
+  "1304032": {
+   "en": "Soulbinding",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Hex Lord Malacrass"
+   ],
+   "phases": {
+    "3": {
+     "casts": 9,
+     "hits": 0,
+     "fights": 9
+    }
+   }
+  },
+  "1304033": {
+   "en": "Ghastly Regeneration",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "3": {
+     "casts": 9,
+     "hits": 0,
+     "fights": 9
+    }
+   }
+  },
+  "1304498": {
+   "en": "Ghastly Regeneration",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "3": {
+     "casts": 9,
+     "hits": 0,
+     "fights": 9
+    }
+   }
+  },
+  "1306906": {
+   "en": "Venomfang",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 467,
+     "fights": 13
+    },
+    "2": {
+     "casts": 0,
+     "hits": 95,
+     "fights": 7
+    }
+   }
+  },
+  "1307184": {
+   "en": "Dread Bolt",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Hex Lord Malacrass"
+   ],
+   "phases": {
+    "2": {
+     "casts": 299,
+     "hits": 296,
+     "fights": 13
+    },
+    "4": {
+     "casts": 411,
+     "hits": 409,
+     "fights": 7
+    }
+   }
+  },
+  "1307292": {
+   "en": "Blighted Sever",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Zul'jan"
+   ],
+   "phases": {
+    "4": {
+     "casts": 31,
+     "hits": 36,
+     "fights": 6
+    }
+   }
+  },
+  "1308011": {
+   "en": "Wail of Terror",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Spiteful Soulcoiler"
+   ],
+   "phases": {
+    "2": {
+     "casts": 38,
+     "hits": 0,
+     "fights": 12
+    },
+    "3": {
+     "casts": 5,
+     "hits": 0,
+     "fights": 4
+    }
+   }
+  },
+  "1308311": {
+   "en": "Retaliatory Malice",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Spiteful Soulcoiler"
+   ],
+   "phases": {
+    "2": {
+     "casts": 32,
+     "hits": 0,
+     "fights": 12
+    }
+   }
+  },
+  "1308323": {
+   "en": "Retaliatory Malice",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Spiteful Soulcoiler"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 486,
+     "fights": 12
+    },
+    "3": {
+     "casts": 0,
+     "hits": 77,
+     "fights": 5
+    }
+   }
+  },
+  "1308330": {
+   "en": "Gravebound",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Hex Lord Malacrass"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 319,
+     "fights": 12
+    },
+    "3": {
+     "casts": 0,
+     "hits": 12,
+     "fights": 2
+    },
+    "4": {
+     "casts": 0,
+     "hits": 272,
+     "fights": 6
+    }
+   }
+  },
+  "1310882": {
+   "en": "Gloombomb",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Hex Lord Malacrass"
+   ],
+   "phases": {
+    "2": {
+     "casts": 27,
+     "hits": 0,
+     "fights": 12
+    },
+    "4": {
+     "casts": 22,
+     "hits": 0,
+     "fights": 6
+    }
+   }
+  },
+  "1310883": {
+   "en": "Gloombomb",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Hex Lord Malacrass"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 96,
+     "fights": 12
+    },
+    "3": {
+     "casts": 0,
+     "hits": 10,
+     "fights": 2
+    },
+    "4": {
+     "casts": 0,
+     "hits": 69,
+     "fights": 6
+    }
+   }
+  },
+  "1312424": {
+   "en": "Unworthy",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Hex Lord Malacrass"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 4,
+     "fights": 3
+    },
+    "4": {
+     "casts": 0,
+     "hits": 1,
+     "fights": 1
+    }
+   }
+  },
+  "1312630": {
+   "en": "Soul Sever",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Hex Lord Malacrass"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 481,
+     "fights": 12
+    },
+    "3": {
+     "casts": 0,
+     "hits": 64,
+     "fights": 8
+    }
+   }
+  }
+ }
+}

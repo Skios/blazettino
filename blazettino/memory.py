@@ -16,15 +16,16 @@ DB = ROOT / "data" / "memoria.db"
 TREND_NIGHTS = 4  # nights looked at (config "trend_nights")
 BETTER, WORSE = 0.5, 1.5  # tonight's hits per fight against the earlier average: below half = better, above 1.5x = worse
 MAX_TREND = 3  # trend lines per person
+MIN_RATE = 0.25  # hits per fight under which a mechanic counts as not taken (a stray hit is not a trend)
 SCHEMA = """
 create table if not exists fight(codice text, id integer, boss text, encounter integer, data text, kill integer, diff integer, primary key(codice, id));
 create table if not exists presenza(codice text, id integer, persona text, personaggio text, primary key(codice, id, personaggio));
 create table if not exists evento(codice text, id integer, persona text, abilita text, colpi integer, danno integer, primary key(codice, id, persona, abilita));
-create table if not exists morte(codice text, id integer, persona text, secondo integer, abilita text);
+create table if not exists morte(codice text, id integer, persona text, secondo integer, abilita text, prima integer);
 """
 ORDER = ("peggiora", "nuova", "risolta", "invariata", "migliora")
 TEXT = {
-    "risolta": "non la prende più (prima {prev:.1f} colpi a fight, ora 0)",
+    "risolta": "non la prende più (prima {prev:.1f} colpi a fight, ora {cur:.1f})",
     "migliora": "la prende meno (da {prev:.1f} a {cur:.1f} colpi a fight)",
     "peggiora": "la prende di più (da {prev:.1f} a {cur:.1f} colpi a fight)",
     "invariata": "la prende ancora come nelle serate scorse ({cur:.1f} colpi a fight)",
@@ -41,6 +42,7 @@ def connect(path: Path = DB) -> sqlite3.Connection:
 
 def classify(prev: float, cur: float) -> str:
     """Tonight against the earlier nights: '' (never taken), nuova, risolta, migliora, peggiora or invariata (the grey zone)."""
+    prev, cur = (x if x >= MIN_RATE else 0 for x in (prev, cur))
     if not prev and not cur:
         return ""
     if not prev:
@@ -69,7 +71,7 @@ def record(db: sqlite3.Connection, code: str, fight: dict, date: str, present: l
                    (*key, fight["name"], fight["encounter"], date, int(bool(fight["kill"])), fight["difficulty"]))
         db.executemany("insert or ignore into presenza values (?,?,?,?)", [(*key, who(c), c) for c in present])
         db.executemany("insert into evento values (?,?,?,?,?,?)", [(*key, p, a, n, d) for (p, a), (n, d) in taken.items()])
-        db.executemany("insert into morte values (?,?,?,?,?)", [(*key, who(d["player"]), d["s"], d["spell"]) for d in prof["deaths"]])
+        db.executemany("insert into morte values (?,?,?,?,?,?)", [(*key, who(d["player"]), d["s"], d["spell"], i) for i, d in enumerate(prof["deaths"])])
 
 
 def present(code: str, fight_id: int) -> list[str]:
@@ -123,7 +125,7 @@ def trend_notes(db: sqlite3.Connection, person: str, encounter: int, spells: dic
     died: dict[str, set[str]] = {}
     for d, ability in db.execute(
             f"select f.data, m.abilita from morte m join fight f on f.codice=m.codice and f.id=m.id "
-            f"where f.encounter=? and m.persona=? and f.data in ({marks})", args):
+            f"where f.encounter=? and m.persona=? and m.prima<=? and f.data in ({marks})", (encounter, person, profile.DEAD_CUTOFF, *dates)):
         died.setdefault(ability, set()).add(d)
     for ability, days in died.items():
         streak = next((i for i, d in enumerate(reversed(dates)) if d not in days), len(dates))

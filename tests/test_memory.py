@@ -33,6 +33,9 @@ class ClassifyTest(unittest.TestCase):
     def test_every_case_including_the_grey_zone(self):
         c = memory.classify
         self.assertEqual(c(0, 0), "")
+        self.assertEqual(c(0.1, 0), "")  # below the noise floor on both sides: nothing to say
+        self.assertEqual(c(0.1, 3), "nuova")
+        self.assertEqual(c(3, 0.1), "risolta")
         self.assertEqual(c(0, 2), "nuova")
         self.assertEqual(c(3, 0), "risolta")
         self.assertEqual(c(4, 1), "migliora")
@@ -97,6 +100,22 @@ class TrendTest(DbCase):
             memory.record(self.db, code, {"id": 1, "name": "U", "encounter": 3492, "kill": True, "difficulty": 4}, date, ["Tore"],
                           prof({"Tore": 0}, [("Tore", 100, "Caustic Waves")]), BOOK)
         self.assertTrue(any("muore" in line and "3 serate" in line for line in self.trend()))
+
+
+class DeathsTest(DbCase):
+    def trend(self):
+        return memory.trend_notes(self.db, "Tore", 3492, SPELLS, "2026-10-21")
+
+    def test_deaths_after_the_cutoff_do_not_count_as_a_streak(self):
+        late = [("X%d" % i, 10 + i, "Necrotic Vapors") for i in range(profile_cutoff() + 1)] + [("Tore", 100, "Necrotic Vapors")]
+        for code, date in (("A", "2026-10-07"), ("B", "2026-10-14"), ("C", "2026-10-21")):
+            memory.record(self.db, code, {"id": 1, "name": "U", "encounter": 3492, "kill": False, "difficulty": 4}, date, ["Tore"],
+                          prof({"Tore": 0}, late), BOOK)
+        self.assertEqual(self.trend(), [])
+
+
+def profile_cutoff():
+    return memory.profile.DEAD_CUTOFF
 
 
 class CollectTest(DbCase):

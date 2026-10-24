@@ -1,0 +1,509 @@
+{
+ "name": "Entombed Sentinels",
+ "encounter": 3445,
+ "phases": {
+  "1": "Stage One: Entombed Sentinels",
+  "2": "Intermission: Vitriolic Stasis"
+ },
+ "logs": [
+  "MqzAmrHX72PJwRQ8#11",
+  "k14HCt3xcZyXbQwq#1"
+ ],
+ "abilities": {
+  "1": {
+   "en": "Melee",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Blood of Ula'tek",
+    "Breath of Ula'tek"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 635,
+     "fights": 2
+    }
+   }
+  },
+  "32409": {
+   "en": "Shadow Word: Death",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 18,
+     "fights": 1
+    },
+    "2": {
+     "casts": 0,
+     "hits": 1,
+     "fights": 1
+    }
+   }
+  },
+  "145629": {
+   "en": "Anti-Magic Zone",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 5,
+     "hits": 0,
+     "fights": 1
+    }
+   }
+  },
+  "1284209": {
+   "en": "Living Venom",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Breath of Ula'tek"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 81,
+     "fights": 2
+    },
+    "2": {
+     "casts": 0,
+     "hits": 5,
+     "fights": 2
+    }
+   }
+  },
+  "1284210": {
+   "en": "Blood Venom",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Blood of Ula'tek"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 299,
+     "fights": 2
+    },
+    "2": {
+     "casts": 0,
+     "hits": 7,
+     "fights": 2
+    }
+   }
+  },
+  "1284251": {
+   "en": "Venom Coagulation",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Breath of Ula'tek"
+   ],
+   "phases": {
+    "1": {
+     "casts": 15,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1284257": {
+   "en": "Contaminate",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Venom Coagulation"
+   ],
+   "phases": {
+    "1": {
+     "casts": 15,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1284258": {
+   "en": "Contaminate",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Venom Coagulation"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 1233,
+     "fights": 2
+    },
+    "2": {
+     "casts": 0,
+     "hits": 33,
+     "fights": 1
+    }
+   }
+  },
+  "1284434": {
+   "en": "Toxic Droplets",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Breath of Ula'tek"
+   ],
+   "phases": {
+    "1": {
+     "casts": 16,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1284451": {
+   "en": "Toxic Droplets",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Breath of Ula'tek"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 279,
+     "fights": 2
+    }
+   }
+  },
+  "1284452": {
+   "en": "Noxious Blast",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Breath of Ula'tek"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 114,
+     "fights": 2
+    }
+   }
+  },
+  "1284458": {
+   "en": "Empowering Slam",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Breath of Ula'tek"
+   ],
+   "phases": {
+    "1": {
+     "casts": 31,
+     "hits": 31,
+     "fights": 2
+    }
+   }
+  },
+  "1284471": {
+   "en": "Blighted Blood",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Blood of Ula'tek"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 12,
+     "fights": 2
+    },
+    "1": {
+     "casts": 0,
+     "hits": 42,
+     "fights": 2
+    }
+   }
+  },
+  "1284483": {
+   "en": "Blighted Blood",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Blood of Ula'tek"
+   ],
+   "phases": {
+    "1": {
+     "casts": 9,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1284487": {
+   "en": "Bloodvenom Injection",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Blood of Ula'tek"
+   ],
+   "phases": {
+    "1": {
+     "casts": 31,
+     "hits": 31,
+     "fights": 2
+    }
+   }
+  },
+  "1284500": {
+   "en": "Mark of Acid",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Breath of Ula'tek"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 3422,
+     "fights": 2
+    },
+    "2": {
+     "casts": 0,
+     "hits": 469,
+     "fights": 2
+    }
+   }
+  },
+  "1284506": {
+   "en": "Mark of Blood",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Blood of Ula'tek"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 3376,
+     "fights": 2
+    },
+    "2": {
+     "casts": 0,
+     "hits": 432,
+     "fights": 2
+    }
+   }
+  },
+  "1284588": {
+   "en": "Vitriolic Stasis",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Blood of Ula'tek"
+   ],
+   "phases": {
+    "2": {
+     "casts": 8,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1284606": {
+   "en": "Vitriolic Stasis",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Breath of Ula'tek"
+   ],
+   "phases": {
+    "2": {
+     "casts": 5,
+     "hits": 0,
+     "fights": 2
+    },
+    "1": {
+     "casts": 2,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1284813": {
+   "en": "Helical Toxins",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Blood of Ula'tek",
+    "Breath of Ula'tek"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 318,
+     "fights": 2
+    },
+    "1": {
+     "casts": 0,
+     "hits": 104,
+     "fights": 2
+    }
+   }
+  },
+  "1284941": {
+   "en": "Cultivated Burst",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Blood of Ula'tek"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 2,
+     "fights": 1
+    },
+    "1": {
+     "casts": 0,
+     "hits": 10,
+     "fights": 2
+    }
+   }
+  },
+  "1284948": {
+   "en": "Cultivated Burst",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Blood of Ula'tek",
+    "Breath of Ula'tek"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 236,
+     "fights": 2
+    }
+   }
+  },
+  "1288232": {
+   "en": "Unstable Miasma",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Blood of Ula'tek"
+   ],
+   "phases": {
+    "1": {
+     "casts": 15,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1288282": {
+   "en": "Unstable Miasma",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Blood of Ula'tek"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 93,
+     "fights": 2
+    }
+   }
+  },
+  "1297338": {
+   "en": "Deadly Venom",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 22,
+     "fights": 2
+    },
+    "2": {
+     "casts": 0,
+     "hits": 11,
+     "fights": 1
+    }
+   }
+  },
+  "1303097": {
+   "en": "Clinging Murk",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Blood of Ula'tek"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 237,
+     "fights": 2
+    }
+   }
+  },
+  "1310126": {
+   "en": "Bloodvenom Injection",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Blood of Ula'tek"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 695,
+     "fights": 2
+    },
+    "2": {
+     "casts": 0,
+     "hits": 104,
+     "fights": 2
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,867 @@
+{
+ "name": "The Lost Explorers",
+ "encounter": 3497,
+ "phases": {
+  "1": "The Lost Explorers",
+  "2": "Scrollsage Iku: Binding Anguish",
+  "3": "First Mate Nama: Binding Anguish",
+  "4": "Trader Gebbo: Binding Anguish"
+ },
+ "logs": [
+  "MqzAmrHX72PJwRQ8#22",
+  "k14HCt3xcZyXbQwq#12"
+ ],
+ "abilities": {
+  "1": {
+   "en": "Melee",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "First Mate Nama",
+    "Scrollsage Iku"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 279,
+     "fights": 2
+    },
+    "3": {
+     "casts": 0,
+     "hits": 104,
+     "fights": 2
+    },
+    "2": {
+     "casts": 0,
+     "hits": 98,
+     "fights": 2
+    }
+   }
+  },
+  "32409": {
+   "en": "Shadow Word: Death",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 7,
+     "fights": 1
+    },
+    "3": {
+     "casts": 0,
+     "hits": 2,
+     "fights": 1
+    },
+    "2": {
+     "casts": 0,
+     "hits": 2,
+     "fights": 1
+    }
+   }
+  },
+  "145629": {
+   "en": "Anti-Magic Zone",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 9,
+     "hits": 0,
+     "fights": 1
+    }
+   }
+  },
+  "1286922": {
+   "en": "Icebound Flames",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Scrollsage Iku"
+   ],
+   "phases": {
+    "1": {
+     "casts": 1,
+     "hits": 2,
+     "fights": 1
+    }
+   }
+  },
+  "1291918": {
+   "en": "Shell Spin",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "First Mate Nama"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 1,
+     "fights": 1
+    }
+   }
+  },
+  "1291933": {
+   "en": "Throw Junk",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Trader Gebbo"
+   ],
+   "phases": {
+    "1": {
+     "casts": 20,
+     "hits": 1,
+     "fights": 2
+    },
+    "3": {
+     "casts": 7,
+     "hits": 1,
+     "fights": 2
+    },
+    "2": {
+     "casts": 9,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1291934": {
+   "en": "Throw Junk",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Trader Gebbo"
+   ],
+   "phases": {
+    "1": {
+     "casts": 127,
+     "hits": 0,
+     "fights": 2
+    },
+    "3": {
+     "casts": 37,
+     "hits": 0,
+     "fights": 2
+    },
+    "2": {
+     "casts": 48,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1291935": {
+   "en": "Throw Junk",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Trader Gebbo"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 28,
+     "fights": 2
+    },
+    "3": {
+     "casts": 0,
+     "hits": 4,
+     "fights": 2
+    },
+    "2": {
+     "casts": 0,
+     "hits": 2,
+     "fights": 2
+    }
+   }
+  },
+  "1292758": {
+   "en": "Evil Eyes",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Creepy Statue"
+   ],
+   "phases": {
+    "1": {
+     "casts": 182,
+     "hits": 0,
+     "fights": 2
+    },
+    "3": {
+     "casts": 21,
+     "hits": 0,
+     "fights": 2
+    },
+    "2": {
+     "casts": 21,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1292764": {
+   "en": "Evil Eyes",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Creepy Statue"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 5,
+     "fights": 2
+    },
+    "2": {
+     "casts": 0,
+     "hits": 10,
+     "fights": 2
+    }
+   }
+  },
+  "1292779": {
+   "en": "Final Ascension",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Mor'zahi"
+   ],
+   "phases": {
+    "1": {
+     "casts": 1,
+     "hits": 0,
+     "fights": 1
+    }
+   }
+  },
+  "1292780": {
+   "en": "Final Ascension",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Mor'zahi"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 116,
+     "fights": 1
+    }
+   }
+  },
+  "1292796": {
+   "en": "Creepy Flames",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Creepy Statue"
+   ],
+   "phases": {
+    "1": {
+     "casts": 14,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1294334": {
+   "en": "Blink Nova",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Scrollsage Iku"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 166,
+     "fights": 2
+    },
+    "2": {
+     "casts": 0,
+     "hits": 33,
+     "fights": 2
+    }
+   }
+  },
+  "1295450": {
+   "en": "Malevolent Presence",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Mor'zahi"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 2741,
+     "fights": 2
+    },
+    "3": {
+     "casts": 0,
+     "hits": 975,
+     "fights": 2
+    },
+    "2": {
+     "casts": 0,
+     "hits": 990,
+     "fights": 2
+    }
+   }
+  },
+  "1295854": {
+   "en": "Shredding Shards",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Scrollsage Iku"
+   ],
+   "phases": {
+    "1": {
+     "casts": 5,
+     "hits": 0,
+     "fights": 2
+    },
+    "3": {
+     "casts": 2,
+     "hits": 0,
+     "fights": 2
+    },
+    "2": {
+     "casts": 2,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1295858": {
+   "en": "Shredding Shards",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Scrollsage Iku"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 2,
+     "fights": 2
+    },
+    "3": {
+     "casts": 0,
+     "hits": 1,
+     "fights": 1
+    }
+   }
+  },
+  "1295891": {
+   "en": "Frostfire Volley",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Scrollsage Iku"
+   ],
+   "phases": {
+    "2": {
+     "casts": 4,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1295893": {
+   "en": "Frostfire Volley",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Scrollsage Iku"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 15,
+     "fights": 2
+    }
+   }
+  },
+  "1295985": {
+   "en": "Frostfire Volley",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Scrollsage Iku"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 14,
+     "fights": 2
+    }
+   }
+  },
+  "1296021": {
+   "en": "Blink Nova",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Scrollsage Iku"
+   ],
+   "phases": {
+    "1": {
+     "casts": 10,
+     "hits": 0,
+     "fights": 2
+    },
+    "2": {
+     "casts": 2,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1296025": {
+   "en": "Blink Nova",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Scrollsage Iku"
+   ],
+   "phases": {
+    "1": {
+     "casts": 12,
+     "hits": 0,
+     "fights": 2
+    },
+    "2": {
+     "casts": 2,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1296062": {
+   "en": "Shell Spin",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "First Mate Nama"
+   ],
+   "phases": {
+    "1": {
+     "casts": 15,
+     "hits": 0,
+     "fights": 2
+    },
+    "2": {
+     "casts": 4,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1296094": {
+   "en": "Mighty Thud",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "First Mate Nama"
+   ],
+   "phases": {
+    "3": {
+     "casts": 4,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1296095": {
+   "en": "Mighty Thud",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "First Mate Nama"
+   ],
+   "phases": {
+    "3": {
+     "casts": 12,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1296133": {
+   "en": "Mighty Thud",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "First Mate Nama"
+   ],
+   "phases": {
+    "3": {
+     "casts": 12,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1296135": {
+   "en": "Mighty Thud",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "First Mate Nama"
+   ],
+   "phases": {
+    "3": {
+     "casts": 12,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1296975": {
+   "en": "Mor'zahi's Command",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Mor'zahi"
+   ],
+   "phases": {
+    "1": {
+     "casts": 2,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1297022": {
+   "en": "Mor'zahi's Command",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Mor'zahi"
+   ],
+   "phases": {
+    "1": {
+     "casts": 2,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1297075": {
+   "en": "Final Ascension",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Mor'zahi"
+   ],
+   "phases": {
+    "1": {
+     "casts": 6,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1297648": {
+   "en": "Frost Patch",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Scrollsage Iku"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 6,
+     "fights": 2
+    }
+   }
+  },
+  "1297649": {
+   "en": "Fire Patch",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Scrollsage Iku"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 9,
+     "fights": 2
+    }
+   }
+  },
+  "1300237": {
+   "en": "Mighty Thud",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "First Mate Nama"
+   ],
+   "phases": {
+    "3": {
+     "casts": 0,
+     "hits": 56,
+     "fights": 2
+    }
+   }
+  },
+  "1301667": {
+   "en": "Dark Whispers",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "First Mate Nama",
+    "Scrollsage Iku"
+   ],
+   "phases": {
+    "1": {
+     "casts": 3,
+     "hits": 0,
+     "fights": 2
+    },
+    "3": {
+     "casts": 1,
+     "hits": 0,
+     "fights": 1
+    }
+   }
+  },
+  "1306127": {
+   "en": "Throw Junk",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Trader Gebbo"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 1,
+     "fights": 1
+    }
+   }
+  },
+  "1306137": {
+   "en": "Throw Junk",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Trader Gebbo"
+   ],
+   "phases": {
+    "1": {
+     "casts": 5,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1306145": {
+   "en": "Throw Junk",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Trader Gebbo"
+   ],
+   "phases": {
+    "1": {
+     "casts": 5,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1308853": {
+   "en": "Splinters",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Trader Gebbo"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 682,
+     "fights": 2
+    },
+    "3": {
+     "casts": 0,
+     "hits": 292,
+     "fights": 2
+    },
+    "2": {
+     "casts": 0,
+     "hits": 402,
+     "fights": 2
+    }
+   }
+  },
+  "1310027": {
+   "en": "Relic Rupture",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Useless Junk"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 16,
+     "fights": 1
+    }
+   }
+  },
+  "1310028": {
+   "en": "Relic Rupture",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Useless Junk"
+   ],
+   "phases": {
+    "2": {
+     "casts": 2,
+     "hits": 0,
+     "fights": 1
+    },
+    "1": {
+     "casts": 1,
+     "hits": 0,
+     "fights": 1
+    }
+   }
+  },
+  "1310500": {
+   "en": "Aftershock",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "First Mate Nama"
+   ],
+   "phases": {
+    "3": {
+     "casts": 0,
+     "hits": 10,
+     "fights": 2
+    },
+    "1": {
+     "casts": 0,
+     "hits": 1,
+     "fights": 1
+    }
+   }
+  },
+  "1310616": {
+   "en": "Shredding Shards",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Scrollsage Iku"
+   ],
+   "phases": {
+    "1": {
+     "casts": 35,
+     "hits": 35,
+     "fights": 2
+    },
+    "3": {
+     "casts": 14,
+     "hits": 14,
+     "fights": 2
+    },
+    "2": {
+     "casts": 14,
+     "hits": 14,
+     "fights": 2
+    }
+   }
+  },
+  "1310662": {
+   "en": "Piercing Frost",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Scrollsage Iku"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 11,
+     "fights": 2
+    }
+   }
+  },
+  "1310667": {
+   "en": "Burning Flames",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Scrollsage Iku"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 39,
+     "fights": 2
+    }
+   }
+  }
+ }
+}

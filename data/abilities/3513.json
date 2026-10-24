@@ -1,0 +1,441 @@
+{
+ "name": "Kith'ix",
+ "encounter": 3513,
+ "phases": {
+  "1": "Stage One: Darkness' Domain",
+  "2": "Stage Two: Last Light"
+ },
+ "logs": [
+  "k14HCt3xcZyXbQwq#34",
+  "k14HCt3xcZyXbQwq#35",
+  "k14HCt3xcZyXbQwq#36",
+  "k14HCt3xcZyXbQwq#37",
+  "k14HCt3xcZyXbQwq#38",
+  "k14HCt3xcZyXbQwq#39",
+  "k14HCt3xcZyXbQwq#40",
+  "k14HCt3xcZyXbQwq#41",
+  "k14HCt3xcZyXbQwq#42",
+  "k14HCt3xcZyXbQwq#43"
+ ],
+ "abilities": {
+  "1": {
+   "en": "Melee",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Kith'ix",
+    "Venomous Hulk",
+    "Voidweaver"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 565,
+     "fights": 10
+    }
+   }
+  },
+  "32409": {
+   "en": "Shadow Word: Death",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 10,
+     "fights": 6
+    }
+   }
+  },
+  "132466": {
+   "en": "Chi Wave",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Kith'ix",
+    "Venomous Hulk"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 2,
+     "fights": 2
+    }
+   }
+  },
+  "1301668": {
+   "en": "Voidswarm",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Kith'ix"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 871,
+     "fights": 10
+    }
+   }
+  },
+  "1302319": {
+   "en": "Digestive Juices",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Bomber Beetle"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 2738,
+     "fights": 10
+    }
+   }
+  },
+  "1302333": {
+   "en": "Voidweave",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Voidweaver"
+   ],
+   "phases": {
+    "1": {
+     "casts": 94,
+     "hits": 0,
+     "fights": 10
+    }
+   }
+  },
+  "1302336": {
+   "en": "Voidweave",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Voidweaver"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 2501,
+     "fights": 10
+    }
+   }
+  },
+  "1302705": {
+   "en": "Nightfall",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Voidweaver"
+   ],
+   "phases": {
+    "1": {
+     "casts": 7,
+     "hits": 0,
+     "fights": 6
+    }
+   }
+  },
+  "1302727": {
+   "en": "Nightfall",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Kith'ix"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 115,
+     "fights": 6
+    }
+   }
+  },
+  "1302884": {
+   "en": "Venom Roar",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Venomous Hulk"
+   ],
+   "phases": {
+    "1": {
+     "casts": 34,
+     "hits": 0,
+     "fights": 10
+    }
+   }
+  },
+  "1302914": {
+   "en": "Venom Roar",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Venomous Hulk"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 53,
+     "fights": 10
+    }
+   }
+  },
+  "1302917": {
+   "en": "Venom Roar",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Venomous Hulk"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 50,
+     "fights": 10
+    }
+   }
+  },
+  "1302951": {
+   "en": "Suffocating Darkness",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Kith'ix"
+   ],
+   "phases": {
+    "1": {
+     "casts": 13,
+     "hits": 0,
+     "fights": 9
+    }
+   }
+  },
+  "1303165": {
+   "en": "Suffocating Darkness",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Kith'ix"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 6804,
+     "fights": 9
+    }
+   }
+  },
+  "1303257": {
+   "en": "Suffocation",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Kith'ix"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 116,
+     "fights": 7
+    }
+   }
+  },
+  "1303685": {
+   "en": "Twisted Appendage",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Twisted Appendage"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 55,
+     "fights": 10
+    }
+   }
+  },
+  "1304046": {
+   "en": "Overwhelming Fear",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Kith'ix"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 2,
+     "fights": 2
+    }
+   }
+  },
+  "1304047": {
+   "en": "Overwhelming Fear",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Kith'ix"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 992,
+     "fights": 9
+    }
+   }
+  },
+  "1304424": {
+   "en": "Extinguish",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Kith'ix"
+   ],
+   "phases": {
+    "1": {
+     "casts": 29,
+     "hits": 354,
+     "fights": 10
+    }
+   }
+  },
+  "1304930": {
+   "en": "Dark Devastation",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Kith'ix"
+   ],
+   "phases": {
+    "1": {
+     "casts": 48,
+     "hits": 0,
+     "fights": 10
+    }
+   }
+  },
+  "1304946": {
+   "en": "Dark Devastation",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Kith'ix"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 66,
+     "fights": 10
+    }
+   }
+  },
+  "1304947": {
+   "en": "Dark Devastation",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Kith'ix"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 53,
+     "fights": 10
+    }
+   }
+  },
+  "1304950": {
+   "en": "Voidscar",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 26,
+     "fights": 6
+    }
+   }
+  },
+  "1308670": {
+   "en": "Blood of the Old Ones",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 43,
+     "fights": 7
+    }
+   }
+  },
+  "1308674": {
+   "en": "Eclipse Fragment",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Kith'ix"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 714,
+     "fights": 9
+    }
+   }
+  },
+  "1308675": {
+   "en": "Lost Refulgence",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Kith'ix"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 130,
+     "fights": 3
+    }
+   }
+  }
+ }
+}

@@ -8,7 +8,34 @@
   "4": "Stage Three: Ula'tek's Ascension"
  },
  "logs": [
-  "RaZCT7cxPbwQ4VNA#21"
+  "RaZCT7cxPbwQ4VNA#21",
+  "zVgjNA4ChyMx1pG7#8",
+  "zVgjNA4ChyMx1pG7#9",
+  "zVgjNA4ChyMx1pG7#10",
+  "zVgjNA4ChyMx1pG7#11",
+  "zVgjNA4ChyMx1pG7#12",
+  "zVgjNA4ChyMx1pG7#13",
+  "zVgjNA4ChyMx1pG7#14",
+  "zVgjNA4ChyMx1pG7#15",
+  "zVgjNA4ChyMx1pG7#16",
+  "zVgjNA4ChyMx1pG7#17",
+  "M6FLgZ8GtKnyTwa7#1",
+  "M6FLgZ8GtKnyTwa7#2",
+  "M6FLgZ8GtKnyTwa7#3",
+  "M6FLgZ8GtKnyTwa7#4",
+  "M6FLgZ8GtKnyTwa7#5",
+  "M6FLgZ8GtKnyTwa7#6",
+  "M6FLgZ8GtKnyTwa7#7",
+  "M6FLgZ8GtKnyTwa7#8",
+  "M6FLgZ8GtKnyTwa7#9",
+  "M6FLgZ8GtKnyTwa7#10",
+  "M6FLgZ8GtKnyTwa7#11",
+  "M6FLgZ8GtKnyTwa7#12",
+  "M6FLgZ8GtKnyTwa7#13",
+  "M6FLgZ8GtKnyTwa7#14",
+  "RaZCT7cxPbwQ4VNA#18",
+  "RaZCT7cxPbwQ4VNA#19",
+  "RaZCT7cxPbwQ4VNA#20"
  ],
  "abilities": {
   "1": {
@@ -28,23 +55,23 @@
    "phases": {
     "1": {
      "casts": 0,
-     "hits": 67,
-     "fights": 1
+     "hits": 1862,
+     "fights": 28
     },
     "2": {
      "casts": 0,
-     "hits": 140,
-     "fights": 1
+     "hits": 3055,
+     "fights": 23
     },
     "3": {
      "casts": 0,
-     "hits": 74,
-     "fights": 1
+     "hits": 1337,
+     "fights": 19
     },
     "4": {
      "casts": 0,
-     "hits": 137,
-     "fights": 1
+     "hits": 2054,
+     "fights": 18
     }
    }
   },
@@ -59,8 +86,8 @@
    "phases": {
     "3": {
      "casts": 0,
-     "hits": 15,
-     "fights": 1
+     "hits": 265,
+     "fights": 18
     }
    }
   },
@@ -75,17 +102,51 @@
    "phases": {
     "1": {
      "casts": 0,
-     "hits": 3,
-     "fights": 1
+     "hits": 114,
+     "fights": 26
     },
     "2": {
      "casts": 0,
-     "hits": 3,
-     "fights": 1
+     "hits": 92,
+     "fights": 23
     },
     "4": {
      "casts": 0,
-     "hits": 7,
+     "hits": 50,
+     "fights": 17
+    },
+    "3": {
+     "casts": 0,
+     "hits": 4,
+     "fights": 3
+    }
+   }
+  },
+  "132466": {
+   "en": "Chi Wave",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Blightscale Rawling",
+    "Blightscale Shrieker",
+    "Ula'tek",
+    "Venomous Heart"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 3,
+     "fights": 3
+    },
+    "2": {
+     "casts": 0,
+     "hits": 4,
+     "fights": 4
+    },
+    "4": {
+     "casts": 0,
+     "hits": 1,
      "fights": 1
     }
    }
@@ -100,14 +161,14 @@
    ],
    "phases": {
     "2": {
-     "casts": 11,
+     "casts": 223,
      "hits": 0,
-     "fights": 1
+     "fights": 19
     },
     "4": {
-     "casts": 16,
+     "casts": 79,
      "hits": 0,
-     "fights": 1
+     "fights": 7
     }
    }
   },
@@ -122,23 +183,23 @@
    "phases": {
     "1": {
      "casts": 0,
-     "hits": 3280,
-     "fights": 1
+     "hits": 80861,
+     "fights": 28
     },
     "2": {
      "casts": 0,
-     "hits": 2900,
-     "fights": 1
+     "hits": 58357,
+     "fights": 24
     },
     "3": {
      "casts": 0,
-     "hits": 1060,
-     "fights": 1
+     "hits": 18399,
+     "fights": 19
     },
     "4": {
      "casts": 0,
-     "hits": 4651,
-     "fights": 1
+     "hits": 54246,
+     "fights": 18
     }
    }
   },
@@ -152,19 +213,19 @@
    ],
    "phases": {
     "1": {
-     "casts": 1,
+     "casts": 24,
      "hits": 0,
-     "fights": 1
+     "fights": 24
     },
     "2": {
-     "casts": 1,
+     "casts": 21,
      "hits": 0,
-     "fights": 1
+     "fights": 21
     },
     "4": {
-     "casts": 1,
+     "casts": 7,
      "hits": 0,
-     "fights": 1
+     "fights": 7
     }
    }
   },
@@ -179,18 +240,23 @@
    "phases": {
     "1": {
      "casts": 0,
-     "hits": 2,
-     "fights": 1
+     "hits": 62,
+     "fights": 21
     },
     "2": {
      "casts": 0,
-     "hits": 4,
-     "fights": 1
+     "hits": 78,
+     "fights": 21
     },
     "4": {
      "casts": 0,
+     "hits": 35,
+     "fights": 6
+    },
+    "3": {
+     "casts": 0,
      "hits": 9,
-     "fights": 1
+     "fights": 8
     }
    }
   },
@@ -205,8 +271,8 @@
    "phases": {
     "4": {
      "casts": 0,
-     "hits": 15,
-     "fights": 1
+     "hits": 68,
+     "fights": 6
     }
    }
   },
@@ -221,23 +287,23 @@
    "phases": {
     "1": {
      "casts": 0,
-     "hits": 14,
-     "fights": 1
+     "hits": 595,
+     "fights": 26
     },
     "2": {
      "casts": 0,
-     "hits": 69,
-     "fights": 1
+     "hits": 1096,
+     "fights": 23
     },
     "3": {
      "casts": 0,
-     "hits": 37,
-     "fights": 1
+     "hits": 857,
+     "fights": 18
     },
     "4": {
      "casts": 0,
-     "hits": 141,
-     "fights": 1
+     "hits": 2207,
+     "fights": 18
     }
    }
   },
@@ -252,13 +318,13 @@
    "phases": {
     "1": {
      "casts": 0,
-     "hits": 80,
-     "fights": 1
+     "hits": 1927,
+     "fights": 26
     },
     "3": {
      "casts": 0,
-     "hits": 120,
-     "fights": 1
+     "hits": 2043,
+     "fights": 19
     }
    }
   },
@@ -273,7 +339,33 @@
    "phases": {
     "1": {
      "casts": 0,
-     "hits": 1,
+     "hits": 13,
+     "fights": 10
+    },
+    "4": {
+     "casts": 0,
+     "hits": 6,
+     "fights": 5
+    },
+    "3": {
+     "casts": 0,
+     "hits": 13,
+     "fights": 7
+    }
+   }
+  },
+  "1290779": {
+   "en": "Malice",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Doomscale Warden"
+   ],
+   "phases": {
+    "2": {
+     "casts": 2,
+     "hits": 0,
      "fights": 1
     }
    }
@@ -288,13 +380,29 @@
    ],
    "phases": {
     "2": {
-     "casts": 4,
+     "casts": 92,
      "hits": 0,
-     "fights": 1
+     "fights": 24
     },
     "4": {
-     "casts": 13,
+     "casts": 216,
      "hits": 0,
+     "fights": 18
+    }
+   }
+  },
+  "1290991": {
+   "en": "Malice",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Doomscale Warden"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 3,
      "fights": 1
     }
    }
@@ -309,9 +417,9 @@
    ],
    "phases": {
     "4": {
-     "casts": 4,
+     "casts": 51,
      "hits": 0,
-     "fights": 1
+     "fights": 17
     }
    }
   },
@@ -326,13 +434,29 @@
    "phases": {
     "1": {
      "casts": 0,
-     "hits": 33,
-     "fights": 1
+     "hits": 1604,
+     "fights": 26
     },
     "4": {
      "casts": 0,
-     "hits": 153,
-     "fights": 1
+     "hits": 2080,
+     "fights": 16
+    }
+   }
+  },
+  "1292521": {
+   "en": "Submerge",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Ula'tek"
+   ],
+   "phases": {
+    "1": {
+     "casts": 11,
+     "hits": 0,
+     "fights": 11
     }
    }
   },
@@ -346,9 +470,9 @@
    ],
    "phases": {
     "1": {
-     "casts": 1,
+     "casts": 15,
      "hits": 0,
-     "fights": 1
+     "fights": 15
     }
    }
   },
@@ -363,8 +487,8 @@
    "phases": {
     "4": {
      "casts": 0,
-     "hits": 520,
-     "fights": 1
+     "hits": 6999,
+     "fights": 18
     }
    }
   },
@@ -379,8 +503,8 @@
    "phases": {
     "4": {
      "casts": 0,
-     "hits": 8,
-     "fights": 1
+     "hits": 160,
+     "fights": 6
     }
    }
   },
@@ -395,8 +519,8 @@
    "phases": {
     "4": {
      "casts": 0,
-     "hits": 12,
-     "fights": 1
+     "hits": 165,
+     "fights": 18
     }
    }
   },
@@ -410,8 +534,39 @@
    ],
    "phases": {
     "4": {
-     "casts": 4,
+     "casts": 55,
      "hits": 0,
+     "fights": 18
+    }
+   }
+  },
+  "1295995": {
+   "en": "Toxin Cloud",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Toxin Cloud Stalker"
+   ],
+   "phases": {
+    "1": {
+     "casts": 3,
+     "hits": 1,
+     "fights": 2
+    },
+    "4": {
+     "casts": 1,
+     "hits": 4,
+     "fights": 1
+    },
+    "2": {
+     "casts": 1,
+     "hits": 0,
+     "fights": 1
+    },
+    "3": {
+     "casts": 0,
+     "hits": 1,
      "fights": 1
     }
    }
@@ -426,9 +581,9 @@
    ],
    "phases": {
     "1": {
-     "casts": 2,
-     "hits": 240,
-     "fights": 1
+     "casts": 52,
+     "hits": 6047,
+     "fights": 26
     }
    }
   },
@@ -443,17 +598,22 @@
    "phases": {
     "1": {
      "casts": 0,
-     "hits": 463,
-     "fights": 1
+     "hits": 11880,
+     "fights": 27
     },
     "2": {
      "casts": 0,
-     "hits": 112,
-     "fights": 1
+     "hits": 2745,
+     "fights": 23
     },
     "3": {
      "casts": 0,
-     "hits": 105,
+     "hits": 1701,
+     "fights": 18
+    },
+    "4": {
+     "casts": 0,
+     "hits": 1,
      "fights": 1
     }
    }
@@ -469,18 +629,23 @@
    "phases": {
     "2": {
      "casts": 0,
-     "hits": 107,
-     "fights": 1
+     "hits": 2522,
+     "fights": 24
     },
     "3": {
      "casts": 0,
-     "hits": 11,
-     "fights": 1
+     "hits": 284,
+     "fights": 18
     },
     "4": {
      "casts": 0,
-     "hits": 80,
-     "fights": 1
+     "hits": 857,
+     "fights": 18
+    },
+    "1": {
+     "casts": 0,
+     "hits": 63,
+     "fights": 9
     }
    }
   },
@@ -494,14 +659,14 @@
    ],
    "phases": {
     "1": {
-     "casts": 3,
+     "casts": 80,
      "hits": 0,
-     "fights": 1
+     "fights": 28
     },
     "4": {
-     "casts": 3,
+     "casts": 45,
      "hits": 0,
-     "fights": 1
+     "fights": 18
     }
    }
   },
@@ -516,13 +681,13 @@
    "phases": {
     "1": {
      "casts": 0,
-     "hits": 27,
-     "fights": 1
+     "hits": 684,
+     "fights": 26
     },
     "4": {
      "casts": 0,
-     "hits": 27,
-     "fights": 1
+     "hits": 401,
+     "fights": 18
     }
    }
   },
@@ -537,18 +702,18 @@
    "phases": {
     "1": {
      "casts": 0,
-     "hits": 228,
-     "fights": 1
+     "hits": 5771,
+     "fights": 28
     },
     "2": {
      "casts": 0,
-     "hits": 81,
-     "fights": 1
+     "hits": 1856,
+     "fights": 24
     },
     "4": {
      "casts": 0,
-     "hits": 276,
-     "fights": 1
+     "hits": 3654,
+     "fights": 18
     }
    }
   },
@@ -562,14 +727,14 @@
    ],
    "phases": {
     "1": {
-     "casts": 4,
+     "casts": 104,
      "hits": 0,
-     "fights": 1
+     "fights": 26
     },
     "4": {
-     "casts": 8,
+     "casts": 100,
      "hits": 0,
-     "fights": 1
+     "fights": 16
     }
    }
   },
@@ -583,14 +748,30 @@
    ],
    "phases": {
     "1": {
-     "casts": 4,
+     "casts": 103,
      "hits": 0,
-     "fights": 1
+     "fights": 27
     },
     "3": {
-     "casts": 6,
+     "casts": 111,
      "hits": 0,
-     "fights": 1
+     "fights": 19
+    }
+   }
+  },
+  "1299206": {
+   "en": "Rattler Slam",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Gore Rattle"
+   ],
+   "phases": {
+    "1": {
+     "casts": 3,
+     "hits": 26,
+     "fights": 3
     }
    }
   },
@@ -604,19 +785,19 @@
    ],
    "phases": {
     "1": {
-     "casts": 1,
+     "casts": 24,
      "hits": 0,
-     "fights": 1
+     "fights": 24
     },
     "2": {
-     "casts": 1,
+     "casts": 21,
      "hits": 0,
-     "fights": 1
+     "fights": 21
     },
     "4": {
-     "casts": 1,
+     "casts": 7,
      "hits": 0,
-     "fights": 1
+     "fights": 7
     }
    }
   },
@@ -631,8 +812,8 @@
    "phases": {
     "2": {
      "casts": 0,
-     "hits": 7,
-     "fights": 1
+     "hits": 133,
+     "fights": 22
     }
    }
   },
@@ -646,9 +827,9 @@
    ],
    "phases": {
     "4": {
-     "casts": 4,
+     "casts": 65,
      "hits": 0,
-     "fights": 1
+     "fights": 18
     }
    }
   },
@@ -663,8 +844,34 @@
    "phases": {
     "1": {
      "casts": 0,
-     "hits": 4,
-     "fights": 1
+     "hits": 56,
+     "fights": 14
+    },
+    "4": {
+     "casts": 0,
+     "hits": 18,
+     "fights": 6
+    }
+   }
+  },
+  "1301007": {
+   "en": "Unchecked Rage",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Ula'tek"
+   ],
+   "phases": {
+    "1": {
+     "casts": 9,
+     "hits": 47,
+     "fights": 3
+    },
+    "4": {
+     "casts": 3,
+     "hits": 42,
+     "fights": 2
     }
    }
   },
@@ -678,9 +885,30 @@
    ],
    "phases": {
     "2": {
-     "casts": 2,
+     "casts": 47,
      "hits": 0,
-     "fights": 1
+     "fights": 23
+    }
+   }
+  },
+  "1301122": {
+   "en": "Mother's Wrath",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Ula'tek"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 177,
+     "fights": 4
+    },
+    "4": {
+     "casts": 0,
+     "hits": 25,
+     "fights": 2
     }
    }
   },
@@ -694,9 +922,9 @@
    ],
    "phases": {
     "2": {
-     "casts": 2,
+     "casts": 49,
      "hits": 0,
-     "fights": 1
+     "fights": 24
     }
    }
   },
@@ -711,8 +939,8 @@
    "phases": {
     "4": {
      "casts": 0,
-     "hits": 79,
-     "fights": 1
+     "hits": 737,
+     "fights": 16
     }
    }
   },
@@ -726,9 +954,9 @@
    ],
    "phases": {
     "4": {
-     "casts": 3,
+     "casts": 41,
      "hits": 0,
-     "fights": 1
+     "fights": 16
     }
    }
   },
@@ -742,9 +970,19 @@
    ],
    "phases": {
     "1": {
-     "casts": 2,
-     "hits": 14,
-     "fights": 1
+     "casts": 47,
+     "hits": 517,
+     "fights": 16
+    },
+    "4": {
+     "casts": 6,
+     "hits": 61,
+     "fights": 3
+    },
+    "2": {
+     "casts": 11,
+     "hits": 95,
+     "fights": 4
     }
    }
   },
@@ -758,9 +996,9 @@
    ],
    "phases": {
     "2": {
-     "casts": 2,
+     "casts": 48,
      "hits": 0,
-     "fights": 1
+     "fights": 24
     }
    }
   },
@@ -775,8 +1013,8 @@
    "phases": {
     "2": {
      "casts": 0,
-     "hits": 16,
-     "fights": 1
+     "hits": 236,
+     "fights": 23
     }
    }
   },
@@ -790,9 +1028,30 @@
    ],
    "phases": {
     "2": {
-     "casts": 2,
+     "casts": 42,
      "hits": 0,
-     "fights": 1
+     "fights": 21
+    }
+   }
+  },
+  "1303414": {
+   "en": "Petrifying Sting",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Blightscale Viper"
+   ],
+   "phases": {
+    "1": {
+     "casts": 8,
+     "hits": 20,
+     "fights": 7
+    },
+    "2": {
+     "casts": 2,
+     "hits": 24,
+     "fights": 2
     }
    }
   },
@@ -806,14 +1065,30 @@
    ],
    "phases": {
     "1": {
-     "casts": 1,
+     "casts": 26,
      "hits": 0,
-     "fights": 1
+     "fights": 26
     },
     "3": {
-     "casts": 1,
+     "casts": 19,
      "hits": 0,
-     "fights": 1
+     "fights": 19
+    }
+   }
+  },
+  "1305650": {
+   "en": "Anguished Cry",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Weakened Doomscale"
+   ],
+   "phases": {
+    "2": {
+     "casts": 3,
+     "hits": 4,
+     "fights": 2
     }
    }
   },
@@ -827,9 +1102,9 @@
    ],
    "phases": {
     "2": {
-     "casts": 3,
-     "hits": 42,
-     "fights": 1
+     "casts": 85,
+     "hits": 688,
+     "fights": 21
     }
    }
   },
@@ -844,8 +1119,24 @@
    "phases": {
     "4": {
      "casts": 0,
-     "hits": 79,
-     "fights": 1
+     "hits": 834,
+     "fights": 17
+    }
+   }
+  },
+  "1306119": {
+   "en": "Calcified Corpse",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "4": {
+     "casts": 0,
+     "hits": 8,
+     "fights": 6
     }
    }
   },
@@ -860,8 +1151,8 @@
    "phases": {
     "2": {
      "casts": 0,
-     "hits": 28,
-     "fights": 1
+     "hits": 556,
+     "fights": 23
     }
    }
   },
@@ -876,18 +1167,18 @@
    "phases": {
     "1": {
      "casts": 0,
-     "hits": 120,
-     "fights": 1
+     "hits": 2761,
+     "fights": 24
     },
     "2": {
      "casts": 0,
-     "hits": 120,
-     "fights": 1
+     "hits": 2161,
+     "fights": 21
     },
     "4": {
      "casts": 0,
-     "hits": 115,
-     "fights": 1
+     "hits": 567,
+     "fights": 7
     }
    }
   },
@@ -902,8 +1193,23 @@
    "phases": {
     "1": {
      "casts": 0,
-     "hits": 400,
+     "hits": 6186,
+     "fights": 17
+    },
+    "2": {
+     "casts": 0,
+     "hits": 1451,
+     "fights": 6
+    },
+    "3": {
+     "casts": 0,
+     "hits": 34,
      "fights": 1
+    },
+    "4": {
+     "casts": 0,
+     "hits": 969,
+     "fights": 3
     }
    }
   },
@@ -917,9 +1223,25 @@
    ],
    "phases": {
     "1": {
-     "casts": 2,
+     "casts": 54,
      "hits": 0,
-     "fights": 1
+     "fights": 28
+    }
+   }
+  },
+  "1310764": {
+   "en": "Vicious Echoes",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Blightscale Shrieker"
+   ],
+   "phases": {
+    "4": {
+     "casts": 4,
+     "hits": 257,
+     "fights": 3
     }
    }
   },
@@ -934,8 +1256,8 @@
    "phases": {
     "2": {
      "casts": 0,
-     "hits": 8,
-     "fights": 1
+     "hits": 331,
+     "fights": 23
     }
    }
   },
@@ -949,9 +1271,9 @@
    ],
    "phases": {
     "1": {
-     "casts": 2,
+     "casts": 52,
      "hits": 0,
-     "fights": 1
+     "fights": 26
     }
    }
   },
@@ -965,8 +1287,24 @@
    ],
    "phases": {
     "4": {
-     "casts": 3,
-     "hits": 1448,
+     "casts": 49,
+     "hits": 16186,
+     "fights": 16
+    }
+   }
+  },
+  "1313966": {
+   "en": "Generic Spell",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Ravenous Doomscale"
+   ],
+   "phases": {
+    "2": {
+     "casts": 1,
+     "hits": 0,
      "fights": 1
     }
    }
@@ -981,9 +1319,9 @@
    ],
    "phases": {
     "4": {
-     "casts": 3,
+     "casts": 41,
      "hits": 0,
-     "fights": 1
+     "fights": 16
     }
    }
   },
@@ -998,8 +1336,8 @@
    "phases": {
     "4": {
      "casts": 0,
-     "hits": 1082,
-     "fights": 1
+     "hits": 10562,
+     "fights": 17
     }
    }
   },
@@ -1014,8 +1352,24 @@
    "phases": {
     "2": {
      "casts": 0,
-     "hits": 120,
-     "fights": 1
+     "hits": 2939,
+     "fights": 23
+    }
+   }
+  },
+  "1318329": {
+   "en": "Calcified Corpse",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "4": {
+     "casts": 0,
+     "hits": 276,
+     "fights": 8
     }
    }
   },
@@ -1029,9 +1383,9 @@
    ],
    "phases": {
     "1": {
-     "casts": 2,
+     "casts": 52,
      "hits": 0,
-     "fights": 1
+     "fights": 26
     }
    }
   }

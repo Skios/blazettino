@@ -1,0 +1,644 @@
+{
+ "name": "Nek'zali the Soulcoiler",
+ "encounter": 3470,
+ "phases": {
+  "1": "Stage One: Soulcoiler Initiation",
+  "2": "Intermission: Ritual of Awakening",
+  "3": "Stage Two: Uncoiling"
+ },
+ "logs": [
+  "MqzAmrHX72PJwRQ8#6",
+  "RaZCT7cxPbwQ4VNA#1"
+ ],
+ "abilities": {
+  "1": {
+   "en": "Melee",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Echo of Jawae",
+    "Nek'zali the Soulcoiler",
+    "Restless Amani"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 92,
+     "fights": 2
+    },
+    "2": {
+     "casts": 0,
+     "hits": 78,
+     "fights": 2
+    },
+    "3": {
+     "casts": 0,
+     "hits": 144,
+     "fights": 2
+    }
+   }
+  },
+  "32409": {
+   "en": "Shadow Word: Death",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 7,
+     "fights": 2
+    },
+    "2": {
+     "casts": 0,
+     "hits": 11,
+     "fights": 2
+    },
+    "3": {
+     "casts": 0,
+     "hits": 15,
+     "fights": 2
+    }
+   }
+  },
+  "145629": {
+   "en": "Anti-Magic Zone",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Environment"
+   ],
+   "phases": {
+    "2": {
+     "casts": 18,
+     "hits": 0,
+     "fights": 1
+    }
+   }
+  },
+  "1284103": {
+   "en": "Possession Barrage",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nek'zali the Soulcoiler"
+   ],
+   "phases": {
+    "1": {
+     "casts": 6,
+     "hits": 0,
+     "fights": 2
+    },
+    "3": {
+     "casts": 5,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1284109": {
+   "en": "Hollowing Strikes",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nek'zali the Soulcoiler"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 97,
+     "fights": 2
+    },
+    "3": {
+     "casts": 0,
+     "hits": 109,
+     "fights": 2
+    }
+   }
+  },
+  "1285681": {
+   "en": "Soulcoil Ignition",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nek'zali the Soulcoiler"
+   ],
+   "phases": {
+    "1": {
+     "casts": 4,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1287434": {
+   "en": "Essence Rend",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nek'zali the Soulcoiler"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 129,
+     "fights": 2
+    },
+    "3": {
+     "casts": 0,
+     "hits": 36,
+     "fights": 2
+    }
+   }
+  },
+  "1287533": {
+   "en": "Gravebound Advance",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Restless Amani"
+   ],
+   "phases": {
+    "1": {
+     "casts": 22,
+     "hits": 0,
+     "fights": 2
+    },
+    "2": {
+     "casts": 27,
+     "hits": 0,
+     "fights": 2
+    },
+    "3": {
+     "casts": 42,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1287987": {
+   "en": "Essence Rend",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nek'zali, the Soulcoiler"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 1,
+     "fights": 1
+    },
+    "3": {
+     "casts": 0,
+     "hits": 1,
+     "fights": 1
+    }
+   }
+  },
+  "1288554": {
+   "en": "Latent Cultist",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nek'zali the Soulcoiler"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 30,
+     "fights": 2
+    },
+    "2": {
+     "casts": 0,
+     "hits": 84,
+     "fights": 2
+    },
+    "3": {
+     "casts": 0,
+     "hits": 119,
+     "fights": 2
+    }
+   }
+  },
+  "1288772": {
+   "en": "Soulcoil Rite",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nek'zali the Soulcoiler"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 2352,
+     "fights": 2
+    },
+    "3": {
+     "casts": 0,
+     "hits": 2214,
+     "fights": 2
+    }
+   }
+  },
+  "1289855": {
+   "en": "Hungering Pyre",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Echo of Jawae"
+   ],
+   "phases": {
+    "2": {
+     "casts": 5,
+     "hits": 37,
+     "fights": 2
+    }
+   }
+  },
+  "1289875": {
+   "en": "Cremation",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Echo of Jawae"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 1268,
+     "fights": 2
+    },
+    "3": {
+     "casts": 0,
+     "hits": 211,
+     "fights": 2
+    }
+   }
+  },
+  "1289902": {
+   "en": "Soul Transfer",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nek'zali the Soulcoiler"
+   ],
+   "phases": {
+    "1": {
+     "casts": 4,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1290390": {
+   "en": "Soulcoil Well",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nek'zali the Soulcoiler"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 11,
+     "fights": 2
+    }
+   }
+  },
+  "1292034": {
+   "en": "Possession Barrage",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nek'zali the Soulcoiler"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 567,
+     "fights": 2
+    },
+    "3": {
+     "casts": 0,
+     "hits": 501,
+     "fights": 2
+    }
+   }
+  },
+  "1292248": {
+   "en": "Soul Transfer",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Echo of Jawae"
+   ],
+   "phases": {
+    "2": {
+     "casts": 4,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1292315": {
+   "en": "Uncoiling",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nek'zali the Soulcoiler"
+   ],
+   "phases": {
+    "3": {
+     "casts": 0,
+     "hits": 5868,
+     "fights": 2
+    }
+   }
+  },
+  "1293211": {
+   "en": "Soul Transfer",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Summoner Jawae"
+   ],
+   "phases": {
+    "1": {
+     "casts": 2,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1293660": {
+   "en": "Soulcoil Ignition",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nek'zali the Soulcoiler"
+   ],
+   "phases": {
+    "1": {
+     "casts": 2,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1293664": {
+   "en": "Soulcoil Ignition",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nek'zali the Soulcoiler"
+   ],
+   "phases": {
+    "1": {
+     "casts": 4,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1294729": {
+   "en": "Corpse Blight",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Restless Amani"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 375,
+     "fights": 2
+    },
+    "2": {
+     "casts": 0,
+     "hits": 402,
+     "fights": 2
+    },
+    "3": {
+     "casts": 0,
+     "hits": 702,
+     "fights": 2
+    }
+   }
+  },
+  "1294742": {
+   "en": "Hungering Pyre",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Echo of Jawae"
+   ],
+   "phases": {
+    "2": {
+     "casts": 5,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1294846": {
+   "en": "Anguished Echoes",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nek'zali the Soulcoiler"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 9,
+     "fights": 2
+    },
+    "3": {
+     "casts": 0,
+     "hits": 3,
+     "fights": 2
+    }
+   }
+  },
+  "1294933": {
+   "en": "Slithering Flame",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Echo of Jawae"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 523,
+     "fights": 2
+    }
+   }
+  },
+  "1295085": {
+   "en": "Soul Transfer",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Echo of Jawae"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 1,
+     "fights": 1
+    }
+   }
+  },
+  "1295124": {
+   "en": "Ritual of Awakening",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nek'zali the Soulcoiler"
+   ],
+   "phases": {
+    "1": {
+     "casts": 2,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1297624": {
+   "en": "Ritual Burn",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nek'zali the Soulcoiler"
+   ],
+   "phases": {
+    "1": {
+     "casts": 444,
+     "hits": 0,
+     "fights": 2
+    },
+    "3": {
+     "casts": 117,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1297630": {
+   "en": "Vessel of Awakening",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Restless Amani"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 285,
+     "fights": 2
+    }
+   }
+  },
+  "1299673": {
+   "en": "Invoke",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nek'zali the Soulcoiler"
+   ],
+   "phases": {
+    "3": {
+     "casts": 6,
+     "hits": 0,
+     "fights": 2
+    }
+   }
+  },
+  "1306593": {
+   "en": "[DNT] Increase Drumming",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Ritual Drummer"
+   ],
+   "phases": {
+    "2": {
+     "casts": 0,
+     "hits": 9,
+     "fights": 1
+    },
+    "3": {
+     "casts": 0,
+     "hits": 9,
+     "fights": 2
+    },
+    "1": {
+     "casts": 0,
+     "hits": 2,
+     "fights": 1
+    }
+   }
+  },
+  "1307939": {
+   "en": "Corpse Blight",
+   "it": "",
+   "metric": "",
+   "note": "",
+   "sources": [
+    "Nek'zali the Soulcoiler"
+   ],
+   "phases": {
+    "1": {
+     "casts": 0,
+     "hits": 1562,
+     "fights": 2
+    },
+    "2": {
+     "casts": 0,
+     "hits": 2322,
+     "fights": 2
+    },
+    "3": {
+     "casts": 0,
+     "hits": 3418,
+     "fights": 2
+    }
+   }
+  }
+ }
+}
