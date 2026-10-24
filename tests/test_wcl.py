@@ -74,5 +74,26 @@ class RateLimitTest(unittest.TestCase):
                 self.run_with([http429(), {"data": {"rateLimitData": {"pointsResetIn": 1}}}] * 2)
 
 
+class EventsTest(unittest.TestCase):
+    def test_follows_next_page_timestamp_until_the_end(self):
+        pages = [
+            {"data": {"reportData": {"report": {"events": {"data": [{"t": 1}, {"t": 2}], "nextPageTimestamp": 3}}}}},
+            {"data": {"reportData": {"report": {"events": {"data": [{"t": 3}], "nextPageTimestamp": None}}}}},
+        ]
+        queries = []
+
+        def fake(q):
+            queries.append(q)
+            return pages[len(queries) - 1]
+
+        with mock.patch.object(wcl, "gql", fake):
+            out = wcl.events("ABC", 21, 0, 100, "DamageTaken", "Friendlies")
+        self.assertEqual(out, [{"t": 1}, {"t": 2}, {"t": 3}])
+        self.assertIn("startTime:0", queries[0])
+        self.assertIn("startTime:3", queries[1])
+        self.assertIn("dataType:DamageTaken", queries[0])
+        self.assertIn("hostilityType:Friendlies", queries[0])
+
+
 if __name__ == "__main__":
     unittest.main()

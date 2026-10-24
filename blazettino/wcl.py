@@ -91,6 +91,18 @@ def report(code: str, body: str) -> dict:
     return gql('{reportData{report(code:"%s"){%s}}}' % (code, body))["data"]["reportData"]["report"]
 
 
+def events(code: str, fight_id: int, start: int, end: int, data_type: str, hostility: str = "Friendlies") -> list[dict]:
+    """Every event of one fight and kind, page after page (10000 per page, each page cached by gql)."""
+    out = []
+    while start is not None:
+        body = ("events(fightIDs:[%d],startTime:%d,endTime:%d,dataType:%s,hostilityType:%s,limit:10000)"
+                "{data nextPageTimestamp}") % (fight_id, start, end, data_type, hostility)
+        page = report(code, body)["events"]
+        out += page["data"]
+        start = page["nextPageTimestamp"]
+    return out
+
+
 def fight_tables(code: str, fight_id: int) -> tuple[dict, dict, dict, dict]:
     """(Summary, DamageTaken, Rankings by dps, Rankings by hps) for one fight, shaped like tests/fixtures."""
     table = lambda kind: report(code, f"table(dataType:{kind},fightIDs:[{fight_id}])")["table"]
