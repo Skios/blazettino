@@ -77,5 +77,39 @@ class FileTest(unittest.TestCase):
             self.assertEqual([p.name for p in folder.iterdir()], ["3492.json"])
 
 
+class TableTest(unittest.TestCase):
+    def folder(self, tmp, **fields):
+        folder = Path(tmp)
+        data = {"abilities": {"1292403": {"en": "Caustic Waves", "it": "Onde Caustiche", "metric": "avoid", "note": "", **fields}}}
+        abilities.save(folder, 3492, data)
+        return folder
+
+    def test_table_is_keyed_by_id_and_lowercase_name_and_skips_untouched_abilities(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            t = abilities.table(self.folder(tmp))
+            self.assertEqual(t[1292403], t["caustic waves"])
+            self.assertEqual(t["caustic waves"]["it"], "Onde Caustiche")
+            self.assertEqual(abilities.table(self.folder(tmp, metric="", it="")), {})
+        self.assertEqual(abilities.table(Path("/nonexistent")), {})
+
+    def test_unknown_metric_stops_with_the_file_and_the_valid_ones(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            with self.assertRaises(SystemExit) as cm:
+                abilities.table(self.folder(tmp, metric="avod"))
+        self.assertIn("avod", str(cm.exception))
+        self.assertIn("avoid", str(cm.exception))
+
+
+class TagTest(unittest.TestCase):
+    def test_deaths_get_the_text_of_the_metric_of_their_killing_ability(self):
+        from tests.helpers import players
+        ps = players(21)
+        table = {"caustic waves": {"metric": "avoid", "it": "", "note": ""}}
+        labelled = [d for p in abilities.tag_deaths(ps, table) for d in p.deaths if d.label]
+        self.assertTrue(labelled)
+        self.assertTrue(all(d.ability == "Caustic Waves" and d.label == abilities.METRIC_TEXT["avoid"] for d in labelled))
+        self.assertEqual(abilities.tag_deaths(ps, {}), ps)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -31,7 +31,7 @@ class Death:
     mass: bool
     boss: str = ""
     spell: int = 0  # WarcraftLogs id of the killing ability (0 = unknown)
-    label: str = ""  # what the ability asks of the player, from mythictrap.labels()
+    label: str = ""  # what the ability asks of the player, from the ability's metric (abilities.tag_deaths)
 
 
 @dataclass(frozen=True)

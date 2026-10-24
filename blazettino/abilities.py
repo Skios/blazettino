@@ -5,12 +5,17 @@ import bisect
 import json
 import os
 from collections import defaultdict
+from dataclasses import replace
 from pathlib import Path
 
-from blazettino import wcl
+from blazettino import kpi, wcl
 from blazettino.config import ROOT
 
 DATA = ROOT / "data" / "abilities"
+METRIC_TEXT = {  # metric -> what the ability asks of the player (also the label of a death on it)
+    "avoid": "da schivare", "interrupt": "da interrompere", "dispel": "da dispellare",
+    "soak": "da assorbire in gruppo", "break": "da rompere nel modo giusto",
+}
 HAND = {"it": "", "metric": "", "note": ""}  # filled in by people: Italian name, how to measure it, text for the LLM
 
 
@@ -84,3 +89,26 @@ def learn(code: str, fight_id: int, folder: Path = DATA) -> str:
     data = merge(load(folder, f["encounterID"]), f["encounterID"], f["name"], phase_names, f"{code}#{fight_id}", found, spells)
     save(folder, f["encounterID"], data)
     return f["name"]
+
+
+def table(folder: Path = DATA) -> dict[int | str, dict]:
+    """Abilities someone has filled in (a metric or an Italian name), by spell id and by lowercase English name.
+    An unknown metric stops the run: a typo would otherwise silently measure nothing."""
+    out: dict[int | str, dict] = {}
+    for path in sorted(folder.glob("*.json")) if folder.is_dir() else ():
+        for spell, a in load(folder, int(path.stem)).get("abilities", {}).items():
+            if a.get("metric") and a["metric"] not in METRIC_TEXT:
+                raise SystemExit(f"{path}: metrica '{a['metric']}' sconosciuta per {a.get('en', spell)}; valide: {', '.join(METRIC_TEXT)}")
+            if a.get("metric") or a.get("it"):
+                entry = {k: a.get(k, "") for k in ("en", "it", "metric", "note")}
+                out.setdefault(int(spell), entry)
+                out.setdefault(a["en"].lower(), entry)
+    return out
+
+
+def tag_deaths(players: list[kpi.Player], spells: dict[int | str, dict]) -> list[kpi.Player]:
+    """Attach what the killing ability asks of the player ("da schivare"...) to each death that has a metric."""
+    def text(d: kpi.Death) -> str:
+        return METRIC_TEXT.get((spells.get(d.spell) or spells.get(d.ability.lower()) or {}).get("metric", ""), "")
+
+    return [replace(p, deaths=tuple(replace(d, label=text(d)) for d in p.deaths)) if spells else p for p in players]

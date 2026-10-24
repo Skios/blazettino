@@ -170,9 +170,9 @@
   },
   "1286885": {
    "en": "Falling Debris",
-   "it": "",
-   "metric": "",
-   "note": "",
+   "it": "Macerie Cadenti",
+   "metric": "avoid",
+   "note": "cadono a terra: si schivano uscendo dal cerchio",
    "sources": [
     "Ula'tek"
    ],
@@ -318,7 +318,7 @@
   "1292403": {
    "en": "Caustic Waves",
    "it": "",
-   "metric": "",
+   "metric": "avoid",
    "note": "",
    "sources": [
     "Ula'tek"
@@ -435,8 +435,8 @@
   "1297213": {
    "en": "Malignant Shell",
    "it": "",
-   "metric": "",
-   "note": "",
+   "metric": "break",
+   "note": "il Guscio Maligno delle uova si rompe solo sugli Spectral Coils",
    "sources": [
     "Ula'tek"
    ],

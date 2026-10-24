@@ -5,7 +5,7 @@ from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from typing import Callable
 
-from blazettino import comment, kpi, mythictrap, roster
+from blazettino import abilities, comment, kpi, roster
 from blazettino.attempts import Attempt
 from blazettino.comment import Comment
 
@@ -53,8 +53,8 @@ def assemble(
     """Drop excluded raiders, merge the night and ask the LLM once per boss plus once for the whole night."""
     book = cfg.get("players", {})
     exclude = {roster.canon(n, book) for n in cfg.get("exclude", ())}
-    spells = cfg.get("spell_labels", {})
-    per_boss = [(a, mythictrap.tag_deaths([p for p in roster.apply(ps, book) if roster.canon(p.name, book) not in exclude], spells)) for a, ps in tries]
+    spells = cfg.get("spells", {})
+    per_boss = [(a, abilities.tag_deaths([p for p in roster.apply(ps, book) if roster.canon(p.name, book) not in exclude], spells)) for a, ps in tries]
     merged = kpi.merge([_tag_boss(ps, a.name) for a, ps in per_boss])
     jobs = [(ps, comment.attempt_context(a)) for a, ps in per_boss]
     jobs.append((merged, comment.night_context([a for a, _ in per_boss])))
@@ -89,7 +89,7 @@ def assemble_boss(
     """A page for one boss of a night: one LLM call, its comments are the page comments."""
     book = cfg.get("players", {})
     exclude = {roster.canon(n, book) for n in cfg.get("exclude", ())}
-    ps = mythictrap.tag_deaths([p for p in roster.apply(players, book) if roster.canon(p.name, book) not in exclude], cfg.get("spell_labels", {}))
+    ps = abilities.tag_deaths([p for p in roster.apply(players, book) if roster.canon(p.name, book) not in exclude], cfg.get("spells", {}))
     notes = comments_fn(ps, cfg, context=comment.attempt_context(attempt))
     return Night(
         f"{attempt.name} ({_day(date)}) · {clean_title(title)}", date, [BossReport(attempt, ps, notes)], ps, notes,

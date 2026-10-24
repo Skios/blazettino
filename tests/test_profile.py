@@ -42,7 +42,7 @@ class ProfileTest(unittest.TestCase):
         self.assertEqual(p["damage"]["777"]["players"]["99"]["dmg"], 5)
 
 
-LABELS = {"falling debris": "Dodge", "stone venom": "Heal Through", "malignant shell": "Keep eggs safe"}
+LABELS = {"falling debris": {"metric": "avoid", "it": "Macerie Cadenti", "note": ""}, "stone venom": {"metric": "", "it": "", "note": ""}}
 
 
 def many(spell, per_player):
@@ -56,7 +56,7 @@ class AvoidableTest(unittest.TestCase):
         dmg = many(10, {1: (2, 100)}) + many(11, {1: (5, 100)}) + [hit(60000, 2, 10, 999)]
         prof = build(damage=dmg, deaths=deaths)
         out = profile.avoidable(prof, LABELS, cutoff=2)
-        self.assertEqual(list(out), ["Falling Debris"])  # Stone Venom is "Heal Through": not avoidable
+        self.assertEqual(list(out), ["Falling Debris"])  # Stone Venom has no "avoid" metric
         self.assertEqual(out["Falling Debris"], {"Tank": {"dmg": 200, "hits": 2}, "Dps": {"dmg": 999, "hits": 1}})
 
     def test_late_hits_are_dropped_when_too_many_raiders_are_already_dead(self):
@@ -68,20 +68,21 @@ class AvoidableTest(unittest.TestCase):
 class NotesTest(unittest.TestCase):
     def test_a_player_taking_far_more_than_the_raid_gets_the_ability_with_a_hand_note(self):
         dmg = many(10, {1: (10, 400), 2: (1, 100), 3: (1, 100)})
-        notes = profile.notes(build(damage=dmg), LABELS, {"Falling Debris": "cade solo in fase 1"})
-        self.assertIn("Falling Debris", notes["Tank"][0])
+        table = {"falling debris": {**LABELS["falling debris"], "note": "cade solo in fase 1"}}
+        notes = profile.notes(build(damage=dmg), table)
+        self.assertIn("Macerie Cadenti", notes["Tank"][0])  # the Italian name when there is one
         self.assertIn("10 colpi", notes["Tank"][0])
         self.assertIn("cade solo in fase 1", notes["Tank"][0])
         self.assertNotIn("Dps", notes)
 
     def test_notable_interrupters_are_named_and_a_player_has_at_most_three_notes(self):
         interrupts = [{"timestamp": 1000 + 1000 * i, "sourceID": 2, "abilityGameID": 20, "extraAbilityGameID": 11} for i in range(3)]
-        notes = profile.notes(build(interrupts=interrupts), LABELS, {})
+        notes = profile.notes(build(interrupts=interrupts), LABELS)
         self.assertIn("3 interruzioni", notes["Dps"][0])
         spells = {i: f"Spell{i}" for i in range(100, 110)}
-        labels = {f"spell{i}": "Dodge" for i in range(100, 110)}
+        labels = {f"spell{i}": {"metric": "avoid", "it": "", "note": ""} for i in range(100, 110)}
         dmg = [e for i in range(100, 110) for e in many(i, {1: (10, 400), 2: (1, 100), 3: (1, 100)})]
-        many_notes = profile.notes(profile.build(1000, dmg, [], [], [], NAMES, spells), labels, {})
+        many_notes = profile.notes(profile.build(1000, dmg, [], [], [], NAMES, spells), labels)
         self.assertEqual(len(many_notes["Tank"]), profile.MAX_NOTES)
 
 
@@ -97,7 +98,7 @@ class AnnotateTest(unittest.TestCase):
             "Other": {"dmg": 100, "hits": 2, "list": [[10, 50, 0]] * 2}}}},
             "deaths": [], "interrupts": {}, "dispels": {}}
         with mock.patch.object(profile, "fight_profile", return_value=prof):
-            out = profile.annotate(players, "CODE", 21, {"falling debris": "Dodge"}, {})
+            out = profile.annotate(players, "CODE", 21, {"falling debris": {"metric": "avoid", "it": "", "note": ""}})
         self.assertIn("Falling Debris", out[0].notes[0])
         self.assertEqual(out[1].notes, ())
         self.assertEqual(out[0].name, who)

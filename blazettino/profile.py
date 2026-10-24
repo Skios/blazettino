@@ -7,9 +7,8 @@ from collections import defaultdict
 from statistics import mean
 
 from blazettino import wcl
-from blazettino.config import ROOT
+from blazettino.abilities import METRIC_TEXT
 
-AVOIDABLE_LABELS = ("dodge", "move out", "spread", "avoid")  # MythicTrap action labels: damage taken here was a choice
 DEAD_CUTOFF = 5  # hits taken when more raiders than this are already dead are ignored (Wipefest does the same)
 MAX_NOTES = 3  # facts per player given to the LLM
 OUTLIER_X = 3  # a player is notable when he took this many times the average of the others
@@ -44,12 +43,12 @@ def build(start: int, damage: list[dict], deaths: list[dict], interrupts: list[d
     return out
 
 
-def avoidable(prof: dict, labels: dict, cutoff: int = DEAD_CUTOFF) -> dict[str, dict[str, dict]]:
-    """{ability: {player: {dmg, hits}}} for the abilities whose MythicTrap label says to dodge them,
+def avoidable(prof: dict, spells: dict, cutoff: int = DEAD_CUTOFF) -> dict[str, dict[str, dict]]:
+    """{ability: {player: {dmg, hits}}} for the abilities whose metric (abilities table) is "avoid",
     without the hits taken when more than `cutoff` raiders were already dead."""
     out = {}
     for ability, a in prof["damage"].items():
-        if not labels.get(ability.lower(), "").lower().startswith(AVOIDABLE_LABELS):
+        if spells.get(ability.lower(), {}).get("metric") != "avoid":
             continue
         per = {}
         for player, v in a["players"].items():
@@ -70,30 +69,24 @@ def _repeats(prof: dict, key: str, text: str) -> dict[str, list[tuple[int, str]]
     return out
 
 
-def notes(prof: dict, labels: dict, hand: dict, cutoff: int = DEAD_CUTOFF) -> dict[str, list[str]]:
+def notes(prof: dict, spells: dict, cutoff: int = DEAD_CUTOFF) -> dict[str, list[str]]:
     """The few facts worth telling about each player, strongest first (damage taken from avoidable abilities
-    far above the others, many interruptions or dispels); `hand` adds our own text for an ability when it shows up."""
+    far above the others, many interruptions or dispels); the ability's hand-written note is added when it shows up."""
     scored: dict[str, list[tuple[float, str]]] = defaultdict(list)
-    for ability, per in avoidable(prof, labels, cutoff).items():
+    for ability, per in avoidable(prof, spells, cutoff).items():
         for player, v in per.items():
             others = [o["dmg"] for p, o in per.items() if p != player]
             base = mean(others) if others else 0
             if v["hits"] < 2 or (others and v["dmg"] < OUTLIER_X * base):
                 continue
             ratio = f", {v['dmg'] / base:.0f}x la media degli altri" if base else ""
-            extra = f" ({hand[ability]})" if ability in hand else ""
-            scored[player].append((v["dmg"], f"{ability} [{labels[ability.lower()]}]: {v['hits']} colpi, {v['dmg'] / 1e6:.1f}M{ratio}{extra}"))
+            a = spells[ability.lower()]
+            extra = f" ({a['note']})" if a["note"] else ""
+            scored[player].append((v["dmg"], f"{a['it'] or ability} [{METRIC_TEXT['avoid']}]: {v['hits']} colpi, {v['dmg'] / 1e6:.1f}M{ratio}{extra}"))
     for key, text in (("interrupts", "interruzioni"), ("dispels", "dispel")):
         for player, [(n, line)] in _repeats(prof, key, text).items():
             scored[player].append((n * 1e3, line))
     return {p: [t for _, t in sorted(v, reverse=True)[:MAX_NOTES]] for p, v in scored.items()}
-
-
-HAND_NOTES = ROOT / "data" / "notes.json"  # our own words per ability, told to the LLM only when that ability shows up
-
-
-def hand_notes(path=HAND_NOTES) -> dict[str, str]:
-    return json.loads(path.read_text()) if path.exists() else {}
 
 
 def fight_profile(code: str, fight_id: int) -> dict:
@@ -107,7 +100,7 @@ def fight_profile(code: str, fight_id: int) -> dict:
     return build(f["startTime"], get("DamageTaken"), get("Deaths"), get("Interrupts"), get("Dispels"), names, spells)
 
 
-def annotate(players: list, code: str, fight_id: int, labels: dict, hand: dict) -> list:
+def annotate(players: list, code: str, fight_id: int, spells: dict) -> list:
     """Players with the notable events of the fight attached (read-only for the grade)."""
-    found = notes(fight_profile(code, fight_id), labels, hand)
+    found = notes(fight_profile(code, fight_id), spells)
     return [dataclasses.replace(p, notes=tuple(found.get(p.name, ()))) for p in players]
