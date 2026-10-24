@@ -134,7 +134,7 @@ FULL_HEALTH = 0.99  # a hit that finds the player at or above this share of max 
 
 
 def slow_deaths(damage: list[dict], deaths: list[dict], names: dict[int, str], spells: dict[int, str],
-                heals: list[dict] = ()) -> dict[str, kpi.SlowDeath]:
+                heals: list[dict] = (), busters: frozenset = frozenset()) -> dict[str, kpi.SlowDeath]:
     """Per player, the slowest death: seconds from the last hit that found them at full health to the death, the hits in
     between and the biggest one, plus the damage taken and the healing received in that time (heal events given in `heals`).
     Needs damage events with resources. Deaths in a crowd or after too many deaths are left out."""
@@ -158,20 +158,25 @@ def slow_deaths(damage: list[dict], deaths: list[dict], names: dict[int, str], s
         if not full:
             continue
         run = mine[full[-1]:]
-        healed = sum(h.get("amount", 0) for h in heals if h.get("targetID") == who and run[0][0] <= h["timestamp"] <= t)
+        mine_heals = [h for h in heals if h.get("targetID") == who and run[0][0] <= h["timestamp"] <= t]
+        healed = sum(h.get("amount", 0) for h in mine_heals)
+        ticks = sum(h.get("amount", 0) for h in mine_heals if h.get("tick"))
+        hit_busters = sum(_name(spells, e["abilityGameID"]).lower() in busters for e in damage
+                          if e["targetID"] == who and run[0][0] <= e["timestamp"] <= t)
         slow = kpi.SlowDeath((t - run[0][0]) / 1000, len(run), round(max(h[2] for h in run) * 100, 1), _name(spells, d.get("killingAbilityGameID", 0)),
-                             sum(h[3] for h in run), healed)
+                             sum(h[3] for h in run), healed, ticks / healed if healed else 0.0, hit_busters)
         if who in names and (names[who] not in out or out[names[who]].ttd_s < slow.ttd_s):
             out[names[who]] = slow
     return out
 
 
-def with_slow_deaths(players: list, code: str, fight_id: int) -> list:
+def with_slow_deaths(players: list, code: str, fight_id: int, table: dict = {}) -> list:
     """Players with their slowest death attached (for the prize 'Il Dimenticato')."""
     f = wcl.report(code, "fights(fightIDs:[%d]){startTime endTime}" % fight_id)["fights"][0]
     md = wcl.report(code, "masterData{actors{id name type}abilities{gameID name}}")["masterData"]
     names = {a["id"]: a["name"] for a in md["actors"] if a["type"] == "Player"}
     spells = {a["gameID"]: a["name"] for a in md["abilities"]}
     get = lambda kind, resources=False: wcl.events(code, fight_id, f["startTime"], f["endTime"], kind, resources=resources)
-    found = slow_deaths(get("DamageTaken", True), get("Deaths"), names, spells, get("Healing"))
+    busters = frozenset(k for k, v in table.items() if isinstance(k, str) and v.get("metric") == "tankbuster")
+    found = slow_deaths(get("DamageTaken", True), get("Deaths"), names, spells, get("Healing"), busters)
     return [dataclasses.replace(p, slowest_death=found.get(p.name)) for p in players]

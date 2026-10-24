@@ -42,6 +42,8 @@ class SlowDeath:
     spell: str  # what killed
     damage: int = 0  # damage taken between the last full health and the death
     healing: int = 0  # healing received in the same time
+    hot_share: float = 0.0  # share of that healing that came from heals over time (ticks)
+    busters: int = 0  # tank buster hits taken in that time (abilities marked tankbuster in the boss file)
 
 
 @dataclass(frozen=True)

@@ -36,7 +36,7 @@ class AssembleTest(unittest.TestCase):
             return fake_comments(ps, cfg, context)
 
         n = build_night(tries=[(KILL_B, list(stats.values()))], comments_fn=spy)
-        self.assertEqual([a.key for a in n.bosses[0].awards], ["anfetamina"])
+        self.assertEqual({a.key: a.winner for a in n.bosses[0].awards}["anfetamina"], "Karabosca")
         self.assertTrue(any("premio:anfetamina" in c for c in seen))
 
     def test_every_boss_and_the_night_have_their_own_comments(self):

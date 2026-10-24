@@ -9,7 +9,7 @@ from blazettino import abilities, awards, comment, kpi, roster
 from blazettino.attempts import Attempt
 from blazettino.comment import Comment
 
-LLM_WORKERS = 2  # free tiers rate-limit: two calls at a time is enough for ~4 per night
+LLM_WORKERS = 1  # one call at a time: with two in flight the free tier answered 429/503 too often (success rate ~60%)
 
 
 @dataclass(frozen=True)

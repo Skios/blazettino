@@ -15,6 +15,7 @@ DATA = ROOT / "data" / "abilities"
 METRIC_TEXT = {  # metric -> what the ability asks of the player (also the label of a death on it)
     "avoid": "da schivare", "interrupt": "da interrompere", "dispel": "da dispellare",
     "soak": "da assorbire in gruppo", "break": "da rompere nel modo giusto",
+    "tankbuster": "da assorbire come tank (inevitabile)",
 }
 KINDS = ("wave", "oneshot")  # wave (default): a hit now and then is fine; oneshot: even one hit counts
 HAND = {"it": "", "metric": "", "kind": "", "note": ""}  # filled in by people: Italian name, how to measure it, text for the LLM

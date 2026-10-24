@@ -218,6 +218,12 @@ class SlowDeathTest(unittest.TestCase):
         d = profile.slow_deaths(dmg, [dead(11000, 2)], NAMES, SPELLS, heals)["Dps"]
         self.assertEqual((d.damage, d.healing), (900, 200))  # only target 2, only inside the window
 
+    def test_hot_share_and_tank_busters_in_the_window(self):
+        dmg = [tick(0, 2, 900, 100), tick(5000, 2, 700, 200), {**tick(8000, 2, 100, 600), "abilityGameID": 12}]
+        heals = [{"timestamp": 1000 + 3000, "targetID": 2, "amount": 150, "tick": True}, {"timestamp": 1000 + 6000, "targetID": 2, "amount": 50}]
+        d = profile.slow_deaths(dmg, [dead(9000, 2)], NAMES, {**SPELLS, 12: "Mauling Blow"}, heals, frozenset({"mauling blow"}))["Dps"]
+        self.assertEqual((d.healing, d.hot_share, d.busters), (200, 0.75, 1))
+
     def test_the_slowest_of_several_deaths_is_kept_and_unknown_targets_are_ignored(self):
         dmg = [tick(0, 2, 900, 100), tick(10000, 2, 100, 900), tick(50000, 2, 950, 50), tick(80000, 2, 100, 850), tick(0, 99, 900, 100)]
         out = self.run_it(dmg, [dead(11000, 2), dead(81000, 2), dead(5000, 99)])
