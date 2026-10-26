@@ -1,9 +1,17 @@
 {
  "labels": {
-  "k14HCt3xcZyXbQwq": {}
+  "k14HCt3xcZyXbQwq": {},
+  "wLFxRqXGNWkmjZfQ": {
+   "4": ""
+  }
  },
  "name": "Kith'ix",
- "records": {},
+ "records": {
+  "4": {
+   "code": "wLFxRqXGNWkmjZfQ",
+   "kill_s": 302
+  }
+ },
  "reports": {
   "k14HCt3xcZyXbQwq": {
    "date": "2026-10-22",
@@ -60,6 +68,31 @@
        "kill": false,
        "pct": 42.9,
        "s": 239
+      }
+     ]
+    }
+   }
+  },
+  "wLFxRqXGNWkmjZfQ": {
+   "date": "2026-10-26",
+   "difficulties": {
+    "4": {
+     "kill_s": 302,
+     "pulls": [
+      {
+       "kill": false,
+       "pct": 36.71,
+       "s": 236
+      },
+      {
+       "kill": false,
+       "pct": 38.72,
+       "s": 280
+      },
+      {
+       "kill": true,
+       "pct": 0.0,
+       "s": 302
       }
      ]
     }

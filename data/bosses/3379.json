@@ -2,13 +2,16 @@
  "labels": {
   "MqzAmrHX72PJwRQ8": {
    "4": ""
+  },
+  "wLFxRqXGNWkmjZfQ": {
+   "4": "NEW RECORD"
   }
  },
  "name": "Nymrissa Wavecaller",
  "records": {
   "4": {
-   "code": "MqzAmrHX72PJwRQ8",
-   "kill_s": 392
+   "code": "wLFxRqXGNWkmjZfQ",
+   "kill_s": 294
   }
  },
  "reports": {
@@ -22,6 +25,86 @@
        "kill": true,
        "pct": 0.0,
        "s": 392
+      }
+     ]
+    }
+   }
+  },
+  "wLFxRqXGNWkmjZfQ": {
+   "date": "2026-10-26",
+   "difficulties": {
+    "4": {
+     "kill_s": 294,
+     "pulls": [
+      {
+       "kill": true,
+       "pct": 0.0,
+       "s": 294
+      }
+     ]
+    },
+    "5": {
+     "kill_s": null,
+     "pulls": [
+      {
+       "kill": false,
+       "pct": 78.07,
+       "s": 127
+      },
+      {
+       "kill": false,
+       "pct": 77.7,
+       "s": 148
+      },
+      {
+       "kill": false,
+       "pct": 84.58,
+       "s": 112
+      },
+      {
+       "kill": false,
+       "pct": 75.91,
+       "s": 127
+      },
+      {
+       "kill": false,
+       "pct": 75.88,
+       "s": 135
+      },
+      {
+       "kill": false,
+       "pct": 74.18,
+       "s": 170
+      },
+      {
+       "kill": false,
+       "pct": 75.73,
+       "s": 234
+      },
+      {
+       "kill": false,
+       "pct": 71.76,
+       "s": 172
+      },
+      {
+       "kill": false,
+       "pct": 73.65,
+       "s": 213
+      },
+      {
+       "kill": false,
+       "pct": 77.38,
+       "s": 154
+      },
+      {
+       "kill": false,
+       "pct": 65.04,
+       "s": 259
+      },
+      {
+       "kill": false,
+       "pct": 68.46,
+       "s": 247
       }
      ]
     }
