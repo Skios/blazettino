@@ -126,7 +126,9 @@ def load_fight(summary: dict, taken: dict, rank_dps: dict, rank_hps: dict) -> li
     damage = defaultdict(int, {e["name"]: e["total"] for e in s["damageDone"]})  # absent = did nothing
     healing = defaultdict(int, {e["name"]: e["total"] for e in s["healingDone"]})
     tk = {e["name"]: e for e in taken["data"]["entries"]}
-    roster = [(role, d) for key, role in ROLE_KEYS.items() for d in s["playerDetails"][key]]
+    # in the group but in none of the tables (offline, outside the instance) = not in the fight
+    active = {e["name"] for e in (*s["damageDone"], *s["healingDone"])} | tk.keys()
+    roster = [(role, d) for key, role in ROLE_KEYS.items() for d in s["playerDetails"][key] if d["name"] in active]
     ranked = bool(rank_dps["data"]) and bool(rank_hps["data"])
     if ranked:
         dps_p, hps_p = _parses(rank_dps), _parses(rank_hps)
@@ -139,7 +141,7 @@ def load_fight(summary: dict, taken: dict, rank_dps: dict, rank_hps: dict) -> li
     players = []
     for role, d in roster:
         n = d["name"]
-        t = tk[n]
+        t = tk.get(n, {"total": 0})  # absent = took no damage
         players.append(Player(
             name=n, spec=d["specs"][0], cls=d["type"], role=role, ilvl=d["maxItemLevel"],
             damage=damage[n], healing=healing[n], dps=damage[n] / secs, hps=healing[n] / secs,

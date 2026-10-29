@@ -85,6 +85,27 @@ class MissingEntriesTest(unittest.TestCase):
         self.assertEqual((p.damage, p.dps), (0, 0))
         self.assertEqual(len(players), 20)
 
+    def test_raider_absent_from_the_damage_taken_table_is_loaded_with_zero_taken(self):
+        taken = load("taken")
+        taken["data"]["entries"] = [e for e in taken["data"]["entries"] if e["name"] != "Stormrager"]
+        players = kpi.load_fight(load("summary"), taken, load("rank_dps"), load("rank_hps"))
+        p = next(p for p in players if p.name == "Stormrager")
+        self.assertEqual((p.taken, p.mitigation), (0, 0.0))
+        self.assertEqual(len(players), 20)
+
+    def test_raider_in_the_group_but_absent_from_every_table_is_left_out(self):
+        summary, taken = load("summary"), load("taken")
+        for key in ("damageDone", "healingDone"):
+            summary["data"][key] = [e for e in summary["data"][key] if e["name"] != "Stormrager"]
+        taken["data"]["entries"] = [e for e in taken["data"]["entries"] if e["name"] != "Stormrager"]
+        for lst in summary["data"]["playerDetails"].values():
+            for d in lst:
+                if d["name"] == "Stormrager":
+                    del d["maxItemLevel"]
+        players = kpi.load_fight(summary, taken, load("rank_dps"), load("rank_hps"))
+        self.assertNotIn("Stormrager", [p.name for p in players])
+        self.assertEqual(len(players), 19)
+
     def test_damage_taken_entry_without_reduction_means_no_mitigation(self):
         taken = load("taken")
         for e in taken["data"]["entries"]:
