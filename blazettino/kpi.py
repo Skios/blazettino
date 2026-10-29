@@ -69,6 +69,7 @@ class Player:
     hps_bracket: int | None = None
     ranked: bool = True  # False: parses are inside-raid percentiles (no WarcraftLogs ranking on wipes)
     active_s: float | None = None  # seconds spent damaging or healing (WarcraftLogs active time), for the prizes
+    targetable_s: float | None = None  # seconds alive while the boss could be targeted (profile.boss_windows); None = unknown
     casts: int | None = None  # spells cast in the fight, for the prizes
     slowest_death: SlowDeath | None = None  # for the prize 'Il Dimenticato'
     notes: tuple[str, ...] = ()  # notable fight events (profile.notes), told to the LLM, never used in the grade

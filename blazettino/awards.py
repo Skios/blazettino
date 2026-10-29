@@ -89,13 +89,14 @@ def compute(players: list[kpi.Player], duration_s: int) -> list[Award]:
     alive = {p.name: _alive_s(p, duration_s) for p in players}
     # whoever died before the wipe (a death that is not part of the final mass death) has an activity that says nothing
     seen = [p for p in players if alive[p.name] >= MIN_ALIVE_SHARE * duration_s and all(d.mass for d in p.deaths)]
-    active = {p.name: min(100.0, p.active_s / alive[p.name] * 100) for p in seen if p.active_s is not None}
+    # damage is only possible while the boss can be targeted: healers heal through those phases, so they are not "idle" in them
+    active = {p.name: min(100.0, p.active_s / (p.targetable_s or alive[p.name]) * 100) for p in seen if p.active_s is not None}
     apm = {p.name: p.casts / (alive[p.name] / 60) for p in seen if p.casts is not None}
     return [
         *_forgotten(players),
         *_scilla(players),
         *_extremes(active, alive, ("anfetamina", "Premio Fatto di Anfetamina"), ("bradipo", "Premio Bradipo"),
-                   lambda v, m: f"{v:.0f}% del tempo a infliggere danni (mediana del raid {m:.0f}%)"),
+                   lambda v, m: f"{v:.0f}% del tempo con il boss targettabile a infliggere danni (mediana del raid {m:.0f}%)"),
         *_extremes(apm, alive, ("spaccatastiere", "Premio Spaccatastiere"), ("tastiera", "Premio Tastiera Arrugginita"),
                    lambda v, m: f"{v:.0f} azioni al minuto (mediana del raid {m:.0f})"),
     ]

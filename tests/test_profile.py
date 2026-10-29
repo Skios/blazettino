@@ -167,12 +167,38 @@ class PerformanceTest(unittest.TestCase):
         healer = next(p for p in ps if p.role == "healer")
         dps = next(p for p in ps if p.role == "dps")
         perf = {healer.name: {"damage_s": 5.0, "healing_s": 500.0, "casts": 40}, dps.name: {"damage_s": 400.0, "healing_s": 3.0, "casts": 90}}
-        with mock.patch.object(profile, "performance", return_value=perf):
+        with mock.patch.object(profile, "performance", return_value=perf), mock.patch.object(profile, "boss_windows", return_value=([(0, 100), (200, 300)], 600)):
             out = {p.name: p for p in profile.with_performance(ps, "CODE", 21)}
         self.assertEqual((out[healer.name].active_s, out[healer.name].casts), (5.0, 40))  # damage time, not healing time
         self.assertEqual(out[dps.name].active_s, 400.0)
         other = next(p for p in ps if p.name not in perf)
         self.assertIsNone(out[other.name].active_s)
+        self.assertLessEqual(out[dps.name].targetable_s, 200)
+
+
+class TargetableTest(unittest.TestCase):
+    def test_a_long_silence_on_the_boss_is_time_it_could_not_be_targeted(self):
+        hits = [1, 2, 3, 4, 50, 51, 52, 100]
+        self.assertEqual(profile.targetable_windows(hits, 102, gap=5), [(0, 4), (50, 52), (100, 102)])
+
+    def test_no_hits_means_no_windows(self):
+        self.assertEqual(profile.targetable_windows([], 100), [])
+
+    def test_seconds_in_windows_up_to_the_death(self):
+        w = [(0, 100), (200, 300)]
+        self.assertEqual(profile.seconds_in(w, 600), 200)
+        self.assertEqual(profile.seconds_in(w, 250), 150)
+        self.assertEqual(profile.seconds_in(w, 150), 100)
+
+    def test_boss_windows_come_from_the_damage_the_boss_takes(self):
+        from unittest import mock
+        def fake_report(code, body):
+            if "fights(" in body:
+                return {"fights": [{"name": "Boss", "startTime": 1000, "endTime": 301_000}]}
+            return {"masterData": {"actors": [{"id": 1, "name": "Boss"}, {"id": 2, "name": "Add"}]}}
+        ev = [{"targetID": 1, "timestamp": 1000 + t * 1000} for t in (1, 2, 3, 200, 201)] + [{"targetID": 2, "timestamp": 1000 + 100_000}]
+        with mock.patch.object(profile.wcl, "report", fake_report), mock.patch.object(profile.wcl, "events", return_value=ev):
+            self.assertEqual(profile.boss_windows("C", 1), ([(0, 3), (200, 201)], 300))
 
 
 def tick(t_ms, target, hp, amount, max_hp=1000, absorbed=0):

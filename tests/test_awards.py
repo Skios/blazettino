@@ -26,6 +26,13 @@ class AwardsTest(unittest.TestCase):
         self.assertIn("infliggere danni", got["anfetamina"].value)
         self.assertIn("50%", got["bradipo"].value)
 
+    def test_activity_is_measured_on_the_time_the_boss_could_be_targeted(self):
+        ps = with_stats({"Karabosca": (150, 300), "Sleãze": (300, 300)})
+        ps = [replace(p, targetable_s=200) if p.name == "Karabosca" else p for p in ps]  # 150 s of damage in 200 s of targetable boss
+        got = self.by_key(ps)
+        self.assertEqual(got["bradipo"].winner, "Sleãze")  # 50% of 600 s; Karabosca 75% of 200 s is not the lowest
+        self.assertIn("boss targettabile", got["bradipo"].value)
+
     def test_most_and_fewest_casts_per_minute(self):
         got = self.by_key(with_stats({"Yorda": (480, 700), "Madreh": (480, 100)}))
         self.assertEqual((got["spaccatastiere"].winner, got["tastiera"].winner), ("Yorda", "Madreh"))

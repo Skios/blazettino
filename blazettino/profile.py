@@ -106,6 +106,37 @@ def annotate(players: list, code: str, fight_id: int, spells: dict) -> list:
     return [dataclasses.replace(p, notes=tuple(found.get(p.name, ()))) for p in players]
 
 
+TARGET_GAP_S = 5  # the boss takes no damage for longer than this = it could not be targeted
+
+
+def targetable_windows(times_s: list[float], end_s: float, gap: float = TARGET_GAP_S) -> list[tuple[float, float]]:
+    """(start, end) seconds in which the boss was being hit: hits closer than `gap` belong to the same window."""
+    out = []
+    for t in sorted(times_s):
+        if out and t - out[-1][1] <= gap:
+            out[-1] = (out[-1][0], t)
+        else:
+            out.append((0 if not out and t <= gap else t, t))
+    if out and end_s - out[-1][1] <= gap:
+        out[-1] = (out[-1][0], end_s)
+    return out
+
+
+def seconds_in(windows: list[tuple[float, float]], until: float) -> float:
+    return sum(max(0.0, min(b, until) - a) for a, b in windows)
+
+
+def boss_windows(code: str, fight_id: int) -> tuple[list[tuple[float, float]], float] | None:
+    """When the boss of a fight could be hit (guessed from the damage it takes: WarcraftLogs has no targetable events) and the fight length."""
+    f = wcl.report(code, "fights(fightIDs:[%d]){name startTime endTime}" % fight_id)["fights"][0]
+    actors = wcl.report(code, "masterData{actors{id name}}")["masterData"]["actors"]
+    ids = {a["id"] for a in actors if a["name"] == f["name"]}
+    secs = [(e["timestamp"] - f["startTime"]) / 1000 for e in wcl.events(code, fight_id, f["startTime"], f["endTime"], "DamageTaken", "Enemies")
+            if e["targetID"] in ids]
+    length = (f["endTime"] - f["startTime"]) / 1000
+    return (targetable_windows(secs, length), length) if secs else None
+
+
 def performance(code: str, fight_id: int) -> dict[str, dict]:
     """Per player of one fight: seconds spent damaging and healing (WarcraftLogs active time) and spells cast."""
     f = wcl.report(code, "fights(fightIDs:[%d]){startTime endTime}" % fight_id)["fights"][0]
@@ -121,12 +152,19 @@ def performance(code: str, fight_id: int) -> dict[str, dict]:
 
 
 def with_performance(players: list, code: str, fight_id: int) -> list:
-    """Players with active seconds (time spent dealing damage, for everyone: a healer healing is always busy) and casts attached."""
-    perf = performance(code, fight_id)
+    """Players with active seconds (time spent dealing damage, for everyone: a healer healing is always busy), and the time the boss could be targeted and casts attached."""
+    perf, boss = performance(code, fight_id), boss_windows(code, fight_id)
     out = []
     for p in players:
         d = perf.get(p.name)
-        out.append(dataclasses.replace(p, active_s=d["damage_s"], casts=d["casts"]) if d else p)
+        if not d:
+            out.append(p)
+            continue
+        tgt = None
+        if boss:
+            windows, length = boss
+            tgt = seconds_in(windows, min(length, p.deaths[0].time_s) if p.deaths else length)
+        out.append(dataclasses.replace(p, active_s=d["damage_s"], casts=d["casts"], targetable_s=tgt))
     return out
 
 
