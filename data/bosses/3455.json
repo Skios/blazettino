@@ -5,6 +5,9 @@
   },
   "k14HCt3xcZyXbQwq": {
    "4": "NEW RECORD"
+  },
+  "vq8M3KcWRJ6jmnH7": {
+   "4": "+0:04"
   }
  },
  "name": "Vashnik the Malignant",
@@ -45,6 +48,21 @@
        "kill": true,
        "pct": 0.0,
        "s": 276
+      }
+     ]
+    }
+   }
+  },
+  "vq8M3KcWRJ6jmnH7": {
+   "date": "2026-10-28",
+   "difficulties": {
+    "4": {
+     "kill_s": 280,
+     "pulls": [
+      {
+       "kill": true,
+       "pct": 0.0,
+       "s": 280
       }
      ]
     }

@@ -5,6 +5,9 @@
   },
   "k14HCt3xcZyXbQwq": {
    "4": "NEW RECORD"
+  },
+  "vq8M3KcWRJ6jmnH7": {
+   "4": "+1:00"
   }
  },
  "name": "Entombed Sentinels",
@@ -40,6 +43,26 @@
        "kill": true,
        "pct": 0.0,
        "s": 327
+      }
+     ]
+    }
+   }
+  },
+  "vq8M3KcWRJ6jmnH7": {
+   "date": "2026-10-28",
+   "difficulties": {
+    "4": {
+     "kill_s": 387,
+     "pulls": [
+      {
+       "kill": false,
+       "pct": 32.45,
+       "s": 222
+      },
+      {
+       "kill": true,
+       "pct": 0.0,
+       "s": 387
       }
      ]
     }

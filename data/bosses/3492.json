@@ -4,13 +4,16 @@
   "RaZCT7cxPbwQ4VNA": {
    "4": ""
   },
+  "vq8M3KcWRJ6jmnH7": {
+   "4": "NEW RECORD"
+  },
   "zVgjNA4ChyMx1pG7": {}
  },
  "name": "Ula'tek",
  "records": {
   "4": {
-   "code": "RaZCT7cxPbwQ4VNA",
-   "kill_s": 602
+   "code": "vq8M3KcWRJ6jmnH7",
+   "kill_s": 581
   }
  },
  "reports": {
@@ -119,6 +122,31 @@
        "kill": true,
        "pct": 0.0,
        "s": 602
+      }
+     ]
+    }
+   }
+  },
+  "vq8M3KcWRJ6jmnH7": {
+   "date": "2026-10-28",
+   "difficulties": {
+    "4": {
+     "kill_s": 581,
+     "pulls": [
+      {
+       "kill": false,
+       "pct": 57.86,
+       "s": 235
+      },
+      {
+       "kill": false,
+       "pct": 10.2,
+       "s": 555
+      },
+      {
+       "kill": true,
+       "pct": 0.0,
+       "s": 581
       }
      ]
     }

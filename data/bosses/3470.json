@@ -4,14 +4,17 @@
    "4": ""
   },
   "RaZCT7cxPbwQ4VNA": {
+   "4": "+1:21"
+  },
+  "vq8M3KcWRJ6jmnH7": {
    "4": "NEW RECORD"
   }
  },
  "name": "Nek'zali the Soulcoiler",
  "records": {
   "4": {
-   "code": "RaZCT7cxPbwQ4VNA",
-   "kill_s": 365
+   "code": "vq8M3KcWRJ6jmnH7",
+   "kill_s": 284
   }
  },
  "reports": {
@@ -40,6 +43,21 @@
        "kill": true,
        "pct": 0.0,
        "s": 365
+      }
+     ]
+    }
+   }
+  },
+  "vq8M3KcWRJ6jmnH7": {
+   "date": "2026-10-28",
+   "difficulties": {
+    "4": {
+     "kill_s": 284,
+     "pulls": [
+      {
+       "kill": true,
+       "pct": 0.0,
+       "s": 284
       }
      ]
     }

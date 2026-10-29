@@ -1,6 +1,9 @@
 {
  "labels": {
   "RaZCT7cxPbwQ4VNA": {
+   "4": "+0:39"
+  },
+  "vq8M3KcWRJ6jmnH7": {
    "4": "NEW RECORD"
   },
   "zVgjNA4ChyMx1pG7": {
@@ -10,8 +13,8 @@
  "name": "The Coiled Altar",
  "records": {
   "4": {
-   "code": "RaZCT7cxPbwQ4VNA",
-   "kill_s": 404
+   "code": "vq8M3KcWRJ6jmnH7",
+   "kill_s": 365
   }
  },
  "reports": {
@@ -50,6 +53,26 @@
        "kill": true,
        "pct": 0.0,
        "s": 404
+      }
+     ]
+    }
+   }
+  },
+  "vq8M3KcWRJ6jmnH7": {
+   "date": "2026-10-28",
+   "difficulties": {
+    "4": {
+     "kill_s": 365,
+     "pulls": [
+      {
+       "kill": false,
+       "pct": 16.12,
+       "s": 385
+      },
+      {
+       "kill": true,
+       "pct": 0.0,
+       "s": 365
       }
      ]
     }

@@ -1,6 +1,9 @@
 {
  "labels": {
   "k14HCt3xcZyXbQwq": {},
+  "vq8M3KcWRJ6jmnH7": {
+   "4": "+0:24"
+  },
   "wLFxRqXGNWkmjZfQ": {
    "4": ""
   }
@@ -68,6 +71,26 @@
        "kill": false,
        "pct": 42.9,
        "s": 239
+      }
+     ]
+    }
+   }
+  },
+  "vq8M3KcWRJ6jmnH7": {
+   "date": "2026-10-28",
+   "difficulties": {
+    "4": {
+     "kill_s": 326,
+     "pulls": [
+      {
+       "kill": false,
+       "pct": 0.74,
+       "s": 307
+      },
+      {
+       "kill": true,
+       "pct": 0.0,
+       "s": 326
       }
      ]
     }
