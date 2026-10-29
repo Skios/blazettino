@@ -1,4 +1,5 @@
 """Publish the night page to a static site repo (GitHub Pages): copy, regenerate the index, commit, push."""
+import logging
 import re
 import shutil
 import subprocess
@@ -166,6 +167,7 @@ def _keep_previous(dest: Path, new_html: str, site_dir: Path) -> None:
 
 def publish(folder: Path, date: str, site_dir: Path, site_url: str, run: Runner = _git, section: str = "") -> str:
     """Copy folder/pagella.html to site_dir/[section/]<date>/index.html, commit and push; return the public URL."""
+    logging.getLogger(__name__).info("pubblico %s/%s sul sito", section, date)
     dest = site_dir / section / date
     dest.mkdir(parents=True, exist_ok=True)
     _keep_previous(dest, (folder / "pagella.html").read_text(), site_dir)

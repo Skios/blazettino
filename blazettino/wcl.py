@@ -68,6 +68,7 @@ def gql(query: str) -> dict:
     path = CACHE / (hashlib.sha1(query.encode()).hexdigest()[:16] + ".json")
     if path.exists():
         return json.loads(path.read_text())
+    log.info("WarcraftLogs: query nuova (non in cache) %s", path.stem)
     for attempt in range(1, MAX_WAITS + 1):
         retry_after = None
         try:

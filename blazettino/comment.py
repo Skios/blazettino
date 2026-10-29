@@ -200,6 +200,7 @@ def call_backend(prompt: str, cfg: dict) -> str:
 
 
 def _generate_with_retry(generate: Callable[[str, dict], str], prompt: str, cfg: dict) -> str:
+    log.info("commenti: chiamo il modello (timeout %ss, fino a %d tentativi)", TIMEOUT_S, len(RETRY_WAIT_S) + 1)
     for wait in RETRY_WAIT_S:
         try:
             return generate(prompt, cfg)

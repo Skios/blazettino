@@ -4,6 +4,7 @@ Collecting (--collect) fills it from every boss pull of a log, wipes included, a
 The report cards only read it, to tell which mechanics a person stopped failing and which they still fail.
 People are the keys of players.json: all the characters of one person count together.
 """
+import logging
 import sqlite3
 from datetime import datetime
 from pathlib import Path
@@ -13,6 +14,7 @@ from blazettino import abilities, profile, roster, wcl
 from blazettino.config import ROOT
 
 DB = ROOT / "data" / "memoria.db"
+log = logging.getLogger(__name__)
 TREND_NIGHTS = 4  # nights looked at (config "trend_nights")
 BETTER, WORSE = 0.5, 1.5  # tonight's hits per fight against the earlier average: below half = better, above 1.5x = worse
 MAX_TREND = 3  # trend lines per person
@@ -91,7 +93,8 @@ def collect(code: str, cfg: dict, db: sqlite3.Connection) -> int:
     info = wcl.report(code, "startTime fights{id name encounterID difficulty kill}")
     date = wcl.report_date(info)
     pulls = [f for f in info["fights"] if f["encounterID"]]
-    for f in pulls:
+    for i, f in enumerate(pulls, 1):
+        log.info("raccolta %s: pull %d/%d (#%d %s, %s)", code, i, len(pulls), f["id"], f["name"], "kill" if f["kill"] else "wipe")
         abilities.learn(code, f["id"])
         record(db, code, {**f, "encounter": f["encounterID"]}, date, present(code, f["id"]), profile.fight_profile(code, f["id"]), cfg.get("players", {}))
     return len(pulls)

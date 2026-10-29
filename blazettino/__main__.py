@@ -70,10 +70,24 @@ def _abilities(codes: list[str]) -> None:
                 sys.stdout.write(f"{code} #{f['id']} {abilities.learn(code, f['id'])}\n")
 
 
+LOG_FILE = ROOT / "logs" / "blazettino.log"
+log = logging.getLogger(__name__)
+
+
+def _logging() -> None:
+    """Progress goes to the terminal and, with the date, to logs/blazettino.log (read it to see how far a long run got)."""
+    LOG_FILE.parent.mkdir(exist_ok=True)
+    fmt = "%(asctime)s %(levelname)s %(message)s"
+    logging.basicConfig(level=logging.INFO, format=fmt, datefmt="%H:%M:%S", handlers=[logging.StreamHandler(), logging.FileHandler(LOG_FILE, encoding="utf-8")])
+    logging.getLogger().handlers[1].setFormatter(logging.Formatter(fmt, "%Y-%m-%d %H:%M:%S"))
+
+
 def _players(code: str, a: attempts.Attempt, cfg: dict, date: str) -> list[kpi.Player]:
     """The raiders of one attempt, with the notable events of the fight (avoidable damage, interrupts, dispels)
     and, if the logs were collected (--collect), how each person's mechanics are going over the last nights."""
+    log.info("%s #%d %s: tabelle e classifiche", code, a.id, a.slug)
     players = profile.annotate(kpi.load_fight(*wcl.fight_tables(code, a.id)), code, a.id, cfg["spells"])
+    log.info("%s #%d: eventi (morti lente, attivita', finestre del boss)", code, a.id)
     players = profile.with_slow_deaths(profile.with_performance(players, code, a.id), code, a.id, cfg["spells"])
     if not memory.DB.exists():
         return players
@@ -90,7 +104,11 @@ def _build(code: str, cfg: dict) -> night.Night:
     if not tries:
         raise SystemExit(f"nessun boss nel report {code}")
     date = _date(info)
-    loaded = [(a, _players(code, a, cfg, date)) for a in tries]
+    log.info("serata %s: %d boss da caricare", date, len(tries))
+    loaded = []
+    for i, a in enumerate(tries, 1):
+        log.info("boss %d/%d: %s", i, len(tries), a.slug)
+        loaded.append((a, _players(code, a, cfg, date)))
     return night.assemble(info["title"], date, loaded, cfg)
 
 
@@ -118,6 +136,7 @@ def _save(n: night.Night, name: str, url: str | None) -> tuple[Path, str]:
 
 
 def main(argv: list[str]) -> None:
+    _logging()
     if argv[1:] == ["--refresh-site"]:
         return _refresh(load_config())
     if argv[1:2] == ["--remove"]:
@@ -149,7 +168,6 @@ def main(argv: list[str]) -> None:
     if not codes or len(codes) > 1 and "--week" not in flags or len(args) != len(codes) + len(flags) or boss and ("--week" in flags or len(codes) != 1):
         raise SystemExit(USAGE)
     do_publish, weekly = "--publish" in flags, "--week" in flags
-    logging.basicConfig(level=logging.WARNING, format="%(levelname)s: %(message)s")
     cfg = {**load_config(), "spells": abilities.table()}
     site_dir, site_url = cfg.get("site_dir"), cfg.get("site_url")
     if do_publish and not (site_dir and site_url):
